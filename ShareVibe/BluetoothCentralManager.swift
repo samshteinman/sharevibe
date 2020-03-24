@@ -14,7 +14,6 @@ import CryptoKit
 class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate, AVAssetResourceLoaderDelegate
 {
     @Published var SegmentLength: UInt32 = 0
-    @Published var SegmentDataReceivedSoFar : Int = 0
     @Published var Running = false
     @Published var Connected = false
     
@@ -29,8 +28,6 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     var streamingAsset : AVURLAsset!
     var streamingPlayerItem : AVPlayerItem!
     
-    var currentlyReceivingSegmentIndex = -1
-    var currentlyPlayingSegmentIndex = 0
     var bytesPlayedSoFar = 0
     
     var playing : Bool = false
@@ -131,11 +128,12 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
         
     }
-    
-    func setupForReceivingNextSegment()
+        
+    func restartPlayer()
     {
-        self.SegmentDataReceivedSoFar = 0
-        self.currentlyReceivingSegmentIndex += 1
+        self.playing = false
+        self.wholeData = Data()
+        Globals.Playback.Player.pause()
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -143,7 +141,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         {
             if let val = characteristic.value
             {
-                setupForReceivingNextSegment()
+                restartPlayer()
                 
                 self.SegmentLength = (val.withUnsafeBytes
                     { (ptr: UnsafePointer<UInt32>) in ptr.pointee } )
@@ -156,11 +154,10 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             {
                 appendFileData(val: val)
                 
-                if(self.wholeData.count >= 32768)//33184)
+                if(self.wholeData.count >= 32768)
                 {
                     if(!self.playing)
                     {
-                    print("Got enough bytes to start: \(self.currentlyReceivingSegmentIndex) : \(self.wholeData.count) bytes")
                         startPlayingStreamingAudio()
                         self.playing = true
                     }
@@ -177,7 +174,6 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     
     func appendFileData(val: Data)
     {
-        self.SegmentDataReceivedSoFar += val.count
         wholeData.append(val)
     }
 
