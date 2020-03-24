@@ -1,0 +1,635 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB1241C603E00FABC9D /* AppDelegate.swift */; };
+		36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB3241C603E00FABC9D /* SceneDelegate.swift */; };
+		36526FB6241C603E00FABC9D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB5241C603E00FABC9D /* ContentView.swift */; };
+		36526FB8241C606200FABC9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36526FB7241C606200FABC9D /* Assets.xcassets */; };
+		36526FBB241C606200FABC9D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36526FBA241C606200FABC9D /* Preview Assets.xcassets */; };
+		36526FBE241C606200FABC9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36526FBC241C606200FABC9D /* LaunchScreen.storyboard */; };
+		36526FC9241C606200FABC9D /* ShareVibeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FC8241C606200FABC9D /* ShareVibeTests.swift */; };
+		36526FD4241C606200FABC9D /* ShareVibeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FD3241C606200FABC9D /* ShareVibeUITests.swift */; };
+		3686737C241DEEA100F23BC8 /* SongPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3686737B241DEEA100F23BC8 /* SongPicker.swift */; };
+		36C849882421542100D5FD8C /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C849872421542100D5FD8C /* Globals.swift */; };
+		36ED5390241D8CE400440054 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36ED538F241D8CE400440054 /* MediaPlayer.framework */; };
+		36ED5392241D908E00440054 /* BluetoothCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ED5391241D908E00440054 /* BluetoothCentralManager.swift */; };
+		36ED5394241D90A200440054 /* PeripheralCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ED5393241D90A200440054 /* PeripheralCentralManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		36526FC5241C606200FABC9D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 36526FA6241C603E00FABC9D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 36526FAD241C603E00FABC9D;
+			remoteInfo = ShareVibe;
+		};
+		36526FD0241C606200FABC9D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 36526FA6241C603E00FABC9D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 36526FAD241C603E00FABC9D;
+			remoteInfo = ShareVibe;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		36526FAE241C603E00FABC9D /* ShareVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		36526FB1241C603E00FABC9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		36526FB3241C603E00FABC9D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		36526FB5241C603E00FABC9D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		36526FB7241C606200FABC9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		36526FBA241C606200FABC9D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		36526FBD241C606200FABC9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		36526FBF241C606200FABC9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36526FC4241C606200FABC9D /* ShareVibeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShareVibeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		36526FC8241C606200FABC9D /* ShareVibeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareVibeTests.swift; sourceTree = "<group>"; };
+		36526FCA241C606200FABC9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36526FCF241C606200FABC9D /* ShareVibeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShareVibeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		36526FD3241C606200FABC9D /* ShareVibeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareVibeUITests.swift; sourceTree = "<group>"; };
+		36526FD5241C606200FABC9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3686737B241DEEA100F23BC8 /* SongPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPicker.swift; sourceTree = "<group>"; };
+		36C849872421542100D5FD8C /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		36ED538F241D8CE400440054 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		36ED5391241D908E00440054 /* BluetoothCentralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCentralManager.swift; sourceTree = "<group>"; };
+		36ED5393241D90A200440054 /* PeripheralCentralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralCentralManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		36526FAB241C603E00FABC9D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36ED5390241D8CE400440054 /* MediaPlayer.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36526FC1241C606200FABC9D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36526FCC241C606200FABC9D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		36526FA5241C603E00FABC9D = {
+			isa = PBXGroup;
+			children = (
+				36526FB0241C603E00FABC9D /* ShareVibe */,
+				36526FC7241C606200FABC9D /* ShareVibeTests */,
+				36526FD2241C606200FABC9D /* ShareVibeUITests */,
+				36526FAF241C603E00FABC9D /* Products */,
+				36ED538E241D8CE200440054 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		36526FAF241C603E00FABC9D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				36526FAE241C603E00FABC9D /* ShareVibe.app */,
+				36526FC4241C606200FABC9D /* ShareVibeTests.xctest */,
+				36526FCF241C606200FABC9D /* ShareVibeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		36526FB0241C603E00FABC9D /* ShareVibe */ = {
+			isa = PBXGroup;
+			children = (
+				36ED5396241DD3B400440054 /* Bluetooth */,
+				36526FB1241C603E00FABC9D /* AppDelegate.swift */,
+				36526FB3241C603E00FABC9D /* SceneDelegate.swift */,
+				36526FB5241C603E00FABC9D /* ContentView.swift */,
+				36526FB7241C606200FABC9D /* Assets.xcassets */,
+				36526FBC241C606200FABC9D /* LaunchScreen.storyboard */,
+				36526FBF241C606200FABC9D /* Info.plist */,
+				36526FB9241C606200FABC9D /* Preview Content */,
+				3686737B241DEEA100F23BC8 /* SongPicker.swift */,
+				36C849872421542100D5FD8C /* Globals.swift */,
+			);
+			path = ShareVibe;
+			sourceTree = "<group>";
+		};
+		36526FB9241C606200FABC9D /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				36526FBA241C606200FABC9D /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		36526FC7241C606200FABC9D /* ShareVibeTests */ = {
+			isa = PBXGroup;
+			children = (
+				36526FC8241C606200FABC9D /* ShareVibeTests.swift */,
+				36526FCA241C606200FABC9D /* Info.plist */,
+			);
+			path = ShareVibeTests;
+			sourceTree = "<group>";
+		};
+		36526FD2241C606200FABC9D /* ShareVibeUITests */ = {
+			isa = PBXGroup;
+			children = (
+				36526FD3241C606200FABC9D /* ShareVibeUITests.swift */,
+				36526FD5241C606200FABC9D /* Info.plist */,
+			);
+			path = ShareVibeUITests;
+			sourceTree = "<group>";
+		};
+		36ED538E241D8CE200440054 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				36ED538F241D8CE400440054 /* MediaPlayer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		36ED5396241DD3B400440054 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				36ED5393241D90A200440054 /* PeripheralCentralManager.swift */,
+				36ED5391241D908E00440054 /* BluetoothCentralManager.swift */,
+			);
+			name = Bluetooth;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		36526FAD241C603E00FABC9D /* ShareVibe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 36526FD8241C606200FABC9D /* Build configuration list for PBXNativeTarget "ShareVibe" */;
+			buildPhases = (
+				36526FAA241C603E00FABC9D /* Sources */,
+				36526FAB241C603E00FABC9D /* Frameworks */,
+				36526FAC241C603E00FABC9D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareVibe;
+			productName = ShareVibe;
+			productReference = 36526FAE241C603E00FABC9D /* ShareVibe.app */;
+			productType = "com.apple.product-type.application";
+		};
+		36526FC3241C606200FABC9D /* ShareVibeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 36526FDB241C606200FABC9D /* Build configuration list for PBXNativeTarget "ShareVibeTests" */;
+			buildPhases = (
+				36526FC0241C606200FABC9D /* Sources */,
+				36526FC1241C606200FABC9D /* Frameworks */,
+				36526FC2241C606200FABC9D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				36526FC6241C606200FABC9D /* PBXTargetDependency */,
+			);
+			name = ShareVibeTests;
+			productName = ShareVibeTests;
+			productReference = 36526FC4241C606200FABC9D /* ShareVibeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		36526FCE241C606200FABC9D /* ShareVibeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 36526FDE241C606200FABC9D /* Build configuration list for PBXNativeTarget "ShareVibeUITests" */;
+			buildPhases = (
+				36526FCB241C606200FABC9D /* Sources */,
+				36526FCC241C606200FABC9D /* Frameworks */,
+				36526FCD241C606200FABC9D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				36526FD1241C606200FABC9D /* PBXTargetDependency */,
+			);
+			name = ShareVibeUITests;
+			productName = ShareVibeUITests;
+			productReference = 36526FCF241C606200FABC9D /* ShareVibeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		36526FA6241C603E00FABC9D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Sam Shteinman";
+				TargetAttributes = {
+					36526FAD241C603E00FABC9D = {
+						CreatedOnToolsVersion = 11.3;
+					};
+					36526FC3241C606200FABC9D = {
+						CreatedOnToolsVersion = 11.3;
+						TestTargetID = 36526FAD241C603E00FABC9D;
+					};
+					36526FCE241C606200FABC9D = {
+						CreatedOnToolsVersion = 11.3;
+						TestTargetID = 36526FAD241C603E00FABC9D;
+					};
+				};
+			};
+			buildConfigurationList = 36526FA9241C603E00FABC9D /* Build configuration list for PBXProject "ShareVibe" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 36526FA5241C603E00FABC9D;
+			productRefGroup = 36526FAF241C603E00FABC9D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				36526FAD241C603E00FABC9D /* ShareVibe */,
+				36526FC3241C606200FABC9D /* ShareVibeTests */,
+				36526FCE241C606200FABC9D /* ShareVibeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		36526FAC241C603E00FABC9D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36526FBE241C606200FABC9D /* LaunchScreen.storyboard in Resources */,
+				36526FBB241C606200FABC9D /* Preview Assets.xcassets in Resources */,
+				36526FB8241C606200FABC9D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36526FC2241C606200FABC9D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36526FCD241C606200FABC9D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		36526FAA241C603E00FABC9D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3686737C241DEEA100F23BC8 /* SongPicker.swift in Sources */,
+				36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */,
+				36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */,
+				36ED5394241D90A200440054 /* PeripheralCentralManager.swift in Sources */,
+				36ED5392241D908E00440054 /* BluetoothCentralManager.swift in Sources */,
+				36C849882421542100D5FD8C /* Globals.swift in Sources */,
+				36526FB6241C603E00FABC9D /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36526FC0241C606200FABC9D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36526FC9241C606200FABC9D /* ShareVibeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36526FCB241C606200FABC9D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36526FD4241C606200FABC9D /* ShareVibeUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		36526FC6241C606200FABC9D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 36526FAD241C603E00FABC9D /* ShareVibe */;
+			targetProxy = 36526FC5241C606200FABC9D /* PBXContainerItemProxy */;
+		};
+		36526FD1241C606200FABC9D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 36526FAD241C603E00FABC9D /* ShareVibe */;
+			targetProxy = 36526FD0241C606200FABC9D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		36526FBC241C606200FABC9D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				36526FBD241C606200FABC9D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		36526FD6241C606200FABC9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		36526FD7241C606200FABC9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		36526FD9241C606200FABC9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"ShareVibe/Preview Content\"";
+				DEVELOPMENT_TEAM = 89D6AQ7X9J;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = ShareVibe/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-9D6AQ7X9J.ShareVibe";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		36526FDA241C606200FABC9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"ShareVibe/Preview Content\"";
+				DEVELOPMENT_TEAM = 89D6AQ7X9J;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = ShareVibe/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-9D6AQ7X9J.ShareVibe";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		36526FDC241C606200FABC9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89D6AQ7X9J;
+				INFOPLIST_FILE = ShareVibeTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-9D6AQ7X9J.ShareVibeTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShareVibe.app/ShareVibe";
+			};
+			name = Debug;
+		};
+		36526FDD241C606200FABC9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89D6AQ7X9J;
+				INFOPLIST_FILE = ShareVibeTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-9D6AQ7X9J.ShareVibeTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShareVibe.app/ShareVibe";
+			};
+			name = Release;
+		};
+		36526FDF241C606200FABC9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89D6AQ7X9J;
+				INFOPLIST_FILE = ShareVibeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-9D6AQ7X9J.ShareVibeUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ShareVibe;
+			};
+			name = Debug;
+		};
+		36526FE0241C606200FABC9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89D6AQ7X9J;
+				INFOPLIST_FILE = ShareVibeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-9D6AQ7X9J.ShareVibeUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ShareVibe;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		36526FA9241C603E00FABC9D /* Build configuration list for PBXProject "ShareVibe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36526FD6241C606200FABC9D /* Debug */,
+				36526FD7241C606200FABC9D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		36526FD8241C606200FABC9D /* Build configuration list for PBXNativeTarget "ShareVibe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36526FD9241C606200FABC9D /* Debug */,
+				36526FDA241C606200FABC9D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		36526FDB241C606200FABC9D /* Build configuration list for PBXNativeTarget "ShareVibeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36526FDC241C606200FABC9D /* Debug */,
+				36526FDD241C606200FABC9D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		36526FDE241C606200FABC9D /* Build configuration list for PBXNativeTarget "ShareVibeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36526FDF241C606200FABC9D /* Debug */,
+				36526FE0241C606200FABC9D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 36526FA6241C603E00FABC9D /* Project object */;
+}

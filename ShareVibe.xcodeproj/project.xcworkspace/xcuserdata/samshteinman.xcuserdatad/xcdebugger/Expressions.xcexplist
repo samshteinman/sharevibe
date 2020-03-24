@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "BluetoothCentralManager.peripheral(_:didUpdateValueFor:error:):BluetoothCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.FileLength">
+            </PersistentString>
+            <PersistentString
+               value = "self.segments[self.currentlyReceivingSegmentIndex].count">
+            </PersistentString>
+            <PersistentString
+               value = "self.SegmentLength">
+            </PersistentString>
+            <PersistentString
+               value = "self.BytesReceivedSoFar">
+            </PersistentString>
+            <PersistentString
+               value = "self.currentSegmentHandleToFile">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "BluetoothCentralManager.startReadingFromL2CAPStream():BluetoothCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.buffer">
+            </PersistentString>
+            <PersistentString
+               value = "self.song.count">
+            </PersistentString>
+            <PersistentString
+               value = "self.song">
+            </PersistentString>
+            <PersistentString
+               value = "self.BytesSoFar">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PeripheralCentralManager.GetChunkFromFile():PeripheralCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "offset..&lt;(Int(fileLength))">
+            </PersistentString>
+            <PersistentString
+               value = "offset">
+            </PersistentString>
+            <PersistentString
+               value = "Int(fileLength)-offset">
+            </PersistentString>
+            <PersistentString
+               value = "fileLength">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PeripheralCentralManager.peripheralManagerIsReady(toUpdateSubscribers:):PeripheralCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.BytesSentOfCurrentSegmentSoFar">
+            </PersistentString>
+            <PersistentString
+               value = "offset">
+            </PersistentString>
+            <PersistentString
+               value = "self.segments[self.CurrentlySendingFileSegmentIndex]!.count">
+            </PersistentString>
+            <PersistentString
+               value = "self.needBroadcastSegmentLength">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PeripheralCentralManager.sendNextSegment():PeripheralCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.CurrentlySendingFileSegmentIndex">
+            </PersistentString>
+            <PersistentString
+               value = "self.FileSegments.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ContentView.sendSong():ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.exportQuality">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "BluetoothCentralManager.playSong(path:):BluetoothCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "path">
+            </PersistentString>
+            <PersistentString
+               value = "self.BytesReceivedSoFar">
+            </PersistentString>
+            <PersistentString
+               value = "Globals.Playback.Player.status">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "specialized closure #1 in ContentView.sendSong():ContentView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "BluetoothCentralManager.resourceLoader(_:shouldWaitForLoadingOfRequestedResource:):BluetoothCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.bytesPlayedSoFar..&lt;(segment.count - self.bytesPlayedSoFar - 1)">
+            </PersistentString>
+            <PersistentString
+               value = "AVFileType.mp4.rawValue">
+            </PersistentString>
+            <PersistentString
+               value = "segment.count">
+            </PersistentString>
+            <PersistentString
+               value = "self.bytesPlayedSoFar">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in ContentView.sendSong():ContentView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PeripheralCentralManager.peripheralManager(_:didReceiveRead:):PeripheralCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.segments">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PeripheralCentralManager.sendL2CAPData():PeripheralCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "result">
+            </PersistentString>
+            <PersistentString
+               value = "chunk.count">
+            </PersistentString>
+            <PersistentString
+               value = "self.channel?.outputStream.streamStatus">
+            </PersistentString>
+            <PersistentString
+               value = "self.BytesSoFar">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "BluetoothCentralManager.appendFileData(val:):BluetoothCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.segments[self.currentlyReceivingSegmentIndex].count">
+            </PersistentString>
+            <PersistentString
+               value = "self.currentlyReceivingSegmentIndex">
+            </PersistentString>
+            <PersistentString
+               value = "self.currentSegmentHandleToFile">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PeripheralCentralManager.startSend(content:):PeripheralCentralManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "PeripheralCentralManager.FileLengthCharacteristic">
+            </PersistentString>
+            <PersistentString
+               value = "peripheralManager">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
