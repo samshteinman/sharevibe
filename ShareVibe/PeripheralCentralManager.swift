@@ -23,7 +23,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
     var peripheralManager: CBPeripheralManager!
     
     static var Service = CBMutableService(type: Globals.BluetoothGlobals.ServiceUUID, primary: true)
-    static var SegmentCharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .writeWithoutResponse]
+    static var SegmentCharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .write]
     static var Permissions: CBAttributePermissions = [.readable, .writeable]
     static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
     static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)

@@ -25,7 +25,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     var centralManager : CBCentralManager!
     var peripheral : CBPeripheral!
     
-    var wholeData = Data()
+    var wholeData : Data?
     
     var streamingAsset : AVURLAsset!
     var streamingPlayerItem : AVPlayerItem!
@@ -131,13 +131,13 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         
     }
         
-    func restartPlayer()
+    func restart()
     {
         self.playing = false
-        self.wholeData = Data()
+        self.wholeData = nil
         self.BytesReceivedOfCurrentSegmentSoFar = 0
         self.bytesPlayedSoFar = 0
-        Globals.Playback.Player.pause()
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -145,8 +145,8 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         {
             if let val = characteristic.value
             {
-                restartPlayer()
-                UIApplication.shared.isIdleTimerDisabled = true
+                Globals.Playback.Player.pause()
+                restart()
                 
                 self.SegmentLength = (val.withUnsafeBytes
                     { (ptr: UnsafePointer<UInt32>) in ptr.pointee } )
@@ -161,7 +161,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 
                 self.BytesReceivedOfCurrentSegmentSoFar += val.count
                 
-                if(self.wholeData.count >= 32768)
+                if(self.wholeData!.count >= 32768)
                 {
                     if(!self.playing)
                     {
@@ -179,7 +179,14 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     
     func appendFileData(val: Data)
     {
-        wholeData.append(val)
+        if(wholeData == nil)
+        {
+            wholeData = val
+        }
+        else
+        {
+            wholeData!.append(val)
+        }
     }
 
     public func startPlayingStreamingAudio()
@@ -192,6 +199,8 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         self.streamingAsset = AVURLAsset.init(url: URL(fileURLWithPath: path))
        
         self.streamingPlayerItem = AVPlayerItem.init(asset: self.streamingAsset, automaticallyLoadedAssetKeys: ["playable"])
+        
+        self.streamingPlayerItem.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         
         self.streamingAsset.resourceLoader.setDelegate(self, queue: DispatchQueue.main)
         
@@ -221,11 +230,15 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         
         if let dataRequest = loadingRequest.dataRequest
         {
-            var amount = wholeData.count - self.bytesPlayedSoFar
+            if(self.wholeData == nil)
+            {
+                return false
+            }
+            var amount = wholeData!.count - self.bytesPlayedSoFar
             var chunk = 16384
             if(amount > chunk)
             {
-                var returning = wholeData.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + chunk))
+                var returning = wholeData!.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + chunk))
                 dataRequest.respond(with: returning)
                 self.bytesPlayedSoFar += chunk
                 loadingRequest.finishLoading()
@@ -233,7 +246,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             }
             else if(self.bytesPlayedSoFar + chunk > self.SegmentLength)
             {
-                var returning = wholeData.subdata(in: self.bytesPlayedSoFar..<wholeData.count)
+                var returning = wholeData!.subdata(in: self.bytesPlayedSoFar..<self.wholeData!.count)
                 dataRequest.respond(with: returning)
                 self.bytesPlayedSoFar += amount
                 loadingRequest.finishLoading()
@@ -248,7 +261,13 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         return false
     }
     
-    func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
-        
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if(keyPath == "status")
+        {
+            if let error = Globals.Playback.Player.currentItem?.error
+            {
+                NSLog("Error during playback: \(error)")
+            }
+        }
     }
 }

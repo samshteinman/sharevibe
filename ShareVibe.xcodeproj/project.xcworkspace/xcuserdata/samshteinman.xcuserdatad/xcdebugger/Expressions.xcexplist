@@ -6,6 +6,12 @@
          contextName = "BluetoothCentralManager.peripheral(_:didUpdateValueFor:error:):BluetoothCentralManager.swift">
          <PersistentStrings>
             <PersistentString
+               value = "self.BytesReceivedSoFar">
+            </PersistentString>
+            <PersistentString
+               value = "self.currentSegmentHandleToFile">
+            </PersistentString>
+            <PersistentString
                value = "self.FileLength">
             </PersistentString>
             <PersistentString
@@ -13,12 +19,6 @@
             </PersistentString>
             <PersistentString
                value = "self.SegmentLength">
-            </PersistentString>
-            <PersistentString
-               value = "self.BytesReceivedSoFar">
-            </PersistentString>
-            <PersistentString
-               value = "self.currentSegmentHandleToFile">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -119,6 +119,9 @@
                value = "AVFileType.mp4.rawValue">
             </PersistentString>
             <PersistentString
+               value = "contentInfoRequest.contentLength">
+            </PersistentString>
+            <PersistentString
                value = "segment.count">
             </PersistentString>
             <PersistentString
@@ -172,10 +175,10 @@
          contextName = "PeripheralCentralManager.startSend(content:):PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "PeripheralCentralManager.FileLengthCharacteristic">
+               value = "peripheralManager">
             </PersistentString>
             <PersistentString
-               value = "peripheralManager">
+               value = "PeripheralCentralManager.FileLengthCharacteristic">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
