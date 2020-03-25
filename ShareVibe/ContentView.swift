@@ -14,6 +14,7 @@ import FileProvider
 struct ContentView: View {
     @State private var songs : MPMediaItemCollection?
     @State private var showPicker : Bool = false
+    @State private var IDToConnect : String = "AAAA"
     
     @ObservedObject var CentralManager = BluetoothCentralManager()
     @ObservedObject var PeripheralManager = PeripheralCentralManager()
@@ -21,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         VStack
         {
-            Text("Connected: \(String(PeripheralManager.Connected || CentralManager.Connected))")
+            Text("Received: \(CentralManager.BytesReceivedOfCurrentSegmentSoFar) / \(CentralManager.SegmentLength)")
             Button("Listening for Songs: \(self.CentralManager.Running.description)")
             {
                 self.CentralManager.startup()
@@ -31,6 +32,7 @@ struct ContentView: View {
                 self.PeripheralManager.startup()
                 self.showPicker = !self.showPicker
             }
+            Text("Sent: \(PeripheralManager.BytesSentOfCurrentSegmentSoFar) / \(PeripheralManager.TotalBytesOfCurrentSegment)")
         }.sheet(isPresented: self.$showPicker,
                 onDismiss: self.sendSong)
             {

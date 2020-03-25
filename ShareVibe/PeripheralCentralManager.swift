@@ -36,8 +36,17 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
         }
     }
     
+    func reset()
+    {
+        self.needBroadcastSegmentLength = true
+        self.BytesSentOfCurrentSegmentSoFar = 0
+    }
+    
     func startSend(content : Data)
     {
+        reset()
+        UIApplication.shared.isIdleTimerDisabled = true
+        
         self.songData = content
         
         tryBroadcastSegmentLength()
@@ -130,6 +139,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
     {
         if(BytesSentOfCurrentSegmentSoFar >= self.songData.count)
         {
+            UIApplication.shared.isIdleTimerDisabled = false
             return nil
         }
         else if(BytesSentOfCurrentSegmentSoFar + Globals.ChunkSize > self.songData.count)

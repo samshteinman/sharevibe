@@ -10,10 +10,12 @@ import Foundation
 import CoreBluetooth
 import AVFoundation
 import CryptoKit
+import UIKit
 
 class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate, AVAssetResourceLoaderDelegate
 {
     @Published var SegmentLength: UInt32 = 0
+    @Published var BytesReceivedOfCurrentSegmentSoFar: Int = 0
     @Published var Running = false
     @Published var Connected = false
     
@@ -133,6 +135,8 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     {
         self.playing = false
         self.wholeData = Data()
+        self.BytesReceivedOfCurrentSegmentSoFar = 0
+        self.bytesPlayedSoFar = 0
         Globals.Playback.Player.pause()
     }
     
@@ -142,10 +146,11 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             if let val = characteristic.value
             {
                 restartPlayer()
+                UIApplication.shared.isIdleTimerDisabled = true
                 
                 self.SegmentLength = (val.withUnsafeBytes
                     { (ptr: UnsafePointer<UInt32>) in ptr.pointee } )
-                print("got segment length \(self.SegmentLength)")
+                NSLog("Got segment length \(self.SegmentLength)")
             }
         }
         else if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
@@ -153,6 +158,8 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             if let val = characteristic.value
             {
                 appendFileData(val: val)
+                
+                self.BytesReceivedOfCurrentSegmentSoFar += val.count
                 
                 if(self.wholeData.count >= 32768)
                 {
@@ -169,8 +176,6 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             print("Update value for uknown characteristic!")
         }
     }
-    
-    var currentSegmentHandleToFile : FileHandle?
     
     func appendFileData(val: Data)
     {
@@ -195,6 +200,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         Globals.Playback.Player.replaceCurrentItem(with: self.streamingPlayerItem)
         
         Globals.Playback.Player.play()
+        UIApplication.shared.isIdleTimerDisabled = false
         if let error = Globals.Playback.Player.error
         {
             print("Error after play: \(String(describing: error))")
@@ -216,16 +222,16 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         if let dataRequest = loadingRequest.dataRequest
         {
             var amount = wholeData.count - self.bytesPlayedSoFar
-            
-            if(amount > 8192)
+            var chunk = 16384
+            if(amount > chunk)
             {
-                var returning = wholeData.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + amount))
+                var returning = wholeData.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + chunk))
                 dataRequest.respond(with: returning)
-                self.bytesPlayedSoFar += amount
+                self.bytesPlayedSoFar += chunk
                 loadingRequest.finishLoading()
                 return true
             }
-            else if(self.bytesPlayedSoFar + 8192 > self.SegmentLength)
+            else if(self.bytesPlayedSoFar + chunk > self.SegmentLength)
             {
                 var returning = wholeData.subdata(in: self.bytesPlayedSoFar..<wholeData.count)
                 dataRequest.respond(with: returning)
@@ -240,5 +246,9 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             }
         }
         return false
+    }
+    
+    func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
+        
     }
 }
