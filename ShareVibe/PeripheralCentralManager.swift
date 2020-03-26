@@ -108,10 +108,10 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
         
         self.Connected = true
         
-        print("Someone subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
+        NSLog("Someone subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
         if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
         {
-            print("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
+            NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
             Globals.ChunkSize = central.maximumUpdateValueLength
         }
     }
@@ -119,7 +119,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
           if(peripheral.state == .poweredOn)
           {
-            print("Ready to advertise")
+            NSLog("Ready to advertise")
             Running = true
             
             PeripheralCentralManager.Service.characteristics = [PeripheralCentralManager.SegmentLengthCharacteristic, PeripheralCentralManager.SegmentDataCharacteristic]

@@ -22,6 +22,10 @@ struct ContentView: View {
     var body: some View {
         VStack
         {
+            Button("Listen Again")
+            {
+                self.CentralManager.playStream(path: Globals.ReceivedAudioFilePath.path)
+            }
             Text("Received: \(CentralManager.BytesReceivedOfCurrentSegmentSoFar) / \(CentralManager.SegmentLength)")
             Button("Listening for Songs: \(self.CentralManager.Running.description)")
             {
