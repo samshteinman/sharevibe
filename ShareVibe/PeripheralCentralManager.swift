@@ -17,7 +17,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
     @Published var Running = false
     @Published var Connected = false
     
-    var songData = Data()
+    var songData : Data!
     var needBroadcastSegmentLength = true
     
     var peripheralManager: CBPeripheralManager!
@@ -45,6 +45,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
     func startSend(content : Data)
     {
         reset()
+        
         UIApplication.shared.isIdleTimerDisabled = true
         
         self.songData = content
@@ -104,7 +105,9 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+        
         self.Connected = true
+        
         print("Someone subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
         if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
         {
@@ -126,14 +129,6 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
             peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.BluetoothGlobals.ServiceUUID]])
           }
       }
-   
-    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
-        print("didStartAdvertising result: \(String(describing: error))")
-       }
-    
-    func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: Error?) {
-        print("didAddService result: \(String(describing: error))")
-    }
     
     func GetChunkFromCurrentSegment() -> Data?
     {

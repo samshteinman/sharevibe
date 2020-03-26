@@ -6,19 +6,22 @@
          contextName = "BluetoothCentralManager.peripheral(_:didUpdateValueFor:error:):BluetoothCentralManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.BytesReceivedSoFar">
-            </PersistentString>
-            <PersistentString
-               value = "self.currentSegmentHandleToFile">
-            </PersistentString>
-            <PersistentString
-               value = "self.FileLength">
+               value = "self.wholeData!.count">
             </PersistentString>
             <PersistentString
                value = "self.segments[self.currentlyReceivingSegmentIndex].count">
             </PersistentString>
             <PersistentString
                value = "self.SegmentLength">
+            </PersistentString>
+            <PersistentString
+               value = "self.FileLength">
+            </PersistentString>
+            <PersistentString
+               value = "self.BytesReceivedSoFar">
+            </PersistentString>
+            <PersistentString
+               value = "self.currentSegmentHandleToFile">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -125,7 +128,7 @@
                value = "segment.count">
             </PersistentString>
             <PersistentString
-               value = "self.bytesPlayedSoFar">
+               value = "wholeDataSnapshot!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -175,10 +178,10 @@
          contextName = "PeripheralCentralManager.startSend(content:):PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "peripheralManager">
+               value = "PeripheralCentralManager.FileLengthCharacteristic">
             </PersistentString>
             <PersistentString
-               value = "PeripheralCentralManager.FileLengthCharacteristic">
+               value = "peripheralManager">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

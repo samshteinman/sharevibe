@@ -87,7 +87,7 @@ struct ContentView: View {
                 }
                 else
                 {
-                    NSLog("Failed for \(String(describing: session?.outputURL)) status: \(String(describing: session?.status.rawValue)) \(session?.error)")
+                    NSLog("Failed for \(String(describing: session?.outputURL)) status: \(String(describing: session?.status.rawValue)) \(String(describing: session?.error))")
                 }
             })
 

@@ -89,6 +89,11 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 }
             }
         }
+        
+        if let error = error
+        {
+            NSLog("Error when discovering services: \(error)")
+        }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
@@ -123,7 +128,6 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         }
     }
     
-    
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         print("Did modify services")
         print("Searching for services again!");
@@ -133,6 +137,10 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         
     func restart()
     {
+        Globals.Playback.Player.currentItem?.cancelPendingSeeks()
+        Globals.Playback.Player.cancelPendingPrerolls()
+        Globals.Playback.Player.replaceCurrentItem(with: nil)
+        
         self.playing = false
         self.wholeData = nil
         self.BytesReceivedOfCurrentSegmentSoFar = 0
@@ -145,7 +153,6 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         {
             if let val = characteristic.value
             {
-                Globals.Playback.Player.pause()
                 restart()
                 
                 self.SegmentLength = (val.withUnsafeBytes
@@ -161,13 +168,10 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 
                 self.BytesReceivedOfCurrentSegmentSoFar += val.count
                 
-                if(self.wholeData!.count >= 32768)
+                if(!self.playing && self.wholeData!.count >= 32768)
                 {
-                    if(!self.playing)
-                    {
-                        startPlayingStreamingAudio()
-                        self.playing = true
-                    }
+                    startPlayingStreamingAudio()
+                    self.playing = true
                 }
             }
         }
@@ -177,6 +181,21 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         }
     }
     
+    func checkIfContainsMDAT(data: Data) -> Bool
+    {
+        for index in 0..<(data.count - 3)
+        {
+           if(data[index] == 0x6D
+               && data[index+1] == 0x64
+               && data[index+2] == 0x61
+               && data[index+3] == 0x74)
+           {
+            return true
+           }
+        }
+        
+        return false
+    }
     func appendFileData(val: Data)
     {
         if(wholeData == nil)
@@ -230,33 +249,34 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         
         if let dataRequest = loadingRequest.dataRequest
         {
-            if(self.wholeData == nil)
+            let wholeDataSnapshot = wholeData
+            if(wholeDataSnapshot == nil)
             {
                 return false
             }
-            var amount = wholeData!.count - self.bytesPlayedSoFar
-            var chunk = 16384
+            
+            let amount = wholeDataSnapshot!.count - self.bytesPlayedSoFar
+            let chunk = 16384
+            var returning : Data?
+            
             if(amount > chunk)
             {
-                var returning = wholeData!.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + chunk))
-                dataRequest.respond(with: returning)
-                self.bytesPlayedSoFar += chunk
-                loadingRequest.finishLoading()
-                return true
+                returning = wholeDataSnapshot!.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + chunk))
             }
             else if(self.bytesPlayedSoFar + chunk > self.SegmentLength)
             {
-                var returning = wholeData!.subdata(in: self.bytesPlayedSoFar..<self.wholeData!.count)
-                dataRequest.respond(with: returning)
-                self.bytesPlayedSoFar += amount
-                loadingRequest.finishLoading()
-                return true
+                returning = wholeDataSnapshot!.subdata(in: self.bytesPlayedSoFar..<self.wholeData!.count)
             }
             else
             {
                 loadingRequest.finishLoading()
                 return true
             }
+            
+            dataRequest.respond(with: returning!)
+            self.bytesPlayedSoFar += returning!.count
+            loadingRequest.finishLoading()
+            return true
         }
         return false
     }
