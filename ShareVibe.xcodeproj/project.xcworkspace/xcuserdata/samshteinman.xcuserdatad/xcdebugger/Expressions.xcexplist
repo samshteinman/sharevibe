@@ -9,6 +9,12 @@
                value = "self.wholeData!.count">
             </PersistentString>
             <PersistentString
+               value = "self.mdatIndex">
+            </PersistentString>
+            <PersistentString
+               value = "self.currentSegmentHandleToFile">
+            </PersistentString>
+            <PersistentString
                value = "self.segments[self.currentlyReceivingSegmentIndex].count">
             </PersistentString>
             <PersistentString
@@ -16,12 +22,6 @@
             </PersistentString>
             <PersistentString
                value = "self.FileLength">
-            </PersistentString>
-            <PersistentString
-               value = "self.BytesReceivedSoFar">
-            </PersistentString>
-            <PersistentString
-               value = "self.currentSegmentHandleToFile">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -178,10 +178,10 @@
          contextName = "PeripheralCentralManager.startSend(content:):PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "PeripheralCentralManager.FileLengthCharacteristic">
+               value = "peripheralManager">
             </PersistentString>
             <PersistentString
-               value = "peripheralManager">
+               value = "PeripheralCentralManager.FileLengthCharacteristic">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

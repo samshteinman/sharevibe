@@ -12,8 +12,8 @@ import MediaPlayer
 
 class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManagerDelegate, MPMediaPickerControllerDelegate
 {
-    @Published var BytesSentOfCurrentSegmentSoFar: Int = 0
-    @Published var TotalBytesOfCurrentSegment: Int = 0
+    @Published var BytesSentOfCurrentSegmentSoFar: UInt64 = 0
+    @Published var TotalBytesOfCurrentSegment: UInt64 = 0
     @Published var Running = false
     @Published var Connected = false
     
@@ -63,7 +63,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
             {
                 if(peripheralManager.updateValue(chunk, for: PeripheralCentralManager.SegmentDataCharacteristic, onSubscribedCentrals: nil))
                 {
-                    self.BytesSentOfCurrentSegmentSoFar += chunk.count
+                    self.BytesSentOfCurrentSegmentSoFar += UInt64(chunk.count)
                 }
                 else
                 {
@@ -77,7 +77,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
     {
         if(self.needBroadcastSegmentLength)
         {
-            self.TotalBytesOfCurrentSegment = self.songData.count
+            self.TotalBytesOfCurrentSegment = UInt64(self.songData.count)
             
             self.needBroadcastSegmentLength = !peripheralManager.updateValue(getCurrentSegmentLengthAsData() ,for: PeripheralCentralManager.SegmentLengthCharacteristic, onSubscribedCentrals: nil)
             
@@ -112,7 +112,7 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
         if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
         {
             NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
-            Globals.ChunkSize = central.maximumUpdateValueLength
+            Globals.ChunkSize = UInt64(central.maximumUpdateValueLength)
         }
     }
     
@@ -139,11 +139,11 @@ class PeripheralCentralManager : NSObject, ObservableObject, CBPeripheralManager
         }
         else if(BytesSentOfCurrentSegmentSoFar + Globals.ChunkSize > self.songData.count)
         {
-            return self.songData.subdata(in: BytesSentOfCurrentSegmentSoFar..<(self.songData.count))
+            return self.songData.subdata(in: Data.Index(BytesSentOfCurrentSegmentSoFar)..<(self.songData.count))
         }
         else
         {
-            return self.songData.subdata(in: BytesSentOfCurrentSegmentSoFar..<(BytesSentOfCurrentSegmentSoFar+Globals.ChunkSize))
+            return self.songData.subdata(in: Data.Index(BytesSentOfCurrentSegmentSoFar)..<(Data.Index(BytesSentOfCurrentSegmentSoFar)+Data.Index(Globals.ChunkSize)))
         }
     }
     

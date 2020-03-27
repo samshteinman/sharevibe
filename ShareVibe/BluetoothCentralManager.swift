@@ -14,8 +14,8 @@ import UIKit
 
 class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate, AVAssetResourceLoaderDelegate
 {
-    @Published var SegmentLength: UInt32 = 0
-    @Published var BytesReceivedOfCurrentSegmentSoFar: Int = 0
+    @Published var SegmentLength: UInt64 = 0
+    @Published var BytesReceivedOfCurrentSegmentSoFar: UInt64 = 0
     @Published var Running = false
     @Published var Connected = false
     
@@ -26,7 +26,8 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     var peripheral : CBPeripheral!
     
     var wholeData : Data?
-    
+    var mdatIndex: UInt64?
+
     var streamingAsset : AVURLAsset!
     var streamingPlayerItem : AVPlayerItem!
     
@@ -108,7 +109,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             {
                 for characteristic in characteristics
                 {
-                    NSLog(characteristic.uuid)
+                    NSLog("\(characteristic.uuid)")
                     if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID)
                     {
                         peripheral.setNotifyValue(true, for: characteristic)
@@ -163,7 +164,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 UIApplication.shared.isIdleTimerDisabled = true
                 
                 self.SegmentLength = (val.withUnsafeBytes
-                    { (ptr: UnsafePointer<UInt32>) in ptr.pointee } )
+                    { (ptr: UnsafePointer<UInt64>) in ptr.pointee } )
                 NSLog("Got segment length \(self.SegmentLength)")
             }
         }
@@ -173,14 +174,15 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             {
                 appendFileData(val: val)
                 
-                self.BytesReceivedOfCurrentSegmentSoFar += val.count
+                self.BytesReceivedOfCurrentSegmentSoFar += UInt64(val.count)
                 
                 if(self.wholeData!.count == self.SegmentLength)
                 {
                     storeWholeData()
                 }
                 
-                if(!self.playing && self.wholeData!.count >= 32768) //Magic number, won't play audio less.. why?
+                //TODO: I've seen files where moov atom and metadata is 33kB, need to know when I can start playing audio.. guessing at 40k right now
+                if(!self.playing && self.wholeData!.count > 40860)
                 {
                     startPlayingStreamingAudio()
                     self.playing = true
@@ -210,30 +212,40 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         }
     }
     
-    func checkIfContainsMDAT(data: Data) -> Bool
+    func getmdatIndex(data: Data) -> UInt64?
     {
         for index in 0..<(data.count - 3)
         {
-           if(data[index] == 0x6D
-               && data[index+1] == 0x64
-               && data[index+2] == 0x61
-               && data[index+3] == 0x74)
+            //mdat
+           //if(data[index] == 0x6D
+            //   && data[index+1] == 0x64
+             //  && data[index+2] == 0x61
+              // && data[index+3] == 0x74)
+            if(data[index] == 0x6D
+               && data[index+1] == 0x6F
+               && data[index+2] == 0x6F
+               && data[index+3] == 0x76)
            {
-            return true
+            NSLog("moov at \(index)")
+            mdatIndex = UInt64(index)
+            return mdatIndex!
            }
         }
         
-        return false
+        return mdatIndex
     }
+    
     func appendFileData(val: Data)
     {
         if(wholeData == nil)
         {
+            NSLog("wholeData empty adding \(val.count) bytes")
             wholeData = val
         }
         else
         {
             wholeData!.append(val)
+            NSLog("Storing \(val.count) bytes")
         }
     }
 
@@ -303,6 +315,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 loadingRequest.finishLoading()
                 return true
             }
+            NSLog("Sending up \(returning!.count) bytes")
             
             dataRequest.respond(with: returning!)
             self.bytesPlayedSoFar += returning!.count

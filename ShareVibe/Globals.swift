@@ -57,7 +57,7 @@ public class Globals : NSObject
     
     static var Compress = false
     
-    static var ChunkSize : Int = 182
+    static var ChunkSize : UInt64 = 182
     
     enum Transmissions
     {
