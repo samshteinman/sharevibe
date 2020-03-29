@@ -48,7 +48,11 @@ public class Globals : NSObject
         
         static var StreamingAsset : AVURLAsset!
         static var StreamingPlayerItem : AVPlayerItem!
+        
+        static var ReceivedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("received" + Playback.AudioFileExtension))
            
+        static var ExportedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("exported" + Playback.AudioFileExtension))
+        
         
         static func RestartPlayer()
         {
@@ -97,17 +101,11 @@ public class Globals : NSObject
                }
     }
     
-    static var ReceivedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("received" + Playback.AudioFileExtension))
-       
-    static var ExportedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("exported" + Playback.AudioFileExtension))
-    
     static var SharedAudioSession : AVAudioSession!
-    
-    static var CompressionAlgorithm = NSData.CompressionAlgorithm.lzfse
     
     static var Compress = false
     
-    static var ChunkSize = 512
+    static var ChunkSize = 256
     
     enum Transmissions
     {

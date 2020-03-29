@@ -31,6 +31,10 @@ struct ContentView: View {
                 self.CentralBroadcastr.startup()
                 self.showPicker = !self.showPicker
             }
+            Button("Play Last")
+            {
+                self.PeripheralListenr.playAudio(path: Globals.Playback.ReceivedAudioFilePath.path)
+            }
         }.sheet(isPresented: self.$showPicker,
                 onDismiss: self.sendSong)
             {
@@ -60,7 +64,7 @@ struct ContentView: View {
             session?.shouldOptimizeForNetworkUse = true
             session?.canPerformMultiplePassesOverSourceMediaData = true
             
-            session!.outputURL = URL(fileURLWithPath: Globals.ExportedAudioFilePath.path)
+            session!.outputURL = URL(fileURLWithPath: Globals.Playback.ExportedAudioFilePath.path)
             
             NSLog("Going to export to location: \(session!.outputURL!)")
 
@@ -74,11 +78,6 @@ struct ContentView: View {
                     {
                         let data = try Data.init(contentsOf: session!.outputURL!)
                         
-                        let file = try AVAudioFile.init(forReading: session!.outputURL!)
-                        
-                        print("Format: \(file.fileFormat)")
-                        print("Processing format: \(file.processingFormat)")
-
                         DispatchQueue.main.async
                         {
                             //self.PeripheralManager.startSend(content: data)

@@ -144,7 +144,7 @@
          contextName = "PeripheralListener.resourceLoader(_:shouldWaitForLoadingOfRequestedResource:):PeripheralListener.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.totalLength">
+               value = "self.TotalLength">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -13,7 +13,7 @@ import AVFoundation
 class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelegate, AVAssetResourceLoaderDelegate, StreamDelegate
 {
     @Published var Connected = false
-    @Published var BytesReceivedSoFar = 0
+    @Published var data : Data = Data()
     
     static var Service = CBMutableService(type: Globals.BluetoothGlobals.ServiceUUID, primary: true)
     static var SegmentCharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .write, .writeWithoutResponse]
@@ -21,12 +21,9 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
     static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
     static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
     
-    
-    var TotalLength = UInt32(0)
+    var TotalLength = Int64(UInt32.max)
     
     var channel : CBL2CAPChannel!
-    
-    @Published var data : Data = Data()
     
     var peripheralManager: CBPeripheralManager!
     
@@ -53,46 +50,6 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
               peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.BluetoothGlobals.ServiceUUID]])
             
             Connected = true 
-        }
-    }
-    
-    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
-        for request in requests
-        {
-            for request in requests
-            {
-                if(request.characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
-                {
-                    if let val = request.value
-                    {
-                        data.append(val)
-                        peripheral.respond(to: request, withResult: CBATTError.success)
-                        
-                        self.BytesReceivedSoFar += val.count
-                        
-                        //if let index = Globals.Playback.getmdatIndex(data: val)
-                        //{
-                            if(data.count >= 32768) //start playing after we have about 2 seconds
-                            {
-                                playAudio(path: "specialscheme://some/station")
-                            }
-                        //}
-                    }
-                }
-                else if(request.characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID)
-                {
-                    if let val = request.value
-                    {
-                        self.TotalLength = (val.withUnsafeBytes
-                        { (ptr: UnsafePointer<UInt32>) in ptr.pointee } )
-                        
-                        print("Got length from broadcaster = \(self.TotalLength)")
-                        
-                        peripheral.respond(to: request, withResult: CBATTError.success)
-                    }
-                }
-            }
-            
         }
     }
     
@@ -130,7 +87,7 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
         if let contentInfoRequest = loadingRequest.contentInformationRequest
         {
             NSLog("Got content request")
-            contentInfoRequest.contentLength = Int64(bitPattern: UInt64(self.TotalLength))
+            contentInfoRequest.contentLength = Int64(UInt32.max)
             contentInfoRequest.contentType = AVFileType.mp4.rawValue
             contentInfoRequest.isByteRangeAccessSupported = true
             
@@ -220,7 +177,7 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
             case .hasBytesAvailable:
                 print("peripheral listener stream - can read some bytes")
                 var buffer = [UInt8].init(repeating: 0, count: Globals.ChunkSize)
-                var count = (aStream as! InputStream).read(&buffer, maxLength: Globals.ChunkSize)
+                let count = (aStream as! InputStream).read(&buffer, maxLength: Globals.ChunkSize)
                 self.data.append(Data(buffer).subdata(in: 0..<count))
                 
                 if(data.count >= 32768) //start playing after we have about 2 seconds

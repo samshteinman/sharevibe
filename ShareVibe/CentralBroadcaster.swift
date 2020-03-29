@@ -177,18 +177,18 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
     
     func startSendChunksToAllPeripheralsL2CAP()
     {
-        var someoneStillNeedsData = true
-        while(someoneStillNeedsData)
-        {
+        //var someoneStillNeedsData = true
+        //while(someoneStillNeedsData)
+        //{
             for peripheral in peripherals
             {
                 if let channel = peripheralsToL2CAPChannels[peripheral]
                 {
                     sendChunkToStream(stream: channel.outputStream)
                 }
-                someoneStillNeedsData = someoneStillNeedsData || (peripheralsToByteSentSoFar[peripheral]! < self.data.count)
+          //      someoneStillNeedsData = someoneStillNeedsData || (peripheralsToByteSentSoFar[peripheral]! < self.data.count)
             }
-        }
+        //}
     }
     
     
@@ -202,9 +202,10 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
                 break
             case .hasSpaceAvailable:
                 print("Central stream: has space available")
+                sendChunkToStream(stream: aStream as! OutputStream)
                 break
         case .errorOccurred:
-            print(aStream.streamError)
+            print(aStream.streamError!)
             break
             default:
                 print(eventCode)
@@ -216,12 +217,19 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
     {
         if((stream as! OutputStream).hasSpaceAvailable)
         {
-            if let chunk = getChunkFromFile(index: peripheralsToByteSentSoFar[outputStreamToPeripheralMap[stream]!]!)
+            if let bytesSentSoFar = peripheralsToByteSentSoFar[outputStreamToPeripheralMap[stream]!]
             {
-                var uint8Buffer = [UInt8](chunk)
-                let bytesSent = (stream as! OutputStream).write(&uint8Buffer, maxLength: chunk.count)
-                print("Sent \(bytesSent) to peripheral \(outputStreamToPeripheralMap[stream]?.identifier)")
-                peripheralsToByteSentSoFar[outputStreamToPeripheralMap[stream]!]! += bytesSent
+                if let chunk = getChunkFromFile(index: bytesSentSoFar)
+                {
+                    var uint8Buffer = [UInt8](chunk)
+                    let bytesSent = (stream as! OutputStream).write(&uint8Buffer, maxLength: chunk.count)
+                    print("Sent \(bytesSent) to peripheral \(outputStreamToPeripheralMap[stream]?.identifier)")
+                    peripheralsToByteSentSoFar[outputStreamToPeripheralMap[stream]!]! += bytesSent
+                }
+                else
+                {
+                    print("Nothing more to send to \(outputStreamToPeripheralMap[stream]?.identifier)")
+                }
             }
         }
     }
