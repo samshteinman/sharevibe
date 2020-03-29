@@ -10,20 +10,6 @@ import Foundation
 import AVFoundation
 import CoreBluetooth
 
-/*
- Listener or a Station
- 
- Listener:
- #1 Listener subscribes to notifications of length and data characteristics
- #2 If receiving SegmentData, but current file length is nil, fetch the file length
- #3 When receiving enough data, add to AVQueuePlayer
- 
- 
- When a station is playing:
- for every next segment played, update the NowBroadcastingSegment
- 
- */
-
 public class Globals : NSObject
 {
     enum State
