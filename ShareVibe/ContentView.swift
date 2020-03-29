@@ -14,29 +14,23 @@ import FileProvider
 struct ContentView: View {
     @State private var songs : MPMediaItemCollection?
     @State private var showPicker : Bool = false
-    @State private var IDToConnect : String = "AAAA"
     
-    @ObservedObject var CentralManager = BluetoothCentralManager()
-    @ObservedObject var PeripheralManager = PeripheralCentralManager()
+    @ObservedObject var CentralBroadcastr = CentralBroadcaster()
+    @ObservedObject var PeripheralListenr = PeripheralListener()
     
     var body: some View {
         VStack
         {
-            Button("Listen Again")
+            Text("\(PeripheralListenr.data.count)")
+            Button("Listen")
             {
-                self.CentralManager.playStream(path: Globals.ReceivedAudioFilePath.path)
-            }
-            Text("Received: \(CentralManager.BytesReceivedOfCurrentSegmentSoFar) / \(CentralManager.SegmentLength)")
-            Button("Listening for Songs: \(self.CentralManager.Running.description)")
-            {
-                self.CentralManager.startup()
+                self.PeripheralListenr.startup()
             }
             Button("Broadcast")
-            {
-                self.PeripheralManager.startup()
+             {
+                self.CentralBroadcastr.startup()
                 self.showPicker = !self.showPicker
             }
-            Text("Sent: \(PeripheralManager.BytesSentOfCurrentSegmentSoFar) / \(PeripheralManager.TotalBytesOfCurrentSegment)")
         }.sheet(isPresented: self.$showPicker,
                 onDismiss: self.sendSong)
             {
@@ -79,9 +73,16 @@ struct ContentView: View {
                     do
                     {
                         let data = try Data.init(contentsOf: session!.outputURL!)
+                        
+                        let file = try AVAudioFile.init(forReading: session!.outputURL!)
+                        
+                        print("Format: \(file.fileFormat)")
+                        print("Processing format: \(file.processingFormat)")
+
                         DispatchQueue.main.async
                         {
-                            self.PeripheralManager.startSend(content: data)
+                            //self.PeripheralManager.startSend(content: data)
+                            self.CentralBroadcastr.startSend(data: data)
                         }
                     }
                     catch

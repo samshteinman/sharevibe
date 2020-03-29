@@ -15,11 +15,11 @@
 		36526FBE241C606200FABC9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36526FBC241C606200FABC9D /* LaunchScreen.storyboard */; };
 		36526FC9241C606200FABC9D /* ShareVibeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FC8241C606200FABC9D /* ShareVibeTests.swift */; };
 		36526FD4241C606200FABC9D /* ShareVibeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FD3241C606200FABC9D /* ShareVibeUITests.swift */; };
+		3657D77E242EDE7B00E72807 /* CentralBroadcaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657D77D242EDE7B00E72807 /* CentralBroadcaster.swift */; };
+		3657D780242EE84A00E72807 /* PeripheralListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3657D77F242EE84A00E72807 /* PeripheralListener.swift */; };
 		3686737C241DEEA100F23BC8 /* SongPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3686737B241DEEA100F23BC8 /* SongPicker.swift */; };
 		36C849882421542100D5FD8C /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C849872421542100D5FD8C /* Globals.swift */; };
 		36ED5390241D8CE400440054 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36ED538F241D8CE400440054 /* MediaPlayer.framework */; };
-		36ED5392241D908E00440054 /* BluetoothCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ED5391241D908E00440054 /* BluetoothCentralManager.swift */; };
-		36ED5394241D90A200440054 /* PeripheralCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ED5393241D90A200440054 /* PeripheralCentralManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,11 +54,11 @@
 		36526FCF241C606200FABC9D /* ShareVibeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShareVibeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36526FD3241C606200FABC9D /* ShareVibeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareVibeUITests.swift; sourceTree = "<group>"; };
 		36526FD5241C606200FABC9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3657D77D242EDE7B00E72807 /* CentralBroadcaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralBroadcaster.swift; sourceTree = "<group>"; };
+		3657D77F242EE84A00E72807 /* PeripheralListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralListener.swift; sourceTree = "<group>"; };
 		3686737B241DEEA100F23BC8 /* SongPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPicker.swift; sourceTree = "<group>"; };
 		36C849872421542100D5FD8C /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		36ED538F241D8CE400440054 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		36ED5391241D908E00440054 /* BluetoothCentralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCentralManager.swift; sourceTree = "<group>"; };
-		36ED5393241D90A200440054 /* PeripheralCentralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralCentralManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,8 +162,8 @@
 		36ED5396241DD3B400440054 /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
-				36ED5393241D90A200440054 /* PeripheralCentralManager.swift */,
-				36ED5391241D908E00440054 /* BluetoothCentralManager.swift */,
+				3657D77D242EDE7B00E72807 /* CentralBroadcaster.swift */,
+				3657D77F242EE84A00E72807 /* PeripheralListener.swift */,
 			);
 			name = Bluetooth;
 			sourceTree = "<group>";
@@ -302,9 +302,9 @@
 				3686737C241DEEA100F23BC8 /* SongPicker.swift in Sources */,
 				36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */,
 				36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */,
-				36ED5394241D90A200440054 /* PeripheralCentralManager.swift in Sources */,
-				36ED5392241D908E00440054 /* BluetoothCentralManager.swift in Sources */,
 				36C849882421542100D5FD8C /* Globals.swift in Sources */,
+				3657D780242EE84A00E72807 /* PeripheralListener.swift in Sources */,
+				3657D77E242EDE7B00E72807 /* CentralBroadcaster.swift in Sources */,
 				36526FB6241C603E00FABC9D /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -45,6 +45,56 @@ public class Globals : NSObject
         static var Player : AVPlayer = AVPlayer.init()
         
         static let AudioFileExtension = ".mp4"
+        
+        static var StreamingAsset : AVURLAsset!
+        static var StreamingPlayerItem : AVPlayerItem!
+           
+        
+        static func RestartPlayer()
+        {
+            Globals.Playback.Player.currentItem?.cancelPendingSeeks()
+            Globals.Playback.Player.cancelPendingPrerolls()
+            Globals.Playback.Player.replaceCurrentItem(with: nil)
+            Globals.Playback.Player.pause()
+        }
+        
+        static func ConvertUInt32ToData(length : UInt32) -> Data
+        {
+            var tempHolder = length
+            return Data.init(bytes: &tempHolder, count: MemoryLayout.size(ofValue: tempHolder))
+        }
+        
+        static func getmdatIndex(data: Data) -> UInt64?
+        {
+            for index in 0..<(data.count - 3)
+            {
+               if(data[index] == 0x6D
+                   && data[index+1] == 0x64
+                   && data[index+2] == 0x61
+                   && data[index+3] == 0x74)
+               {
+                return UInt64(index)
+               }
+            }
+            
+            return nil
+        }
+        
+        static func getmoovIndex(data: Data) -> UInt64?
+               {
+                   for index in 0..<(data.count - 3)
+                   {
+                      if(data[index] == 0x6D
+                          && data[index+1] == 0x6F
+                          && data[index+2] == 0x6F
+                          && data[index+3] == 0x76)
+                      {
+                       return UInt64(index)
+                      }
+                   }
+                   
+                   return nil
+               }
     }
     
     static var ReceivedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("received" + Playback.AudioFileExtension))
@@ -57,7 +107,7 @@ public class Globals : NSObject
     
     static var Compress = false
     
-    static var ChunkSize : UInt64 = 182
+    static var ChunkSize = 512
     
     enum Transmissions
     {
