@@ -64,18 +64,11 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
           {
                if(service.uuid == Globals.BluetoothGlobals.ServiceUUID)
                {
-                   peripheral.discoverCharacteristics([ Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID], for: service)
-               }
+                    peripheral.openL2CAPChannel(CBL2CAPPSM(192))
+                
+                }
            }
        }
-    }
-    
-    public func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error:
-        Error?)
-    {
-        peripheralsToCharacteristics[peripheral] = service.characteristics
-        
-        peripheral.openL2CAPChannel(CBL2CAPPSM(192)) //192
     }
     
     func startSend(data: Data)
@@ -85,7 +78,6 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
         
         resetForAllPeripherals()
         
-        sendLengthToAllPeripherals()
         //sendChunkToAllPeripherals()
         startSendChunksToAllPeripheralsL2CAP()
     }
@@ -94,38 +86,6 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
     {
         for peripheral in peripherals{
             peripheralsToByteSentSoFar[peripheral] = 0
-        }
-    }
-    func sendLengthToAllPeripherals()
-    {
-        for peripheral in peripherals
-        {
-            if let lengthChar = peripheralsToCharacteristics[peripheral]?.first(where: {$0.uuid == Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID })
-            {
-                peripheral.writeValue(Globals.Playback.ConvertUInt32ToData(length: UInt32(self.data.count)), for: lengthChar, type: .withResponse)
-                print("Sent length to peripheral \(peripheral.identifier) : length = \(self.data.count)")
-            }
-        }
-    }
-    
-    func sendChunkToAllPeripherals()
-    {
-        while(self.bytesSentSoFar < self.data.count)
-        {
-            if let chunk = getChunkFromFile()
-            {
-                for peripheral in peripherals
-                {
-                    if let dataChar = peripheralsToCharacteristics[peripheral]?.first(where: {$0.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID })
-                    {
-                        peripheral.writeValue(chunk, for: dataChar, type: .withResponse)
-                        
-                        var buffer = [UInt8](chunk)
-                        peripheralsToL2CAPChannels[peripheral]?.outputStream.write(&buffer, maxLength: peripheral.maximumWriteValueLength(for: .withResponse))
-                    }
-                }
-                bytesSentSoFar += chunk.count
-            }
         }
     }
     

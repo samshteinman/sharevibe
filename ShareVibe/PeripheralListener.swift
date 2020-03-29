@@ -16,10 +16,6 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
     @Published var data : Data = Data()
     
     static var Service = CBMutableService(type: Globals.BluetoothGlobals.ServiceUUID, primary: true)
-    static var SegmentCharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .write, .writeWithoutResponse]
-    static var Permissions: CBAttributePermissions = [.readable, .writeable]
-    static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
-    static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
     
     var TotalLength = Int64(UInt32.max)
     
@@ -41,8 +37,6 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
         {
             NSLog("Bluetooth on peripheral listener")
             
-             PeripheralListener.Service.characteristics = [PeripheralListener.SegmentLengthCharacteristic, PeripheralListener.SegmentDataCharacteristic]
-              
               peripheralManager.add(PeripheralListener.Service)
                 
               peripheralManager.publishL2CAPChannel(withEncryption: false)
@@ -180,7 +174,7 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
                 let count = (aStream as! InputStream).read(&buffer, maxLength: Globals.ChunkSize)
                 self.data.append(Data(buffer).subdata(in: 0..<count))
                 
-                if(data.count >= 32768) //start playing after we have about 2 seconds
+                if(data.count >= 32768) //Magic number seems to work most cases.. need to find out real number
                    {
                        playAudio(path: "specialscheme://some/station")
                    }
