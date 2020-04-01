@@ -21,6 +21,8 @@ public class Globals : NSObject
     
     public class BluetoothGlobals
     {
+        static let CurrentFileSegmentDataUUID = CBUUID(string: "78753A44-4D6F-1226-9C60-0050E4C00067")
+        static let CurrentFileSegmentLengthUUID = CBUUID(string: "18753A44-4D6F-1226-9C60-0050E4C00067")
         static let ServiceUUID = CBUUID(string: "88753A44-4D6F-1226-9C60-0050E4C00067")
     }
     
@@ -97,4 +99,9 @@ public class Globals : NSObject
     }
     
     static var Transmission = Transmissions.update
+
+    static var ReceivedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("received" + Playback.AudioFileExtension))
+          
+    static var ExportedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("exported" + Playback.AudioFileExtension))
+
 }

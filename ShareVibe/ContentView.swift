@@ -15,26 +15,23 @@ struct ContentView: View {
     @State private var songs : MPMediaItemCollection?
     @State private var showPicker : Bool = false
     
-    @ObservedObject var CentralBroadcastr = CentralBroadcaster()
-    @ObservedObject var PeripheralListenr = PeripheralListener()
+    @ObservedObject var CentralManager = BluetoothCentralManager()
+    @ObservedObject var PeripheralManager = BluetoothPeripheralManager()
    
     var body: some View {
         VStack
         {
-            Text("Buffering: \(String(self.PeripheralListenr.data.count > 0 && self.PeripheralListenr.data.count < 65535))")
+            Text("Received: \(self.CentralManager.BytesReceivedOfCurrentSegmentSoFar) / \(self.CentralManager.SegmentLength)")
             Button("Listen")
             {
-                self.PeripheralListenr.startup()
+                self.CentralManager.startup()
             }
             Button("Broadcast")
             {
-                self.CentralBroadcastr.startup()
+                self.PeripheralManager.startup()
                 self.showPicker = !self.showPicker
             }
-            Button("\(self.PeripheralListenr.SongTitleArtistName)")
-            {
-                self.PeripheralListenr.playAudio(path: Globals.Playback.ReceivedAudioFilePath.path)
-            }
+            Text("Sent: \(self.PeripheralManager.BytesSentOfCurrentSegmentSoFar) / \(self.PeripheralManager.TotalBytesOfCurrentSegment)")
         }
         .sheet(isPresented: self.$showPicker,
                 onDismiss: self.sendSong)
@@ -81,8 +78,7 @@ struct ContentView: View {
                         
                         DispatchQueue.main.async
                         {
-                            //self.PeripheralManager.startSend(content: data)
-                            self.CentralBroadcastr.startSend(data: data)
+                            self.PeripheralManager.startSend(content: data)
                         }
                     }
                     catch
