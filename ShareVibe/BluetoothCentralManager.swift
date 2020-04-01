@@ -181,8 +181,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                     storeWholeData()
                 }
                 
-                //TODO: I've seen files where moov atom and metadata is 33kB, need to know when I can start playing audio.. guessing at 40k right now
-                if(!self.playing && self.wholeData!.count > 40860)
+                if(!self.playing && self.wholeData!.count > 65535)
                 {
                     startPlayingStreamingAudio()
                     self.playing = true

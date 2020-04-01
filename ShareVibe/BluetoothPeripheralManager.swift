@@ -20,6 +20,9 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
     var songData : Data!
     var needBroadcastSegmentLength = true
     
+    var player : AVPlayer?
+    var playing = false
+    
     var peripheralManager: CBPeripheralManager!
     
     static var Service = CBMutableService(type: Globals.BluetoothGlobals.ServiceUUID, primary: true)
@@ -40,6 +43,10 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
     {
         self.needBroadcastSegmentLength = true
         self.BytesSentOfCurrentSegmentSoFar = 0
+        
+        self.playing = false
+        self.player?.replaceCurrentItem(with: nil)
+        self.player?.pause()
     }
     
     func startSend(content : Data)
@@ -64,6 +71,12 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
                 if(peripheralManager.updateValue(chunk, for: BluetoothPeripheralManager.SegmentDataCharacteristic, onSubscribedCentrals: nil))
                 {
                     self.BytesSentOfCurrentSegmentSoFar += chunk.count
+                    if(!self.playing && self.BytesSentOfCurrentSegmentSoFar >= 65535)
+                    {
+                        player = AVPlayer.init(url: Globals.ExportedAudioFilePath)
+                        player?.play()
+                        self.playing = true
+                    }
                 }
                 else
                 {
