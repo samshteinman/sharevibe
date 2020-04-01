@@ -20,7 +20,6 @@
 		3686737C241DEEA100F23BC8 /* SongPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3686737B241DEEA100F23BC8 /* SongPicker.swift */; };
 		36C849882421542100D5FD8C /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C849872421542100D5FD8C /* Globals.swift */; };
 		36ED5390241D8CE400440054 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36ED538F241D8CE400440054 /* MediaPlayer.framework */; };
-		36EDD9202434156C006AE5B5 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EDD91F2434156C006AE5B5 /* AudioPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +59,6 @@
 		3686737B241DEEA100F23BC8 /* SongPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPicker.swift; sourceTree = "<group>"; };
 		36C849872421542100D5FD8C /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		36ED538F241D8CE400440054 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		36EDD91F2434156C006AE5B5 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,7 +121,6 @@
 				36526FB9241C606200FABC9D /* Preview Content */,
 				3686737B241DEEA100F23BC8 /* SongPicker.swift */,
 				36C849872421542100D5FD8C /* Globals.swift */,
-				36EDD91F2434156C006AE5B5 /* AudioPlayer.swift */,
 			);
 			path = ShareVibe;
 			sourceTree = "<group>";
@@ -305,7 +302,6 @@
 				3686737C241DEEA100F23BC8 /* SongPicker.swift in Sources */,
 				36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */,
 				36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */,
-				36EDD9202434156C006AE5B5 /* AudioPlayer.swift in Sources */,
 				36C849882421542100D5FD8C /* Globals.swift in Sources */,
 				3657D780242EE84A00E72807 /* BluetoothPeripheralManager.swift in Sources */,
 				3657D77E242EDE7B00E72807 /* BluetoothCentralManager.swift in Sources */,
