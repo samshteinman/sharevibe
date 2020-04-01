@@ -53,38 +53,6 @@ public class Globals : NSObject
             var tempHolder = length
             return Data.init(bytes: &tempHolder, count: MemoryLayout.size(ofValue: tempHolder))
         }
-        
-        static func getmdatIndex(data: Data) -> UInt64?
-        {
-            for index in 0..<(data.count - 3)
-            {
-               if(data[index] == 0x6D
-                   && data[index+1] == 0x64
-                   && data[index+2] == 0x61
-                   && data[index+3] == 0x74)
-               {
-                return UInt64(index)
-               }
-            }
-            
-            return nil
-        }
-        
-        static func getmoovIndex(data: Data) -> UInt64?
-               {
-                   for index in 0..<(data.count - 3)
-                   {
-                      if(data[index] == 0x6D
-                          && data[index+1] == 0x6F
-                          && data[index+2] == 0x6F
-                          && data[index+3] == 0x76)
-                      {
-                       return UInt64(index)
-                      }
-                   }
-                   
-                   return nil
-               }
     }
     
     static var SharedAudioSession : AVAudioSession!

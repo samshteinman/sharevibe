@@ -212,29 +212,6 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         }
     }
     
-    func getmdatIndex(data: Data) -> UInt64?
-    {
-        for index in 0..<(data.count - 3)
-        {
-            //mdat
-           //if(data[index] == 0x6D
-            //   && data[index+1] == 0x64
-             //  && data[index+2] == 0x61
-              // && data[index+3] == 0x74)
-            if(data[index] == 0x6D
-               && data[index+1] == 0x6F
-               && data[index+2] == 0x6F
-               && data[index+3] == 0x76)
-           {
-            NSLog("moov at \(index)")
-            mdatIndex = UInt64(index)
-            return mdatIndex!
-           }
-        }
-        
-        return mdatIndex
-    }
-    
     func appendFileData(val: Data)
     {
         if(wholeData == nil)
