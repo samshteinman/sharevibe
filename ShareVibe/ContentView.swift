@@ -17,25 +17,26 @@ struct ContentView: View {
     
     @ObservedObject var CentralBroadcastr = CentralBroadcaster()
     @ObservedObject var PeripheralListenr = PeripheralListener()
-    
+   
     var body: some View {
         VStack
         {
-            Text("\(PeripheralListenr.data.count)")
+            Text("Buffering: \(String(self.PeripheralListenr.data.count > 0 && self.PeripheralListenr.data.count < 65535))")
             Button("Listen")
             {
                 self.PeripheralListenr.startup()
             }
             Button("Broadcast")
-             {
+            {
                 self.CentralBroadcastr.startup()
                 self.showPicker = !self.showPicker
             }
-            Button("Play Last")
+            Button("\(self.PeripheralListenr.SongTitleArtistName)")
             {
                 self.PeripheralListenr.playAudio(path: Globals.Playback.ReceivedAudioFilePath.path)
             }
-        }.sheet(isPresented: self.$showPicker,
+        }
+        .sheet(isPresented: self.$showPicker,
                 onDismiss: self.sendSong)
             {
                SongPicker(songs: self.$songs)

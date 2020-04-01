@@ -49,26 +49,9 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
     }
     
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-      
-        peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
-        
         Connected = true
         NSLog("Connected to a peripheral! \(peripheral.identifier)")
-    }
-    
-    public func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?)
-    {
-       if let services = peripheral.services
-       {
-          for service in services
-          {
-               if(service.uuid == Globals.BluetoothGlobals.ServiceUUID)
-               {
-                    peripheral.openL2CAPChannel(CBL2CAPPSM(192))
-                
-                }
-           }
-       }
+        peripheral.openL2CAPChannel(CBL2CAPPSM(192))
     }
     
     func startSend(data: Data)
@@ -78,7 +61,6 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
         
         resetForAllPeripherals()
         
-        //sendChunkToAllPeripherals()
         startSendChunksToAllPeripheralsL2CAP()
     }
     
@@ -164,9 +146,9 @@ public class CentralBroadcaster : NSObject, ObservableObject, CBCentralManagerDe
                 print("Central stream: has space available")
                 sendChunkToStream(stream: aStream as! OutputStream)
                 break
-        case .errorOccurred:
-            print(aStream.streamError!)
-            break
+            case .errorOccurred:
+                print(aStream.streamError!)
+                break
             default:
                 print(eventCode)
                 break

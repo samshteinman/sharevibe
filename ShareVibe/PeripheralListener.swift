@@ -29,7 +29,7 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
     
     func startup()
     {
-       peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+        peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
@@ -47,7 +47,6 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
         }
     }
     
-    //Playback
     func playAudio(path: String)
     {
         if(self.currentlyPlayingAudio)
@@ -63,7 +62,7 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
          
         Globals.Playback.StreamingAsset.resourceLoader.setDelegate(self, queue: DispatchQueue.main)
          
-         Globals.Playback.Player.automaticallyWaitsToMinimizeStalling = false
+        Globals.Playback.Player.automaticallyWaitsToMinimizeStalling = false
          
         Globals.Playback.Player.replaceCurrentItem(with: Globals.Playback.StreamingPlayerItem)
          
@@ -93,18 +92,13 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
         {
             let wholeDataSnapshot = data
             
-            let amount = wholeDataSnapshot.count - self.bytesPlayedSoFar
-            let chunk = 16384 //mdat at 19645, moov at 32
+            let amountCanSend = wholeDataSnapshot.count - self.bytesPlayedSoFar
+            let chunk = 16384
             var returning : Data?
             
-            if(amount > chunk)
+            if(amountCanSend >= chunk)
             {
-                returning = wholeDataSnapshot.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + chunk))
-                print("Data \(wholeDataSnapshot.count) bytes : grabbed \(returning!.count)")
-            }
-            else if(self.bytesPlayedSoFar + chunk > self.TotalLength)
-            {
-                returning = wholeDataSnapshot.subdata(in: self.bytesPlayedSoFar..<wholeDataSnapshot.count)
+                returning = wholeDataSnapshot.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + amountCanSend))
                 print("Data \(wholeDataSnapshot.count) bytes : grabbed \(returning!.count)")
             }
             else
@@ -172,17 +166,25 @@ class PeripheralListener : NSObject, ObservableObject, CBPeripheralManagerDelega
                 print("peripheral listener stream - can read some bytes")
                 var buffer = [UInt8].init(repeating: 0, count: Globals.ChunkSize)
                 let count = (aStream as! InputStream).read(&buffer, maxLength: Globals.ChunkSize)
-                self.data.append(Data(buffer).subdata(in: 0..<count))
+                appendData(data: Data(buffer).subdata(in: 0..<count))
                 
-                if(data.count >= 32768) //Magic number seems to work most cases.. need to find out real number
-                   {
-                       playAudio(path: "specialscheme://some/station")
-                   }
+                if(data.count >= 65535) //Magic number seems to work most cases.. need to find out real number
+                {
+                    playAudio(path: "specialscheme://some/station")
+                }
                 print("Adding \(count) bytes to data for total of \(self.data.count)")
                 break
+            case .endEncountered:
+                print("End of stream with \(self.data.count) bytes collected")
+            break
             default:
                 print("peripheral listener stream - some other thing \(eventCode)")
                 break
         }
+    }
+    
+    func appendData(data : Data)
+    {
+        self.data.append(data)
     }
 }
