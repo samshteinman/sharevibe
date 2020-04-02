@@ -11,36 +11,59 @@ import CoreBluetooth
 import AVFoundation
 import CryptoKit
 import UIKit
+import MediaPlayer
 
-class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate, AVAssetResourceLoaderDelegate
+class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate, AVAssetResourceLoaderDelegate
 {
     @Published var SegmentLength: UInt64 = 0
     @Published var BytesReceivedOfCurrentSegmentSoFar: UInt64 = 0
     @Published var Running = false
     @Published var Connected = false
-    
-    var segmentDataCharacteristic : CBCharacteristic!
-    var segmentLengthCharacteristic : CBCharacteristic!
+    @Published var SongDescription : String?
     
     var centralManager : CBCentralManager!
     var peripheral : CBPeripheral!
     
     var wholeData : Data?
-    var mdatIndex: UInt64?
 
     var streamingAsset : AVURLAsset!
     var streamingPlayerItem : AVPlayerItem!
+    var fileHandle : FileHandle!
     
     var bytesPlayedSoFar = 0
+    var startedPlayingAudio = false
     
-    var playing : Bool = false
-            
     func startup()
     {
         if(!Running)
         {
             centralManager = CBCentralManager(delegate: self, queue: nil)
+            setupRemoteControls()
         }
+    }
+    
+    func setupRemoteControls()
+    {
+            // Get the shared MPRemoteCommandCenter
+            let commandCenter = MPRemoteCommandCenter.shared()
+
+            // Add handler for Play Command
+            commandCenter.playCommand.addTarget { [unowned self] event in
+                if Globals.Playback.Player.rate == 0.0 {
+                    Globals.Playback.Player.play()
+                    return .success
+                }
+                return .commandFailed
+            }
+
+            // Add handler for Pause Command
+            commandCenter.pauseCommand.addTarget { [unowned self] event in
+                if Globals.Playback.Player.rate == 1.0 {
+                   Globals.Playback.Player.pause()
+                    return .success
+                }
+                return .commandFailed
+            }
     }
     
     public func centralManagerDidUpdateState(
@@ -86,7 +109,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 if(service.uuid == Globals.BluetoothGlobals.ServiceUUID)
                 {
                     NSLog("Found service we were looking for")
-                    peripheral.discoverCharacteristics([ Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID], for: service)
+                    peripheral.discoverCharacteristics([ Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID, Globals.BluetoothGlobals.SongDescriptionUUID], for: service)
                 }
             }
         }
@@ -110,20 +133,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 for characteristic in characteristics
                 {
                     NSLog("\(characteristic.uuid)")
-                    if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID)
-                    {
-                        peripheral.setNotifyValue(true, for: characteristic)
-                        self.segmentLengthCharacteristic = characteristic
-                    }
-                    else if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
-                    {
-                        peripheral.setNotifyValue(true, for: characteristic)
-                        self.segmentDataCharacteristic = characteristic
-                    }
-                    else
-                    {
-                        NSLog("discovered unknown characteristic")
-                    }
+                    peripheral.setNotifyValue(true, for: characteristic)
                 }
             }
         }
@@ -148,10 +158,11 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     {
         restartPlayer()
         
-        self.playing = false
+        var startedPlayingAudio = false
         self.wholeData = nil
         self.BytesReceivedOfCurrentSegmentSoFar = 0
         self.bytesPlayedSoFar = 0
+        setupFileHandle()
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -162,7 +173,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 restart()
                 
                 UIApplication.shared.isIdleTimerDisabled = true
-                
+
                 self.SegmentLength = (val.withUnsafeBytes
                     { (ptr: UnsafePointer<UInt64>) in ptr.pointee } )
                 NSLog("Got segment length \(self.SegmentLength)")
@@ -176,16 +187,17 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
                 
                 self.BytesReceivedOfCurrentSegmentSoFar += UInt64(val.count)
                 
-                if(self.wholeData!.count == self.SegmentLength)
-                {
-                    storeWholeData()
-                }
-                
-                if(!self.playing && self.wholeData!.count > 65535)
+                if(!self.startedPlayingAudio && self.wholeData!.count > 65535)
                 {
                     startPlayingStreamingAudio()
-                    self.playing = true
                 }
+            }
+        }
+        else if(characteristic.uuid == Globals.BluetoothGlobals.SongDescriptionUUID)
+        {
+            if let val = characteristic.value
+            {
+                self.SongDescription = String(decoding: val, as: UTF8.self)
             }
         }
         else
@@ -194,26 +206,27 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
         }
     }
     
-    func storeWholeData()
+    func setupFileHandle()
     {
         do
-        {
-            if(FileManager.default.fileExists(atPath: Globals.ReceivedAudioFilePath.path))
-            {
-                try FileManager.default.removeItem(at: Globals.ReceivedAudioFilePath)
-            }
-            
-            FileManager.default.createFile(atPath: Globals.ReceivedAudioFilePath.path, contents: self.wholeData!, attributes: nil)
-        }
-        catch
-        {
-         NSLog("Failed to write file : \(error)")
-        }
+       {
+           if(FileManager.default.fileExists(atPath: Globals.ReceivedAudioFilePath.path))
+           {
+               try FileManager.default.removeItem(at: Globals.ReceivedAudioFilePath)
+           }
+           
+            FileManager.default.createFile(atPath: Globals.ReceivedAudioFilePath.path, contents: nil, attributes: nil)
+        
+            self.fileHandle = try FileHandle.init(forUpdating: Globals.ReceivedAudioFilePath)
+       }
+       catch
+       {
+        NSLog("Failed to write file : \(error)")
+       }
     }
-    
     func appendFileData(val: Data)
     {
-        if(wholeData == nil)
+        if wholeData == nil
         {
             NSLog("wholeData empty adding \(val.count) bytes")
             wholeData = val
@@ -223,10 +236,18 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
             wholeData!.append(val)
             NSLog("Storing \(val.count) bytes")
         }
+        
+        if self.fileHandle == nil
+        {
+            setupFileHandle()
+        }
+        
+        self.fileHandle.write(val)
     }
 
     public func startPlayingStreamingAudio()
     {
+        self.startedPlayingAudio = true
         playStream(path: "specialscheme://some/station")
     }
     
@@ -304,6 +325,7 @@ class BluetoothCentralManager : NSObject, ObservableObject, CBCentralManagerDele
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if(keyPath == "status")
         {
+            print("playback currentitem : \(Globals.Playback.Player.currentItem!)")
             if let error = Globals.Playback.Player.currentItem?.error
             {
                 NSLog("Error during playback: \(error)")

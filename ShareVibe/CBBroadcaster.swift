@@ -10,18 +10,16 @@ import Foundation
 import CoreBluetooth
 import MediaPlayer
 
-class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManagerDelegate, MPMediaPickerControllerDelegate
+class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, MPMediaPickerControllerDelegate
 {
     @Published var BytesSentOfCurrentSegmentSoFar: Int = 0
     @Published var TotalBytesOfCurrentSegment: Int = 0
     @Published var Running = false
     @Published var Connected = false
+    @Published var Centrals : [CBCentral] = []
     
     var songData : Data!
     var needBroadcastSegmentLength = true
-    
-    var player : AVPlayer?
-    var playing = false
     
     var peripheralManager: CBPeripheralManager!
     
@@ -30,6 +28,7 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
     static var Permissions: CBAttributePermissions = [.readable, .writeable]
     static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
     static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
+    static var SongDescription = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongDescriptionUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
     
     func startup()
     {
@@ -43,12 +42,14 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
     {
         self.needBroadcastSegmentLength = true
         self.BytesSentOfCurrentSegmentSoFar = 0
-        
-        self.playing = false
-        self.player?.replaceCurrentItem(with: nil)
-        self.player?.pause()
     }
     
+    func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {
+        if let index = self.Centrals.firstIndex(of: central)
+        {
+            self.Centrals.remove(at: index)
+        }
+    }
     func startSend(content : Data)
     {
         reset()
@@ -68,15 +69,9 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
         {
             if let chunk = GetChunkFromCurrentSegment()
             {
-                if(peripheralManager.updateValue(chunk, for: BluetoothPeripheralManager.SegmentDataCharacteristic, onSubscribedCentrals: nil))
+                if(peripheralManager.updateValue(chunk, for: CBBroadcaster.SegmentDataCharacteristic, onSubscribedCentrals: nil))
                 {
                     self.BytesSentOfCurrentSegmentSoFar += chunk.count
-                    if(!self.playing && self.BytesSentOfCurrentSegmentSoFar >= 65535)
-                    {
-                        player = AVPlayer.init(url: Globals.ExportedAudioFilePath)
-                        player?.play()
-                        self.playing = true
-                    }
                 }
                 else
                 {
@@ -92,7 +87,7 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
         {
             self.TotalBytesOfCurrentSegment = self.songData.count
             
-            self.needBroadcastSegmentLength = !peripheralManager.updateValue(getCurrentSegmentLengthAsData() ,for: BluetoothPeripheralManager.SegmentLengthCharacteristic, onSubscribedCentrals: nil)
+            self.needBroadcastSegmentLength = !peripheralManager.updateValue(getCurrentSegmentLengthAsData() ,for: CBBroadcaster.SegmentLengthCharacteristic, onSubscribedCentrals: nil)
             
             if(!self.needBroadcastSegmentLength)
             {
@@ -114,12 +109,20 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
     }
     
     func peripheralManagerIsReady(toUpdateSubscribers peripheral: CBPeripheralManager) {
-        continueSending()
+        if self.Centrals.count != 0
+        {
+            continueSending()
+        }
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
         
         self.Connected = true
+        
+        if !self.Centrals.contains(central)
+        {
+            self.Centrals.append(central)
+        }
         
         NSLog("Someone subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
         if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
@@ -135,9 +138,9 @@ class BluetoothPeripheralManager : NSObject, ObservableObject, CBPeripheralManag
             NSLog("Ready to advertise")
             Running = true
             
-            BluetoothPeripheralManager.Service.characteristics = [BluetoothPeripheralManager.SegmentLengthCharacteristic, BluetoothPeripheralManager.SegmentDataCharacteristic]
+            CBBroadcaster.Service.characteristics = [CBBroadcaster.SegmentLengthCharacteristic, CBBroadcaster.SegmentDataCharacteristic]
             
-            peripheralManager.add(BluetoothPeripheralManager.Service)
+            peripheralManager.add(CBBroadcaster.Service)
             
             peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.BluetoothGlobals.ServiceUUID]])
           }

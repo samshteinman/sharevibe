@@ -12,16 +12,16 @@
                value = "self.mdatIndex">
             </PersistentString>
             <PersistentString
+               value = "self.currentSegmentHandleToFile">
+            </PersistentString>
+            <PersistentString
                value = "self.SegmentLength">
             </PersistentString>
             <PersistentString
                value = "self.FileLength">
             </PersistentString>
             <PersistentString
-               value = "self.segments[self.currentlyReceivingSegmentIndex].count">
-            </PersistentString>
-            <PersistentString
-               value = "self.currentSegmentHandleToFile">
+               value = "Globals.Playback.Player.status">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -60,6 +60,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "CentralBroadcaster.startSendChunksToAllPeripheralsL2CAP():CentralBroadcaster.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "peripheralsToL2CAPChannels">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PeripheralCentralManager.peripheralManagerIsReady(toUpdateSubscribers:):PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
@@ -73,14 +81,6 @@
             </PersistentString>
             <PersistentString
                value = "self.needBroadcastSegmentLength">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "CentralBroadcaster.startSendChunksToAllPeripheralsL2CAP():CentralBroadcaster.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "peripheralsToL2CAPChannels">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -205,10 +205,10 @@
          contextName = "PeripheralCentralManager.startSend(content:):PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "peripheralManager">
+               value = "PeripheralCentralManager.FileLengthCharacteristic">
             </PersistentString>
             <PersistentString
-               value = "PeripheralCentralManager.FileLengthCharacteristic">
+               value = "peripheralManager">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
