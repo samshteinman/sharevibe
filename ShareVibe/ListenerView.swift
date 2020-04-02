@@ -24,7 +24,7 @@ struct ListenerView : View {
     }
 }
 
-struct ListenSongView_Previews: PreviewProvider {
+struct ListenerView_Previews: PreviewProvider {
     static var previews: some View {
         ListenerView()
     }

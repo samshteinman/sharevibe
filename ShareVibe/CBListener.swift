@@ -158,7 +158,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     {
         restartPlayer()
         
-        var startedPlayingAudio = false
+        self.startedPlayingAudio = false
         self.wholeData = nil
         self.BytesReceivedOfCurrentSegmentSoFar = 0
         self.bytesPlayedSoFar = 0

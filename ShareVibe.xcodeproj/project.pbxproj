@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		364E0FEA243682A30014AC58 /* ListenerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FE9243682A30014AC58 /* ListenerView.swift */; };
 		36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB1241C603E00FABC9D /* AppDelegate.swift */; };
 		36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB3241C603E00FABC9D /* SceneDelegate.swift */; };
 		36526FB6241C603E00FABC9D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB5241C603E00FABC9D /* ContentView.swift */; };
@@ -21,7 +22,6 @@
 		368D177C24352AD600E22EF9 /* SongController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368D177B24352AD600E22EF9 /* SongController.swift */; };
 		36C849882421542100D5FD8C /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C849872421542100D5FD8C /* Globals.swift */; };
 		36D2C48124366CA5000477CB /* BroadcasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2C48024366CA5000477CB /* BroadcasterView.swift */; };
-		36D2C48324366D35000477CB /* ListenerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2C48224366D35000477CB /* ListenerView.swift */; };
 		36ED5390241D8CE400440054 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36ED538F241D8CE400440054 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		364E0FE9243682A30014AC58 /* ListenerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerView.swift; sourceTree = "<group>"; };
 		36526FAE241C603E00FABC9D /* ShareVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36526FB1241C603E00FABC9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36526FB3241C603E00FABC9D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,7 +64,6 @@
 		368D177B24352AD600E22EF9 /* SongController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongController.swift; sourceTree = "<group>"; };
 		36C849872421542100D5FD8C /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		36D2C48024366CA5000477CB /* BroadcasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcasterView.swift; sourceTree = "<group>"; };
-		36D2C48224366D35000477CB /* ListenerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerView.swift; sourceTree = "<group>"; };
 		36ED538F241D8CE400440054 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -129,7 +129,7 @@
 				36C849872421542100D5FD8C /* Globals.swift */,
 				368D177B24352AD600E22EF9 /* SongController.swift */,
 				36D2C48024366CA5000477CB /* BroadcasterView.swift */,
-				36D2C48224366D35000477CB /* ListenerView.swift */,
+				364E0FE9243682A30014AC58 /* ListenerView.swift */,
 			);
 			path = ShareVibe;
 			sourceTree = "<group>";
@@ -308,7 +308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36D2C48324366D35000477CB /* ListenerView.swift in Sources */,
+				364E0FEA243682A30014AC58 /* ListenerView.swift in Sources */,
 				36D2C48124366CA5000477CB /* BroadcasterView.swift in Sources */,
 				3686737C241DEEA100F23BC8 /* SongPicker.swift in Sources */,
 				36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */,

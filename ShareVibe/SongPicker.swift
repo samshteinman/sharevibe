@@ -36,7 +36,7 @@ struct SongPicker : UIViewControllerRepresentable
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<SongPicker>) -> MPMediaPickerController {
         let picker = MPMediaPickerController(mediaTypes: .music)
-        picker.allowsPickingMultipleItems = false
+        picker.allowsPickingMultipleItems = false //TODO: Multiple?
         picker.delegate = context.coordinator
         picker.prompt = "Pick a song to share!"
         return picker
