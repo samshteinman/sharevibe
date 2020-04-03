@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import CoreBluetooth
+import MediaPlayer
 
 public class Globals : NSObject
 {
@@ -23,6 +24,8 @@ public class Globals : NSObject
     public class Playback
     {
         static var Player : AVPlayer = AVPlayer.init()
+        
+        static var StartPlayBytes : UInt64 = 65535
         
         static let AudioFileExtension = ".mp4"
         
@@ -41,6 +44,30 @@ public class Globals : NSObject
             Globals.Playback.Player.pause()
         }
         
+        static func setupRemoteControls()
+           {
+                   // Get the shared MPRemoteCommandCenter
+                   let commandCenter = MPRemoteCommandCenter.shared()
+
+                   // Add handler for Play Command
+                   commandCenter.playCommand.addTarget { event in
+                       if Globals.Playback.Player.rate == 0.0 {
+                           Globals.Playback.Player.play()
+                           return .success
+                       }
+                       return .commandFailed
+                   }
+
+                   // Add handler for Pause Command
+                   commandCenter.pauseCommand.addTarget { event in
+                       if Globals.Playback.Player.rate == 1.0 {
+                          Globals.Playback.Player.pause()
+                           return .success
+                       }
+                       return .commandFailed
+                   }
+           }
+         
         static func ConvertUInt32ToData(length : UInt32) -> Data
         {
             var tempHolder = length

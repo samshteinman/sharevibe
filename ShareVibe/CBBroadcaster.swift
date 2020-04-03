@@ -14,8 +14,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
 {
     @Published var BytesSentOfCurrentSegmentSoFar: Int = 0
     @Published var TotalBytesOfCurrentSegment: Int = 0
-    @Published var Running = false
-    @Published var Connected = false
+    
     @Published var Centrals : [CBCentral] = []
     
     var songData : Data!
@@ -32,10 +31,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func startup()
     {
-        if(!Running)
-        {
-            peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
-        }
+        peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
     
     func reset()
@@ -50,17 +46,20 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             self.Centrals.remove(at: index)
         }
     }
-    func startSend(content : Data)
+    
+    func trySend(data: Data)
     {
+        self.songData = data
+        
         reset()
         
         UIApplication.shared.isIdleTimerDisabled = true
-        
-        self.songData = content
-        
+                           
         tryBroadcastSegmentLength()
-        
+                       
         sendWholeSegment()
+        
+        //TODO: Listening first then broadcast vs broadcast first then listen
     }
     
     func sendWholeSegment()
@@ -117,27 +116,24 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
         
-        self.Connected = true
-        
         if !self.Centrals.contains(central)
         {
             self.Centrals.append(central)
         }
         
         NSLog("Someone subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
-        if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
-        {
-            NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
-            Globals.ChunkSize = Int(central.maximumUpdateValueLength)
-        }
+           if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
+           {
+               NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
+               Globals.ChunkSize = Int(central.maximumUpdateValueLength)
+           }
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
           if(peripheral.state == .poweredOn)
           {
             NSLog("Ready to advertise")
-            Running = true
-            
+
             CBBroadcaster.Service.characteristics = [CBBroadcaster.SegmentLengthCharacteristic, CBBroadcaster.SegmentDataCharacteristic]
             
             peripheralManager.add(CBBroadcaster.Service)

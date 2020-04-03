@@ -11,15 +11,15 @@ import CoreBluetooth
 import AVFoundation
 import CryptoKit
 import UIKit
-import MediaPlayer
 
 class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate, AVAssetResourceLoaderDelegate
 {
-    @Published var SegmentLength: UInt64 = 0
-    @Published var BytesReceivedOfCurrentSegmentSoFar: UInt64 = 0
-    @Published var Running = false
-    @Published var Connected = false
-    @Published var SongDescription : String?
+    var ExpectedLength: UInt64 = 0
+    @Published var BytesReceivedSoFar: UInt64 = 0
+    
+    @Published var Listening = false
+    
+    @Published var SongDescription: String?
     
     var centralManager : CBCentralManager!
     var peripheral : CBPeripheral!
@@ -31,39 +31,12 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     var fileHandle : FileHandle!
     
     var bytesPlayedSoFar = 0
-    var startedPlayingAudio = false
+    @Published var startedPlayingAudio = false
     
     func startup()
     {
-        if(!Running)
-        {
-            centralManager = CBCentralManager(delegate: self, queue: nil)
-            setupRemoteControls()
-        }
-    }
-    
-    func setupRemoteControls()
-    {
-            // Get the shared MPRemoteCommandCenter
-            let commandCenter = MPRemoteCommandCenter.shared()
-
-            // Add handler for Play Command
-            commandCenter.playCommand.addTarget { [unowned self] event in
-                if Globals.Playback.Player.rate == 0.0 {
-                    Globals.Playback.Player.play()
-                    return .success
-                }
-                return .commandFailed
-            }
-
-            // Add handler for Pause Command
-            commandCenter.pauseCommand.addTarget { [unowned self] event in
-                if Globals.Playback.Player.rate == 1.0 {
-                   Globals.Playback.Player.pause()
-                    return .success
-                }
-                return .commandFailed
-            }
+        centralManager = CBCentralManager(delegate: self, queue: nil)
+        Globals.Playback.setupRemoteControls()
     }
     
     public func centralManagerDidUpdateState(
@@ -71,13 +44,14 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     {
         if(central.state == .poweredOn)
         {
-            Running = true
             NSLog("Starting scan")
+            Listening = true
             centralManager.scanForPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
         }
         else
         {
-            Running = false
+            Listening = false
+            //TODO: Alert that something's wrong with bluetooth
         }
     }
     
@@ -95,7 +69,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if(peripheral == self.peripheral)
         {
             NSLog("Connected!");
-            self.Connected = true
             peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
         }
     }
@@ -160,7 +133,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
         self.startedPlayingAudio = false
         self.wholeData = nil
-        self.BytesReceivedOfCurrentSegmentSoFar = 0
+        self.BytesReceivedSoFar = 0
         self.bytesPlayedSoFar = 0
         setupFileHandle()
     }
@@ -174,9 +147,9 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 
                 UIApplication.shared.isIdleTimerDisabled = true
 
-                self.SegmentLength = (val.withUnsafeBytes
+                self.ExpectedLength = (val.withUnsafeBytes
                     { (ptr: UnsafePointer<UInt64>) in ptr.pointee } )
-                NSLog("Got segment length \(self.SegmentLength)")
+                NSLog("Got segment length \(self.ExpectedLength)")
             }
         }
         else if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
@@ -185,11 +158,12 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             {
                 appendFileData(val: val)
                 
-                self.BytesReceivedOfCurrentSegmentSoFar += UInt64(val.count)
+                self.BytesReceivedSoFar += UInt64(val.count)
                 
-                if(!self.startedPlayingAudio && self.wholeData!.count > 65535)
+                if(!self.startedPlayingAudio && self.wholeData!.count > Globals.Playback.StartPlayBytes)
                 {
                     startPlayingStreamingAudio()
+                    //TODO: Handler for when a song finishes
                 }
             }
         }
@@ -279,7 +253,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if let contentInfoRequest = loadingRequest.contentInformationRequest
         {
             NSLog("Got content request")
-            contentInfoRequest.contentLength = Int64(bitPattern: UInt64(self.SegmentLength))
+            contentInfoRequest.contentLength = Int64(bitPattern: UInt64(self.ExpectedLength))
             contentInfoRequest.contentType = AVFileType.mp4.rawValue
             contentInfoRequest.isByteRangeAccessSupported = true
             
@@ -299,11 +273,17 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             let chunk = 16384
             var returning : Data?
             
-            if(amount > chunk)
+            if self.bytesPlayedSoFar == self.ExpectedLength
+            {
+                NSLog("Finished playback")
+                loadingRequest.finishLoading()
+                return false
+            }
+            else if amount > chunk
             {
                 returning = wholeDataSnapshot!.subdata(in: self.bytesPlayedSoFar..<(bytesPlayedSoFar + chunk))
             }
-            else if(self.bytesPlayedSoFar + chunk > self.SegmentLength)
+            else if self.bytesPlayedSoFar + chunk > self.ExpectedLength
             {
                 returning = wholeDataSnapshot!.subdata(in: self.bytesPlayedSoFar..<wholeDataSnapshot!.count)
             }

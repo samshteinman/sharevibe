@@ -12,16 +12,16 @@
                value = "self.mdatIndex">
             </PersistentString>
             <PersistentString
-               value = "self.currentSegmentHandleToFile">
+               value = "Globals.Playback.Player.status">
             </PersistentString>
             <PersistentString
                value = "self.SegmentLength">
             </PersistentString>
             <PersistentString
-               value = "self.FileLength">
+               value = "self.currentSegmentHandleToFile">
             </PersistentString>
             <PersistentString
-               value = "Globals.Playback.Player.status">
+               value = "self.FileLength">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -149,6 +149,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #2 in closure #1 in ListenerView.body.getter:ListenerView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Double(self.Listener.BytesReceivedSoFar / 65535)">
+            </PersistentString>
+            <PersistentString
+               value = "self.Listener.BytesReceivedSoFar">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "CentralBroadcaster.sendChunkToStream(stream:):CentralBroadcaster.swift">
          <PersistentStrings>
             <PersistentString
@@ -205,10 +216,10 @@
          contextName = "PeripheralCentralManager.startSend(content:):PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "PeripheralCentralManager.FileLengthCharacteristic">
+               value = "peripheralManager">
             </PersistentString>
             <PersistentString
-               value = "peripheralManager">
+               value = "PeripheralCentralManager.FileLengthCharacteristic">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -10,15 +10,15 @@ import Foundation
 import SwiftUI
 import MediaPlayer
 
-struct SongPicker : UIViewControllerRepresentable
+struct SongPickerView : UIViewControllerRepresentable
 {
     @Binding var songs : MPMediaItemCollection?
     @Environment(\.presentationMode) var presentationMode
     
     class Coordinator : NSObject, MPMediaPickerControllerDelegate
     {
-        var parent: SongPicker
-        init(_ parent: SongPicker)
+        var parent: SongPickerView
+        init(_ parent: SongPickerView)
         {
             self.parent = parent
         }
@@ -34,7 +34,7 @@ struct SongPicker : UIViewControllerRepresentable
         Coordinator(self)
     }
     
-    func makeUIViewController(context: UIViewControllerRepresentableContext<SongPicker>) -> MPMediaPickerController {
+    func makeUIViewController(context: UIViewControllerRepresentableContext<SongPickerView>) -> MPMediaPickerController {
         let picker = MPMediaPickerController(mediaTypes: .music)
         picker.allowsPickingMultipleItems = false //TODO: Multiple?
         picker.delegate = context.coordinator
@@ -42,7 +42,7 @@ struct SongPicker : UIViewControllerRepresentable
         return picker
     }
     
-    func updateUIViewController(_ uiViewController: MPMediaPickerController, context: UIViewControllerRepresentableContext<SongPicker>) {
+    func updateUIViewController(_ uiViewController: MPMediaPickerController, context: UIViewControllerRepresentableContext<SongPickerView>) {
         
     }
 }

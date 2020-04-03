@@ -10,16 +10,33 @@ import SwiftUI
 
 struct ListenerView : View {
     
-    @ObservedObject var Listener = CBListener()
+    @ObservedObject private var Listener = CBListener()
     
     var body: some View {
         VStack
-            {
-         Text("Received: \(self.Listener.BytesReceivedOfCurrentSegmentSoFar) / \(self.Listener.SegmentLength)")
-        Button("Listen")
         {
-          self.Listener.startup()
-        }
+            if Listener.startedPlayingAudio
+            {
+                PlaybackControlsView()
+            }
+            else
+            {
+                if self.Listener.Listening
+                {
+                    BufferingIndicatorView(BytesReceivedSoFar: $Listener.BytesReceivedSoFar)
+                }
+                else
+                {
+                    Button(action:
+                    {
+                        self.Listener.startup()
+                    })
+                    {
+                       Image(systemName: "ear")
+                       .font(Font.system(.largeTitle))
+                    }
+                }
+            }
         }
     }
 }
