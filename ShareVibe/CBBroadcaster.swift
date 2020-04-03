@@ -23,11 +23,12 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     var peripheralManager: CBPeripheralManager!
     
     static var Service = CBMutableService(type: Globals.BluetoothGlobals.ServiceUUID, primary: true)
-    static var SegmentCharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .write]
+    static var CharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .write]
     static var Permissions: CBAttributePermissions = [.readable, .writeable]
-    static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
-    static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
-    static var SongDescription = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongDescriptionUUID, properties: SegmentCharacteristicProperties, value: nil, permissions: Permissions)
+    static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongLengthUUID, properties: CharacteristicProperties, value: nil, permissions: Permissions)
+    static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongDataUUID, properties: CharacteristicProperties, value: nil, permissions: Permissions)
+    static var SongDescriptionCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongDescriptionUUID, properties: CharacteristicProperties, value: nil, permissions: Permissions)
+    static var SongControlCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongControlUUID, properties: CharacteristicProperties, value: nil, permissions: Permissions)
     
     func startup()
     {
@@ -122,7 +123,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
         
         NSLog("Someone subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
-           if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
+           if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
            {
                NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
                Globals.ChunkSize = Int(central.maximumUpdateValueLength)

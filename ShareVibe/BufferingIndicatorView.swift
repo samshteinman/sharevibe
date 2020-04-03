@@ -18,10 +18,9 @@ struct BufferingIndicatorView: View {
                                           
             if BytesReceivedSoFar > 0
            {
-               Text("Preparing: \(Int(Double(BytesReceivedSoFar) / Double(Globals.Playback.StartPlayBytes) * Double(100)))%")
-                   .foregroundColor(.gray)
-                Text("Please don't close the app yet...")
-                    .foregroundColor(.red)
+               Text("\(Int(Double(BytesReceivedSoFar) / Double(Globals.Playback.StartPlayBytes) * Double(100)))%")
+                .foregroundColor(.secondary)
+                .font(Font.system(.subheadline))
            }
         }
     }

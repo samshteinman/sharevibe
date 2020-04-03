@@ -82,7 +82,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 if(service.uuid == Globals.BluetoothGlobals.ServiceUUID)
                 {
                     NSLog("Found service we were looking for")
-                    peripheral.discoverCharacteristics([ Globals.BluetoothGlobals.CurrentFileSegmentDataUUID, Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID, Globals.BluetoothGlobals.SongDescriptionUUID], for: service)
+                    peripheral.discoverCharacteristics([ Globals.BluetoothGlobals.SongDataUUID, Globals.BluetoothGlobals.SongLengthUUID, Globals.BluetoothGlobals.SongDescriptionUUID,
+                    Globals.BluetoothGlobals.SongControlUUID], for: service)
                 }
             }
         }
@@ -139,7 +140,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentLengthUUID)
+        if(characteristic.uuid == Globals.BluetoothGlobals.SongLengthUUID)
         {
             if let val = characteristic.value
             {
@@ -152,7 +153,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 NSLog("Got segment length \(self.ExpectedLength)")
             }
         }
-        else if(characteristic.uuid == Globals.BluetoothGlobals.CurrentFileSegmentDataUUID)
+        else if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
         {
             if let val = characteristic.value
             {
