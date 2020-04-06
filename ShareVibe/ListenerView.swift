@@ -49,8 +49,12 @@ struct ListenerView : View {
                                         {
                                             Image(systemName: "music.note")
                                         }
-                                        StationRowView(station: station)
+                                        Text("\(station.Name!)")
+                                        Spacer()
+                                        Image(systemName: "person.3.fill")
+                                        Text("\(station.NumberOfListeners ?? 0)")
                                 }
+                                .padding()
                             }
                             .disabled(self.Listener.currentlyListeningToStation?.id == station.id)
                             
@@ -67,11 +71,15 @@ struct ListenerView : View {
                     if !Listener.startedPlayingAudio {
                         HStack {
                             Spacer()
-                            BufferingIndicatorView(BytesReceivedSoFar: $Listener.BytesReceivedSoFar)
-                            Text(Listener.Status)
-                                .foregroundColor(.secondary)
-                                .font(Font.system(.subheadline))
-                                .transition(.opacity)
+                            
+                            BufferingIndicatorView(Status: $Listener.Status)
+                            
+                            if Listener.BytesReceivedSoFar > 0
+                            {
+                                Text("\(Int(Double(Listener.BytesReceivedSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
+                                    .foregroundColor(.primary)
+                                    .font(Font.system(.subheadline))
+                            }
                             Spacer()
                         }
                         .padding()

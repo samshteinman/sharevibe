@@ -10,26 +10,24 @@ import SwiftUI
 
 struct BufferingIndicatorView: View {
     
-    @Binding var BytesReceivedSoFar : UInt64
+    @Binding var Status : String
     
     var body: some View {
-            HStack
+        HStack
             {
                 ActivityIndicatorView()
-                                              
-                if BytesReceivedSoFar > 0
-                {
-                   Text("\(Int(Double(BytesReceivedSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
+                
+                Text(Status)
                     .foregroundColor(.secondary)
                     .font(Font.system(.subheadline))
-                }
-            }
-            .padding()
+                    .transition(.opacity)
+        }
+        .padding()
     }
 }
 
 struct BufferingIndicatorView_Previews: PreviewProvider {
     static var previews: some View {
-        BufferingIndicatorView(BytesReceivedSoFar: .constant(0))
+        BufferingIndicatorView(Status: .constant(""))
     }
 }

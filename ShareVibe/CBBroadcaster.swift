@@ -17,6 +17,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     @Published var ListeningCentrals : [CBCentral] = []
     
+    @Published var Status : String = ""
+    
     @Published var startedPlayingAudio = false
     
     @Published var NumberOfListeners = 0
@@ -39,6 +41,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func reset()
     {
+        Globals.Playback.RestartPlayer()
+        
         self.needBroadcastSegmentLength = true
         self.BytesSentOfCurrentSegmentSoFar = 0
         self.startedPlayingAudio = false

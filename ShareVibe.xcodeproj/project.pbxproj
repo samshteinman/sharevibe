@@ -11,7 +11,6 @@
 		364E0FED2436B9C30014AC58 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */; };
 		364E925C243814CD00615E5E /* PlaybackControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E925B243814CD00615E5E /* PlaybackControlView.swift */; };
 		365031ED2439283300E6B7D6 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EC2439283300E6B7D6 /* Station.swift */; };
-		365031EF243928AB00E6B7D6 /* StationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EE243928AB00E6B7D6 /* StationRowView.swift */; };
 		365031F324392F8800E6B7D6 /* ListeningToStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031F224392F8700E6B7D6 /* ListeningToStationView.swift */; };
 		3650C7A524379CE0003A19F1 /* BufferingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */; };
 		36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB1241C603E00FABC9D /* AppDelegate.swift */; };
@@ -52,7 +51,6 @@
 		364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		364E925B243814CD00615E5E /* PlaybackControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlView.swift; sourceTree = "<group>"; };
 		365031EC2439283300E6B7D6 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
-		365031EE243928AB00E6B7D6 /* StationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationRowView.swift; sourceTree = "<group>"; };
 		365031F224392F8700E6B7D6 /* ListeningToStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningToStationView.swift; sourceTree = "<group>"; };
 		3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferingIndicatorView.swift; sourceTree = "<group>"; };
 		36526FAE241C603E00FABC9D /* ShareVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,7 +104,6 @@
 		364E0FEB2436AF6A0014AC58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				365031EE243928AB00E6B7D6 /* StationRowView.swift */,
 				364E0FE9243682A30014AC58 /* ListenerView.swift */,
 				36D2C48024366CA5000477CB /* BroadcasterView.swift */,
 				36526FB5241C603E00FABC9D /* ContentView.swift */,
@@ -351,7 +348,6 @@
 				36C849882421542100D5FD8C /* Globals.swift in Sources */,
 				3657D780242EE84A00E72807 /* CBBroadcaster.swift in Sources */,
 				3657D77E242EDE7B00E72807 /* CBListener.swift in Sources */,
-				365031EF243928AB00E6B7D6 /* StationRowView.swift in Sources */,
 				36526FB6241C603E00FABC9D /* ContentView.swift in Sources */,
 				364E925C243814CD00615E5E /* PlaybackControlView.swift in Sources */,
 			);
