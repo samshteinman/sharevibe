@@ -36,6 +36,7 @@ struct BroadcasterView: View {
                 
                 Button(action: {
                     self.Broadcaster.startStation(roomName: self.roomName)
+                    self.songs = nil
                     self.showPicker = !self.showPicker
                     self.isRoomMade = true
                 })
@@ -79,10 +80,9 @@ struct BroadcasterView: View {
             
             let session = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetLowQuality)
             session!.outputFileType = AVFileType.mp4
-            AVAssetExportSession.exportPresets(compatibleWith: asset)
             
-            session?.shouldOptimizeForNetworkUse = true
-            session?.canPerformMultiplePassesOverSourceMediaData = true
+            session!.shouldOptimizeForNetworkUse = true
+            session!.canPerformMultiplePassesOverSourceMediaData = true
             
             session!.outputURL = URL(fileURLWithPath: Globals.Playback.ExportedAudioFilePath.path)
             
@@ -98,8 +98,7 @@ struct BroadcasterView: View {
                         {
                             let data = try Data.init(contentsOf: session!.outputURL!)
                             
-                            DispatchQueue.main.async
-                                {
+                            DispatchQueue.main.async {
                                     self.Broadcaster.trySend(data: data)
                             }
                         }
