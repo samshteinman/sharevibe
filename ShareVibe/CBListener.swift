@@ -392,7 +392,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             
             for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID])
             {
-                
                 centralManager.cancelPeripheralConnection(peripheral)
             }
             

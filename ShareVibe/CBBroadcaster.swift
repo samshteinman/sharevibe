@@ -16,13 +16,13 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     @Published var TotalBytesOfCurrentSegment: Int = 0
     
     @Published var ListeningCentrals : [CBCentral] = []
-
+    
     @Published var startedPlayingAudio = false
     
     @Published var NumberOfListeners = 0
     @Published var RoomName : String = ""
     
-    var songData : Data!
+    var songData : Data = Data()
     var needBroadcastSegmentLength = true
     
     var peripheralManager: CBPeripheralManager!
@@ -62,15 +62,22 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     {
         self.songData = data
         
+        if self.ListeningCentrals.count != 0
+        {
+            trySend()
+        }
+        
+    }
+    
+    func trySend()
+    {
         reset()
         
         UIApplication.shared.isIdleTimerDisabled = true
-                           
-        tryBroadcastSegmentLength()
-                       
-        sendWholeSegment()
         
-        //TODO: Listening first then broadcast vs broadcast first then listen
+        tryBroadcastSegmentLength()
+        
+        sendWholeSegment()
     }
     
     func sendWholeSegment()
@@ -111,7 +118,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             }
         }
     }
-
+    
     func continueSending()
     {
         tryBroadcastSegmentLength()
@@ -143,32 +150,37 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
                 self.ListeningCentrals.append(central)
                 NSLog("Broadcasting listener count \(self.ListeningCentrals.count)")
                 peripheral.updateValue(Globals.convertToData(number: self.ListeningCentrals.count), for: Globals.BluetoothGlobals.NumberOfListenersCharacteristic, onSubscribedCentrals: nil)
+                
+                if(self.ListeningCentrals.count == 1 && self.songData.count > 0)
+                {
+                    trySend()
+                }
             }
         }
         
         NSLog("\(central) subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
-           if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
-           {
-               NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
-               Globals.ChunkSize = Int(central.maximumUpdateValueLength)
-           }
+        if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
+        {
+            NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
+            Globals.ChunkSize = Int(central.maximumUpdateValueLength)
+        }
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-          if(peripheral.state == .poweredOn)
-          {
+        if(peripheral.state == .poweredOn)
+        {
             NSLog("Ready to advertise")
-
+            
             Globals.BluetoothGlobals.Service.characteristics = [Globals.BluetoothGlobals.SegmentLengthCharacteristic, Globals.BluetoothGlobals.SegmentDataCharacteristic,
-            Globals.BluetoothGlobals.SongDescriptionCharacteristic,
-            Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
-            Globals.BluetoothGlobals.RoomNameCharacteristic]
+                                                                Globals.BluetoothGlobals.SongDescriptionCharacteristic,
+                                                                Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
+                                                                Globals.BluetoothGlobals.RoomNameCharacteristic]
             
             peripheralManager.add(Globals.BluetoothGlobals.Service)
             
             peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : Globals.BluetoothGlobals.ServiceUUID])
-          }
-      }
+        }
+    }
     
     func GetChunkFromCurrentSegment() -> Data?
     {
