@@ -21,6 +21,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     
     @Published var Status : String = ""
     
+    @Published var SongTitleAndArtist : String = ""
+    
     @Published var Scanning = false
     @Published var BufferingAudio = false
     
@@ -32,16 +34,10 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     @Published var fullyDiscoveredStations = Dictionary<UUID,Station>()
     var currentlyDiscoveringStations = Dictionary<UUID,Station>()
     
-    func setup()
-    {
-        Globals.Playback.setupPlaybackBackgroundControls()
-    }
-    
     func startScanningForStations()
     {
         centralManager = CBCentralManager(delegate: self, queue: nil)
     }
-    
     
     public func centralManagerDidUpdateState(
         _ central: CBCentralManager)
@@ -50,12 +46,13 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         {
             NSLog("Starting scan")
             Scanning = true
+            Status = Globals.Playback.Status.scanningForStations
             centralManager.scanForPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
         }
         else
         {
             Scanning = false
-            Status = "Could not start Bluetooth! Please restart the app."
+            Status = Globals.Playback.Status.couldNotStartBluetooth
         }
     }
     
@@ -114,37 +111,37 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-           if let error = error
-           {
-               NSLog("Could not discover characteristics : \(error)")
-           }
-           else
-           {
-               NSLog("Discovered some characteristics:")
-               if let characteristics = service.characteristics
-               {
-                   for characteristic in characteristics
-                   {
-                       if characteristic.uuid == Globals.BluetoothGlobals.RoomNameUUID
-                           ||
-                           characteristic.uuid == Globals.BluetoothGlobals.NumberOfListenersUUID
-                       {
-                           peripheral.readValue(for: characteristic)
-                           NSLog("Request\(characteristic.uuid)")
-                           peripheral.setNotifyValue(true, for: characteristic)
-                       }
-                       else
-                       {
-                           if currentlyListeningToStation?.id == peripheral.identifier
-                           {
-                               NSLog("\(characteristic.uuid)")
-                               peripheral.setNotifyValue(true, for: characteristic)
-                           }
-                       }
-                   }
-               }
-           }
-       }
+        if let error = error
+        {
+            NSLog("Could not discover characteristics : \(error)")
+        }
+        else
+        {
+            NSLog("Discovered some characteristics:")
+            if let characteristics = service.characteristics
+            {
+                for characteristic in characteristics
+                {
+                    if characteristic.uuid == Globals.BluetoothGlobals.RoomNameUUID
+                        ||
+                        characteristic.uuid == Globals.BluetoothGlobals.NumberOfListenersUUID
+                    {
+                        peripheral.readValue(for: characteristic)
+                        NSLog("Request\(characteristic.uuid)")
+                        peripheral.setNotifyValue(true, for: characteristic)
+                    }
+                    else
+                    {
+                        if currentlyListeningToStation?.id == peripheral.identifier
+                        {
+                            NSLog("\(characteristic.uuid)")
+                            peripheral.setNotifyValue(true, for: characteristic)
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     func createOrUpdateStation(id: UUID, name: String? = nil, numberOfListeners: Int? = nil, peripheral : CBPeripheral? = nil, service : CBService? = nil)
     {
@@ -218,6 +215,13 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         }
         else if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
         {
+            if self.ExpectedAmountOfBytes <= 0
+            {
+                Status = Globals.Playback.Status.waitingForCurrentSongToFinish
+                //TODO: Be able to tell them how long it will be until song finishes
+                return
+            }
+            
             if let val = characteristic.value
             {
                 appendFileData(val: val)
@@ -226,7 +230,12 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 
                 BufferingAudio = self.BytesReceivedSoFar > 0 && self.BytesReceivedSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
                 
-                if(!self.startedPlayingAudio && self.dataReceived!.count > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
+                if(BufferingAudio && Status != Globals.Playback.Status.incomingSong)
+                {
+                    Status = Globals.Playback.Status.incomingSong
+                }
+                
+                if(!self.startedPlayingAudio && self.BytesReceivedSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
                 {
                     startPlayingStreamingAudio()
                 }
@@ -236,7 +245,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         {
             if let val = characteristic.value
             {
-                //         self.SongDescription = String(decoding: val, as: UTF8.self)
+                self.SongTitleAndArtist = String(decoding: val, as: UTF8.self)
             }
         }
         else
@@ -247,7 +256,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     
     
     
-   
+    
     
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         NSLog("Did modify services")
@@ -260,10 +269,12 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     {
         Globals.Playback.RestartPlayer()
         
+        self.Status = ""
         self.BufferingAudio = false
         self.startedPlayingAudio = false
         self.dataReceived = nil
         self.BytesReceivedSoFar = 0
+        self.ExpectedAmountOfBytes = 0
         Globals.Playback.BytesPlayedSoFar = 0
     }
     
@@ -294,6 +305,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     @objc func playerDidFinishPlaying(note: Notification)
     {
         restart()
+        Status = Globals.Playback.Status.noSongCurrentlyPlaying
     }
     
     public func playStream(path: String)
@@ -395,6 +407,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 centralManager.cancelPeripheralConnection(peripheral)
             }
             
+            Status = Globals.Playback.Status.noSongCurrentlyPlaying
             centralManager.connect(peripheral, options: nil)
         }
     }

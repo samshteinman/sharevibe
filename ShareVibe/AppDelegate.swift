@@ -18,7 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate
            {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, policy: .longFormAudio, options: [])
                try AVAudioSession.sharedInstance().setActive(true)
+            
             NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
+            
+            Globals.Playback.setupPlaybackBackgroundControls()
             }
            catch {}
         return true
@@ -28,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     {
         print("notification: \(notification)")
     }
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         
     }

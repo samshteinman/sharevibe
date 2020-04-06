@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		364E0FEA243682A30014AC58 /* ListenerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FE9243682A30014AC58 /* ListenerView.swift */; };
 		364E0FED2436B9C30014AC58 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */; };
+		364E52A1243BA36E0094344B /* StationNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E52A0243BA36E0094344B /* StationNameView.swift */; };
 		364E925C243814CD00615E5E /* PlaybackControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E925B243814CD00615E5E /* PlaybackControlView.swift */; };
 		365031ED2439283300E6B7D6 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EC2439283300E6B7D6 /* Station.swift */; };
 		365031EF243928AB00E6B7D6 /* StationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EE243928AB00E6B7D6 /* StationRowView.swift */; };
@@ -50,6 +51,7 @@
 /* Begin PBXFileReference section */
 		364E0FE9243682A30014AC58 /* ListenerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerView.swift; sourceTree = "<group>"; };
 		364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
+		364E52A0243BA36E0094344B /* StationNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationNameView.swift; sourceTree = "<group>"; };
 		364E925B243814CD00615E5E /* PlaybackControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlView.swift; sourceTree = "<group>"; };
 		365031EC2439283300E6B7D6 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		365031EE243928AB00E6B7D6 /* StationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationRowView.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */,
 				364E925B243814CD00615E5E /* PlaybackControlView.swift */,
 				365031F224392F8700E6B7D6 /* ListeningToStationView.swift */,
+				364E52A0243BA36E0094344B /* StationNameView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				3657D77E242EDE7B00E72807 /* CBListener.swift in Sources */,
 				365031EF243928AB00E6B7D6 /* StationRowView.swift in Sources */,
 				36526FB6241C603E00FABC9D /* ContentView.swift in Sources */,
+				364E52A1243BA36E0094344B /* StationNameView.swift in Sources */,
 				364E925C243814CD00615E5E /* PlaybackControlView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

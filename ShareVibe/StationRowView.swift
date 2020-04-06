@@ -13,12 +13,11 @@ struct StationRowView : View {
     
     var body : some View
     {
-            HStack
-            {
-                Text("\(station.Name!)")
-                Spacer()
-                Image(systemName: "person.3.fill")
-                Text("\(station.NumberOfListeners ?? 0)")
-            }.padding()
+        HStack {
+            Text("\(station.Name!)")
+            Spacer()
+            Image(systemName: "person.3.fill")
+            Text("\(station.NumberOfListeners ?? 0)")
+        }.padding()
     }
 }

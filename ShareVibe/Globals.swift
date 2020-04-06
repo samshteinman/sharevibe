@@ -45,6 +45,15 @@ public class Globals : NSObject
     
     public class Playback
     {
+        public class Status
+        {//Make localizable
+            static let scanningForStations = "Scanning for stations..."
+            static let noSongCurrentlyPlaying = "No song currently playing..."
+            static let waitingForCurrentSongToFinish = "Waiting for song to finish..."
+            static let incomingSong = "Incoming song..."
+            static let couldNotStartBluetooth = "Could not start Bluetooth! Please restart the app."
+        }
+        
         static var Player : AVPlayer = AVPlayer.init()
         
         static var AmountOfBytesBeforeAudioCanStart : UInt64 = 65535
@@ -52,12 +61,12 @@ public class Globals : NSObject
         static let AudioFileExtension = ".mp4"
         
         static var ReceivedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("received" + Playback.AudioFileExtension))
-           
+        
         static var ExportedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("exported" + Playback.AudioFileExtension))
         
         static var StreamingAsset : AVURLAsset!
         static var StreamingPlayerItem : AVPlayerItem!
-
+        
         static var BytesPlayedSoFar = 0
         
         static func RestartPlayer()
@@ -69,29 +78,29 @@ public class Globals : NSObject
         }
         
         static func setupPlaybackBackgroundControls()
-           {
-                   // Get the shared MPRemoteCommandCenter
-                   let commandCenter = MPRemoteCommandCenter.shared()
-
-                   // Add handler for Play Command
-                   commandCenter.playCommand.addTarget { event in
-                       if Globals.Playback.Player.rate == 0.0 {
-                           Globals.Playback.Player.play()
-                           return .success
-                       }
-                       return .commandFailed
-                   }
-
-                   // Add handler for Pause Command
-                   commandCenter.pauseCommand.addTarget { event in
-                       if Globals.Playback.Player.rate == 1.0 {
-                          Globals.Playback.Player.pause()
-                           return .success
-                       }
-                       return .commandFailed
-                   }
-           }
-         
+        {
+            // Get the shared MPRemoteCommandCenter
+            let commandCenter = MPRemoteCommandCenter.shared()
+            
+            // Add handler for Play Command
+            commandCenter.playCommand.addTarget { event in
+                if Globals.Playback.Player.rate == 0.0 {
+                    Globals.Playback.Player.play()
+                    return .success
+                }
+                return .commandFailed
+            }
+            
+            // Add handler for Pause Command
+            commandCenter.pauseCommand.addTarget { event in
+                if Globals.Playback.Player.rate == 1.0 {
+                    Globals.Playback.Player.pause()
+                    return .success
+                }
+                return .commandFailed
+            }
+        }
+        
         static func ConvertUInt32ToData(length : UInt32) -> Data
         {
             var tempHolder = length
@@ -107,13 +116,13 @@ public class Globals : NSObject
     
     enum Transmissions
     {
-       case update, requestRead, L2CAP
+        case update, requestRead, L2CAP
     }
     
     static var Transmission = Transmissions.update
-
+    
     static var ReceivedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("received" + Playback.AudioFileExtension))
-          
+    
     static var ExportedAudioFilePath = URL(fileURLWithPath: NSTemporaryDirectory().appending("exported" + Playback.AudioFileExtension))
-
+    
 }

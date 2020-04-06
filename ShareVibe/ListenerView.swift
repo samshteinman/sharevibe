@@ -14,74 +14,74 @@ struct ListenerView : View {
     @State var roomName : String = ""
     
     var body: some View {
-        VStack
+        VStack {
+            if !Listener.Scanning
             {
-                if !Listener.Scanning
-                {
-                    VStack
+                VStack {
+                    Button(action: {
+                        self.Listener.startScanningForStations()
+                    })
                     {
-                            Button(action:
-                            {
-                                    self.Listener.startScanningForStations()
-                            })
-                            {
-                                Image(systemName: "ear")
-                                    .font(Font.system(.largeTitle))
-                            }
+                        Image(systemName: "ear")
+                            .font(Font.system(.largeTitle))
                     }
                 }
-                else
-                {
-                    VStack
-                        {
-                            Spacer()
-                            
-                            List (Listener.fullyDiscoveredStations.values.map{$0.self}) {
-                                station in
-                                Button(action: {
-                                    self.Listener.startListeningToStation(id: station.id)
-                                })
-                                {
-                                    HStack
+            }
+            else
+            {
+                VStack {
+                    Spacer()
+                    
+                    List (Listener.fullyDiscoveredStations.values.map{$0.self}) {
+                        station in
+                        
+                        HStack{
+                            Button(action: {
+                                self.Listener.startListeningToStation(id: station.id)
+                            })
+                            {
+                                HStack
+                                    {
+                                        if self.Listener.currentlyListeningToStation?.id == station.id
                                         {
-                                            if self.Listener.currentlyListeningToStation?.id == station.id
-                                            {
-                                                Image(systemName: "radiowaves.left")
-                                                    .font(Font.system(.largeTitle))
-                                            }
-                                            else
-                                            {
-                                                Image(systemName: "music.note")
-                                            }
-                                            StationRowView(station: station)
-                                                .disabled(self.Listener.currentlyListeningToStation?.id == station.id)
-                                    }
+                                            Image(systemName: "radiowaves.left")
+                                                .font(Font.system(.largeTitle))
+                                                .foregroundColor(.blue)
+                                        }
+                                        else
+                                        {
+                                            Image(systemName: "music.note")
+                                        }
+                                        StationRowView(station: station)
                                 }
                             }
-                            .listStyle(GroupedListStyle())
-                            .padding()
+                            .disabled(self.Listener.currentlyListeningToStation?.id == station.id)
                             
-                            if Listener.startedPlayingAudio
+                            if self.Listener.startedPlayingAudio
                             {
                                 PlaybackControlView()
                                     .padding()
                             }
-                            else
-                            {
-                                HStack
-                                    {
-                                        Spacer()
-                                        BufferingIndicatorView(BytesReceivedSoFar: $Listener.BytesReceivedSoFar)
-                                        Text(Listener.Status)
-                                            .foregroundColor(.secondary)
-                                            .font(Font.system(.subheadline))
-                                            .transition(.opacity)
-                                        Spacer()
-                                }
-                                .padding()
-                            }
+                        }
+                    }
+                    .listStyle(GroupedListStyle())
+                    .padding()
+                    
+                    if !Listener.startedPlayingAudio {
+                        
+                        HStack {
+                            Spacer()
+                            BufferingIndicatorView(BytesReceivedSoFar: $Listener.BytesReceivedSoFar)
+                            Text(Listener.Status)
+                                .foregroundColor(.secondary)
+                                .font(Font.system(.subheadline))
+                                .transition(.opacity)
+                            Spacer()
+                        }
+                        .padding()
                     }
                 }
+            }
         }
     }
 }
