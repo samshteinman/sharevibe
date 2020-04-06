@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct StationRowView : View {
-    var station: Station
+    @State var station: Station
     
     var body : some View
     {

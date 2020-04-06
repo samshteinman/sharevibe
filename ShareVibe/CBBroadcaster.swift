@@ -26,9 +26,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     var needBroadcastSegmentLength = true
     
     var peripheralManager: CBPeripheralManager!
-    
-    var needSendControlMessage : Bool?
-    
+        
     func startStation(roomName : String)
     {
         if peripheralManager == nil
@@ -43,7 +41,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     {
         self.needBroadcastSegmentLength = true
         self.BytesSentOfCurrentSegmentSoFar = 0
-        self.needSendControlMessage = nil
+        self.startedPlayingAudio = false
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {

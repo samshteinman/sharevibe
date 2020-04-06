@@ -10,28 +10,25 @@ import SwiftUI
 
 struct ListenerView : View {
     
-    @ObservedObject var Listener = CBListener()
+    @ObservedObject var Listener : CBListener = CBListener()
     @State var roomName : String = ""
     
     var body: some View {
         VStack {
+            
             if !Listener.Scanning
             {
-                VStack {
-                    Button(action: {
-                        self.Listener.startScanningForStations()
-                    })
-                    {
-                        Image(systemName: "ear")
-                            .font(Font.system(.largeTitle))
-                    }
+                Button(action: {
+                    self.Listener.startScanningForStations()
+                })
+                {
+                    Image(systemName: "ear")
+                        .font(Font.system(.largeTitle))
                 }
             }
             else
             {
                 VStack {
-                    Spacer()
-                    
                     List (Listener.fullyDiscoveredStations.values.map{$0.self}) {
                         station in
                         
@@ -68,7 +65,6 @@ struct ListenerView : View {
                     .padding()
                     
                     if !Listener.startedPlayingAudio {
-                        
                         HStack {
                             Spacer()
                             BufferingIndicatorView(BytesReceivedSoFar: $Listener.BytesReceivedSoFar)
