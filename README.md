@@ -1,6 +1,10 @@
 # ShareVibe
 
+Bluetooth Radio Station
+
 Stream song from iTunes library over BLE
+
+Listeners subscribe to your iPhone and hear the songs you pick
 
 Launch app on both
 
@@ -11,6 +15,5 @@ Another chooses "Broadcast" and picks the song(low quality MP4, the only one tha
 After ~65k bytes are sent, music starts on both phones
 
 TODO:
-Start/stop
-Send data in background(is this possible? Currently forcing iPhone not to lock screen)
-Start/stop song(on both apps)
+Keep sending data while apps in background(currently only works if the app is playing audio)
+Chatroom?
