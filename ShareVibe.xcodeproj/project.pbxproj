@@ -9,7 +9,10 @@
 /* Begin PBXBuildFile section */
 		364E0FEA243682A30014AC58 /* ListenerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FE9243682A30014AC58 /* ListenerView.swift */; };
 		364E0FED2436B9C30014AC58 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */; };
-		3650C79F24378BF2003A19F1 /* PlaybackControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3650C79E24378BF2003A19F1 /* PlaybackControlsView.swift */; };
+		364E925C243814CD00615E5E /* PlaybackControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E925B243814CD00615E5E /* PlaybackControlView.swift */; };
+		365031ED2439283300E6B7D6 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EC2439283300E6B7D6 /* Station.swift */; };
+		365031EF243928AB00E6B7D6 /* StationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EE243928AB00E6B7D6 /* StationRowView.swift */; };
+		365031F324392F8800E6B7D6 /* ListeningToStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031F224392F8700E6B7D6 /* ListeningToStationView.swift */; };
 		3650C7A524379CE0003A19F1 /* BufferingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */; };
 		36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB1241C603E00FABC9D /* AppDelegate.swift */; };
 		36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB3241C603E00FABC9D /* SceneDelegate.swift */; };
@@ -47,7 +50,10 @@
 /* Begin PBXFileReference section */
 		364E0FE9243682A30014AC58 /* ListenerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerView.swift; sourceTree = "<group>"; };
 		364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
-		3650C79E24378BF2003A19F1 /* PlaybackControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlsView.swift; sourceTree = "<group>"; };
+		364E925B243814CD00615E5E /* PlaybackControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlView.swift; sourceTree = "<group>"; };
+		365031EC2439283300E6B7D6 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
+		365031EE243928AB00E6B7D6 /* StationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationRowView.swift; sourceTree = "<group>"; };
+		365031F224392F8700E6B7D6 /* ListeningToStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningToStationView.swift; sourceTree = "<group>"; };
 		3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferingIndicatorView.swift; sourceTree = "<group>"; };
 		36526FAE241C603E00FABC9D /* ShareVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36526FB1241C603E00FABC9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -100,15 +106,25 @@
 		364E0FEB2436AF6A0014AC58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				36526FB5241C603E00FABC9D /* ContentView.swift */,
-				36D2C48024366CA5000477CB /* BroadcasterView.swift */,
+				365031EE243928AB00E6B7D6 /* StationRowView.swift */,
 				364E0FE9243682A30014AC58 /* ListenerView.swift */,
+				36D2C48024366CA5000477CB /* BroadcasterView.swift */,
+				36526FB5241C603E00FABC9D /* ContentView.swift */,
 				3686737B241DEEA100F23BC8 /* SongPickerView.swift */,
 				364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */,
-				3650C79E24378BF2003A19F1 /* PlaybackControlsView.swift */,
 				3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */,
+				364E925B243814CD00615E5E /* PlaybackControlView.swift */,
+				365031F224392F8700E6B7D6 /* ListeningToStationView.swift */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		365031EB2439281400E6B7D6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				365031EC2439283300E6B7D6 /* Station.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		36526FA5241C603E00FABC9D = {
@@ -135,8 +151,9 @@
 		36526FB0241C603E00FABC9D /* ShareVibe */ = {
 			isa = PBXGroup;
 			children = (
-				364E0FEB2436AF6A0014AC58 /* Views */,
+				365031EB2439281400E6B7D6 /* Models */,
 				36ED5396241DD3B400440054 /* Bluetooth */,
+				364E0FEB2436AF6A0014AC58 /* Views */,
 				36526FB1241C603E00FABC9D /* AppDelegate.swift */,
 				36526FB3241C603E00FABC9D /* SceneDelegate.swift */,
 				36526FB7241C606200FABC9D /* Assets.xcassets */,
@@ -322,18 +339,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3650C79F24378BF2003A19F1 /* PlaybackControlsView.swift in Sources */,
 				364E0FEA243682A30014AC58 /* ListenerView.swift in Sources */,
 				364E0FED2436B9C30014AC58 /* ActivityIndicatorView.swift in Sources */,
 				36D2C48124366CA5000477CB /* BroadcasterView.swift in Sources */,
 				3686737C241DEEA100F23BC8 /* SongPickerView.swift in Sources */,
+				365031F324392F8800E6B7D6 /* ListeningToStationView.swift in Sources */,
 				36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */,
+				365031ED2439283300E6B7D6 /* Station.swift in Sources */,
 				36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */,
 				3650C7A524379CE0003A19F1 /* BufferingIndicatorView.swift in Sources */,
 				36C849882421542100D5FD8C /* Globals.swift in Sources */,
 				3657D780242EE84A00E72807 /* CBBroadcaster.swift in Sources */,
 				3657D77E242EDE7B00E72807 /* CBListener.swift in Sources */,
+				365031EF243928AB00E6B7D6 /* StationRowView.swift in Sources */,
 				36526FB6241C603E00FABC9D /* ContentView.swift in Sources */,
+				364E925C243814CD00615E5E /* PlaybackControlView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

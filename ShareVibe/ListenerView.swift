@@ -10,33 +10,78 @@ import SwiftUI
 
 struct ListenerView : View {
     
-    @ObservedObject private var Listener = CBListener()
+    @ObservedObject var Listener = CBListener()
+    @State var roomName : String = ""
     
     var body: some View {
         VStack
-        {
-            if Listener.startedPlayingAudio
             {
-                PlaybackControlsView()
-            }
-            else
-            {
-                if self.Listener.Listening
+                if !Listener.Scanning
                 {
-                    BufferingIndicatorView(BytesReceivedSoFar: $Listener.BytesReceivedSoFar)
+                    VStack
+                    {
+                            Button(action:
+                            {
+                                    self.Listener.startScanningForStations()
+                            })
+                            {
+                                Image(systemName: "ear")
+                                    .font(Font.system(.largeTitle))
+                            }
+                    }
                 }
                 else
                 {
-                    Button(action:
-                    {
-                        self.Listener.startup()
-                    })
-                    {
-                       Image(systemName: "ear")
-                       .font(Font.system(.largeTitle))
+                    VStack
+                        {
+                            Spacer()
+                            
+                            List (Listener.fullyDiscoveredStations.values.map{$0.self}) {
+                                station in
+                                Button(action: {
+                                    self.Listener.startListeningToStation(id: station.id)
+                                })
+                                {
+                                    HStack
+                                        {
+                                            if self.Listener.currentlyListeningToStation?.id == station.id
+                                            {
+                                                Image(systemName: "radiowaves.left")
+                                                    .font(Font.system(.largeTitle))
+                                            }
+                                            else
+                                            {
+                                                Image(systemName: "music.note")
+                                            }
+                                            StationRowView(station: station)
+                                                .disabled(self.Listener.currentlyListeningToStation?.id == station.id)
+                                    }
+                                }
+                            }
+                            .listStyle(GroupedListStyle())
+                            .padding()
+                            
+                            if Listener.startedPlayingAudio
+                            {
+                                PlaybackControlView()
+                                    .padding()
+                            }
+                            else
+                            {
+                                HStack
+                                    {
+                                        Spacer()
+                                        BufferingIndicatorView(BytesReceivedSoFar: $Listener.BytesReceivedSoFar)
+                                        Text(Listener.Status)
+                                            .foregroundColor(.secondary)
+                                            .font(Font.system(.subheadline))
+                                            .transition(.opacity)
+                                        Spacer()
+                                }
+                                .padding()
+                            }
                     }
                 }
-            }
         }
     }
 }

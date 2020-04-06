@@ -13,16 +13,18 @@ struct BufferingIndicatorView: View {
     @Binding var BytesReceivedSoFar : UInt64
     
     var body: some View {
-        VStack{
-            ActivityIndicatorView()
-                                          
-            if BytesReceivedSoFar > 0
-           {
-               Text("\(Int(Double(BytesReceivedSoFar) / Double(Globals.Playback.StartPlayBytes) * Double(100)))%")
-                .foregroundColor(.secondary)
-                .font(Font.system(.subheadline))
-           }
-        }
+            HStack
+            {
+                ActivityIndicatorView()
+                                              
+                if BytesReceivedSoFar > 0
+                {
+                   Text("\(Int(Double(BytesReceivedSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
+                    .foregroundColor(.secondary)
+                    .font(Font.system(.subheadline))
+                }
+            }
+            .padding()
     }
 }
 
