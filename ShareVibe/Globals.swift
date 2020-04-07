@@ -47,11 +47,13 @@ public class Globals : NSObject
     {
         public class Status
         {//Make localizable
-            static let scanningForStations = "Scanning for stations..."
+            static let scanningForStations = "Searching  for stations..."
             static let noSongCurrentlyPlaying = "No song currently playing..."
             static let waitingForCurrentSongToFinish = "Waiting for song to finish..."
-            static let incomingSong = "Incoming song..."
+            static let bufferingSong = "Buffering song..."
             static let couldNotStartBluetooth = "Could not start Bluetooth! Please restart the app."
+            static let waitingForListeners = "Waiting for listeners..."
+            static let failedBluetooth = "Bluetooth error! Please restart..."
         }
         
         static var Player : AVPlayer = AVPlayer.init()

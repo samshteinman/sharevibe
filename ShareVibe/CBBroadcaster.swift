@@ -68,6 +68,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             trySend()
         }
+        else
+        {
+        }
         
     }
     
@@ -86,6 +89,13 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     {
         while(self.BytesSentOfCurrentSegmentSoFar < self.songData.count)
         {
+            let BufferingAudio = self.BytesSentOfCurrentSegmentSoFar > 0 && self.BytesSentOfCurrentSegmentSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
+            
+            if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
+            {
+                Status = Globals.Playback.Status.bufferingSong
+            }
+            
             if let chunk = GetChunkFromCurrentSegment()
             {
                 if(peripheralManager.updateValue(chunk, for: Globals.BluetoothGlobals.SegmentDataCharacteristic, onSubscribedCentrals: nil))
@@ -173,6 +183,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             NSLog("Ready to advertise")
             
+            Status = Globals.Playback.Status.waitingForListeners
+            
             Globals.BluetoothGlobals.Service.characteristics = [Globals.BluetoothGlobals.SegmentLengthCharacteristic, Globals.BluetoothGlobals.SegmentDataCharacteristic,
                                                                 Globals.BluetoothGlobals.SongDescriptionCharacteristic,
                                                                 Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
@@ -181,6 +193,10 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             peripheralManager.add(Globals.BluetoothGlobals.Service)
             
             peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : Globals.BluetoothGlobals.ServiceUUID])
+        }
+        else
+        {
+            Status = Globals.Playback.Status.failedBluetooth
         }
     }
     

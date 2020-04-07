@@ -61,10 +61,10 @@ struct ListenerView : View {
                             if self.Listener.startedPlayingAudio
                             {
                                 Button(action: {
-                                        Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
+                                    Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
                                 })
                                 {
-                                    Image(systemName: Globals.Playback.Player.isMuted ? "speaker.3.fill" : "speaker.fill")
+                                    Image(systemName: Globals.Playback.Player.isMuted ? "speaker.fill" : "speaker.3.fill")
                                         .foregroundColor(.blue)
                                 }
                                 .padding()
@@ -90,13 +90,11 @@ struct ListenerView : View {
                         }
                         .padding()
                     }
-                    else
+                    
+                    if self.Listener.currentlyListeningToStation != nil
                     {
                         Button(action: {
-                            self.Listener.restartReceivingAudio()
-                            self.Listener.cancelAllConnections()
-                            self.Listener.clearAllStationLists()
-                            self.Listener.startScanningForStations()
+                            self.Listener.restart()
                         })
                         {
                             Image(systemName: "gobackward")

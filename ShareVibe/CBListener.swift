@@ -42,6 +42,15 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         }
     }
     
+    func restart()
+    {
+        restartReceivingAudio()
+        cancelAllConnections()
+        clearAllStationLists()
+        currentlyListeningToStation = nil
+        startScanningForStations()
+    }
+    
     func startScanningForStations()
     {
         Scanning = true
@@ -238,9 +247,9 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 
                 BufferingAudio = self.BytesReceivedSoFar > 0 && self.BytesReceivedSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
                 
-                if(BufferingAudio && Status != Globals.Playback.Status.incomingSong)
+                if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
                 {
-                    Status = Globals.Playback.Status.incomingSong
+                    Status = Globals.Playback.Status.bufferingSong
                 }
                 
                 if(!self.startedPlayingAudio && self.BytesReceivedSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
@@ -288,6 +297,14 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         NSLog("Disconnected from \(peripheral)")
+        /*if let station = self.currentlyListeningToStation
+        {
+            if station.peripheral?.identifier == peripheral.identifier
+            {
+                NSLog("Disconnected from currently listening to \(peripheral) , restarting scan")
+                restart()
+            }
+        }*/
     }
     
     func appendFileData(val: Data)
@@ -399,6 +416,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     {
         self.fullyDiscoveredStations = Dictionary<UUID,Station>()
         self.currentlyDiscoveringStations = Dictionary<UUID,Station>()
+        self.currentlyListeningToStation = nil
     }
 
     
@@ -420,8 +438,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         {
             centralManager.cancelPeripheralConnection(peripheral)
         }
-        
-        currentlyListeningToStation = nil
     }
     
     func startListeningToStation(id: UUID)
@@ -445,6 +461,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             clearAllStationsBut(station: currentlyListeningToStation!)
             
             Status = Globals.Playback.Status.noSongCurrentlyPlaying
+            
             centralManager.connect(peripheral, options: nil)
         }
     }

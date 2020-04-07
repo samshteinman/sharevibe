@@ -53,11 +53,29 @@ struct BroadcasterView: View {
                 if self.Broadcaster.startedPlayingAudio
                 {
                     Button(action: {
-                            Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
+                        Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
                     })
                     {
-                        Image(systemName: Globals.Playback.Player.isMuted ? "speaker.3.fill" : "speaker.fill")
-                            .font(Font.system(.largeTitle))
+                        Image(systemName: Globals.Playback.Player.isMuted ? "speaker.fill" : "speaker.3.fill")
+                            .foregroundColor(.blue)
+                    }
+                    .font(Font.system(.largeTitle))
+                    .padding()
+                }
+                else if isRoomMade
+                {
+                    HStack {
+                        Spacer()
+                        
+                        BufferingIndicatorView(Status: $Broadcaster.Status)
+                        
+                        if Broadcaster.BytesSentOfCurrentSegmentSoFar > 0
+                        {
+                            Text("\(Int(Double(Broadcaster.BytesSentOfCurrentSegmentSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
+                                .foregroundColor(.primary)
+                                .font(Font.system(.subheadline))
+                        }
+                        Spacer()
                     }
                     .padding()
                 }
