@@ -296,17 +296,17 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         self.ExpectedAmountOfBytes = 0
         Globals.Playback.BytesPlayedSoFar = 0
     }
-        
+    
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         NSLog("Disconnected from \(peripheral)")
-        /*if let station = self.currentlyListeningToStation
+        if let station = self.currentlyListeningToStation
         {
             if station.peripheral?.identifier == peripheral.identifier
             {
                 NSLog("Disconnected from currently listening to \(peripheral) , restarting scan")
                 restart()
             }
-        }*/
+        }
     }
     
     func appendFileData(val: Data)
@@ -418,7 +418,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         self.currentlyDiscoveringStations = Dictionary<UUID,Station>()
         self.currentlyListeningToStation = nil
     }
-
+    
     
     func clearAllStationsBut(station : Station)
     {
@@ -440,6 +440,23 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         }
     }
     
+    func cancelAllConnectionsBut( exceptPeripheral : CBPeripheral) -> Bool
+       {
+        var isCurrentlyConnected = false
+           for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID])
+           {
+            if(exceptPeripheral == peripheral)
+            {
+                isCurrentlyConnected = true
+            } else
+            {
+               centralManager.cancelPeripheralConnection(peripheral)
+            }
+           }
+        
+        return isCurrentlyConnected
+       }
+    
     func startListeningToStation(id: UUID)
     {
         if let currentStation = currentlyListeningToStation
@@ -454,15 +471,21 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         {
             self.centralManager.stopScan()
             
-            cancelAllConnections()
+            let isCurrentlyConnected = cancelAllConnectionsBut(exceptPeripheral: peripheral)
             
             currentlyListeningToStation = fullyDiscoveredStations[id]
             
             clearAllStationsBut(station: currentlyListeningToStation!)
             
             Status = Globals.Playback.Status.noSongCurrentlyPlaying
-            
-            centralManager.connect(peripheral, options: nil)
+            if(isCurrentlyConnected)
+            {
+                peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
+            }
+            else
+            {
+                centralManager.connect(peripheral, options: nil)
+            }
         }
     }
     
