@@ -39,6 +39,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if centralManager == nil
         {
             centralManager = CBCentralManager(delegate: self, queue: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         }
     }
     
@@ -342,8 +344,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         Globals.Playback.StreamingPlayerItem = AVPlayerItem.init(asset: Globals.Playback.StreamingAsset, automaticallyLoadedAssetKeys: ["playable"])
         
         Globals.Playback.StreamingPlayerItem.addObserver(self, forKeyPath: "status", options: .new, context: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         
         Globals.Playback.StreamingAsset.resourceLoader.setDelegate(self, queue: DispatchQueue.main)
         

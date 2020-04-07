@@ -36,6 +36,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             RoomName = roomName
             
             peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         }
     }
     
@@ -70,8 +72,14 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
         else
         {
+            Status = Globals.Playback.Status.waitingForListeners
         }
-        
+    }
+    
+    @objc func playerDidFinishPlaying(note: Notification)
+    {
+        reset()
+        Status = Globals.Playback.Status.noSongCurrentlyPlaying
     }
     
     func trySend()
@@ -100,6 +108,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             {
                 if(peripheralManager.updateValue(chunk, for: Globals.BluetoothGlobals.SegmentDataCharacteristic, onSubscribedCentrals: nil))
                 {
+                    NSLog("Sent \(chunk.count) bytes")
                     self.BytesSentOfCurrentSegmentSoFar += chunk.count
                     if(!self.startedPlayingAudio && self.BytesSentOfCurrentSegmentSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
                     {
@@ -110,6 +119,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
                 }
                 else
                 {
+                    NSLog("Transmit queue full at \(self.BytesSentOfCurrentSegmentSoFar) bytes")
+                    //TODO: Add a queue, instead of failing on the updatevalue every time
                     break
                 }
             }
@@ -192,11 +203,18 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             
             peripheralManager.add(Globals.BluetoothGlobals.Service)
             
-            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : Globals.BluetoothGlobals.ServiceUUID])
+            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.BluetoothGlobals.ServiceUUID]])
         }
         else
         {
             Status = Globals.Playback.Status.failedBluetooth
+        }
+    }
+    
+    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
+        if let error = error{
+            Status = Globals.Playback.Status.failedBluetooth
+            NSLog("\(error)")
         }
     }
     
