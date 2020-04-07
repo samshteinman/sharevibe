@@ -20,8 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                try AVAudioSession.sharedInstance().setActive(true)
             
             NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
-            
-            Globals.Playback.setupPlaybackBackgroundControls()
             }
            catch {}
         return true

@@ -52,8 +52,14 @@ struct BroadcasterView: View {
                 
                 if self.Broadcaster.startedPlayingAudio
                 {
-                    PlaybackControlView()
-                        .padding()
+                    Button(action: {
+                            Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
+                    })
+                    {
+                        Image(systemName: Globals.Playback.Player.isMuted ? "speaker.3.fill" : "speaker.fill")
+                            .font(Font.system(.largeTitle))
+                    }
+                    .padding()
                 }
         }
         .sheet(isPresented: self.$showPicker,
@@ -99,7 +105,7 @@ struct BroadcasterView: View {
                             let data = try Data.init(contentsOf: session!.outputURL!)
                             
                             DispatchQueue.main.async {
-                                    self.Broadcaster.trySend(data: data)
+                                self.Broadcaster.trySend(data: data)
                             }
                         }
                         catch

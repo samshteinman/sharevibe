@@ -77,30 +77,6 @@ public class Globals : NSObject
             Globals.Playback.Player.pause()
         }
         
-        static func setupPlaybackBackgroundControls()
-        {
-            // Get the shared MPRemoteCommandCenter
-            let commandCenter = MPRemoteCommandCenter.shared()
-            
-            // Add handler for Play Command
-            commandCenter.playCommand.addTarget { event in
-                if Globals.Playback.Player.rate == 0.0 {
-                    Globals.Playback.Player.play()
-                    return .success
-                }
-                return .commandFailed
-            }
-            
-            // Add handler for Pause Command
-            commandCenter.pauseCommand.addTarget { event in
-                if Globals.Playback.Player.rate == 1.0 {
-                    Globals.Playback.Player.pause()
-                    return .success
-                }
-                return .commandFailed
-            }
-        }
-        
         static func ConvertUInt32ToData(length : UInt32) -> Data
         {
             var tempHolder = length

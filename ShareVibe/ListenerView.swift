@@ -60,8 +60,14 @@ struct ListenerView : View {
                             
                             if self.Listener.startedPlayingAudio
                             {
-                                PlaybackControlView()
-                                    .padding()
+                                Button(action: {
+                                        Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
+                                })
+                                {
+                                    Image(systemName: Globals.Playback.Player.isMuted ? "speaker.3.fill" : "speaker.fill")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding()
                             }
                         }
                     }
