@@ -20,7 +20,7 @@ struct PlaybackControlView: View {
             //Can't use AVPLayer .rate because it can stay as 1.0 even though no audio is playing
         })
         {
-         Image(systemName: self.isPlaying ? "pause.fill" : "play.fill")
+         Image(systemName: self.isPlaying ? "pause.circle" : "play.circle")
                                    .font(Font.system(.largeTitle))
         }
     }

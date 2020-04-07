@@ -19,7 +19,7 @@ struct ListenerView : View {
             if !Listener.Scanning
             {
                 Button(action: {
-                    self.Listener.startScanningForStations()
+                    self.Listener.startup()
                 })
                 {
                     Image(systemName: "ear")
@@ -83,6 +83,22 @@ struct ListenerView : View {
                             Spacer()
                         }
                         .padding()
+                    }
+                    else
+                    {
+                        Button(action: {
+                            self.Listener.restartReceivingAudio()
+                            self.Listener.cancelAllConnections()
+                            self.Listener.clearAllStationLists()
+                            self.Listener.startScanningForStations()
+                        })
+                        {
+                            Image(systemName: "gobackward")
+                                .font(Font.system(.largeTitle))
+                                .foregroundColor(.blue)
+                        }
+                        .padding()
+                        Spacer()
                     }
                 }
             }

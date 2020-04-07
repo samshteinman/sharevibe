@@ -34,9 +34,19 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     @Published var fullyDiscoveredStations = Dictionary<UUID,Station>()
     var currentlyDiscoveringStations = Dictionary<UUID,Station>()
     
+    func startup()
+    {
+        if centralManager == nil
+        {
+            centralManager = CBCentralManager(delegate: self, queue: nil)
+        }
+    }
+    
     func startScanningForStations()
     {
-        centralManager = CBCentralManager(delegate: self, queue: nil)
+        Scanning = true
+        Status = Globals.Playback.Status.scanningForStations
+        centralManager.scanForPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
     }
     
     public func centralManagerDidUpdateState(
@@ -45,9 +55,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if(central.state == .poweredOn)
         {
             NSLog("Starting scan")
-            Scanning = true
-            Status = Globals.Playback.Status.scanningForStations
-            centralManager.scanForPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
+            startScanningForStations()
         }
         else
         {
@@ -204,7 +212,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         {
             if let val = characteristic.value
             {
-                restart()
+                restartReceivingAudio()
                 
                 UIApplication.shared.isIdleTimerDisabled = true
                 
@@ -265,7 +273,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
     }
     
-    func restart()
+    func restartReceivingAudio()
     {
         Globals.Playback.RestartPlayer()
         
@@ -277,7 +285,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         self.ExpectedAmountOfBytes = 0
         Globals.Playback.BytesPlayedSoFar = 0
     }
-    
+        
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         NSLog("Disconnected from \(peripheral)")
     }
@@ -304,7 +312,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     
     @objc func playerDidFinishPlaying(note: Notification)
     {
-        restart()
+        restartReceivingAudio()
         Status = Globals.Playback.Status.noSongCurrentlyPlaying
     }
     
@@ -387,6 +395,35 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         return false
     }
     
+    func clearAllStationLists()
+    {
+        self.fullyDiscoveredStations = Dictionary<UUID,Station>()
+        self.currentlyDiscoveringStations = Dictionary<UUID,Station>()
+    }
+
+    
+    func clearAllStationsBut(station : Station)
+    {
+        for (id,station) in fullyDiscoveredStations
+        {
+            if id != station.id
+            {
+                fullyDiscoveredStations[id] = nil
+            }
+        }
+        self.currentlyDiscoveringStations = Dictionary<UUID,Station>()
+    }
+    
+    func cancelAllConnections()
+    {
+        for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID])
+        {
+            centralManager.cancelPeripheralConnection(peripheral)
+        }
+        
+        currentlyListeningToStation = nil
+    }
+    
     func startListeningToStation(id: UUID)
     {
         if let currentStation = currentlyListeningToStation
@@ -400,12 +437,12 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if let peripheral = fullyDiscoveredStations[id]?.peripheral
         {
             self.centralManager.stopScan()
+            
+            cancelAllConnections()
+            
             currentlyListeningToStation = fullyDiscoveredStations[id]
             
-            for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID])
-            {
-                centralManager.cancelPeripheralConnection(peripheral)
-            }
+            clearAllStationsBut(station: currentlyListeningToStation!)
             
             Status = Globals.Playback.Status.noSongCurrentlyPlaying
             centralManager.connect(peripheral, options: nil)
