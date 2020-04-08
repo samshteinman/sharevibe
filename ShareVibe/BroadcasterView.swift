@@ -69,9 +69,9 @@ struct BroadcasterView: View {
                         
                         BufferingIndicatorView(Status: $Broadcaster.Status)
                         
-                        if Broadcaster.BytesSentOfCurrentSegmentSoFar > 0
+                        if Broadcaster.BytesSentOfSoFar > 0
                         {
-                            Text("\(Int(Double(Broadcaster.BytesSentOfCurrentSegmentSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
+                            Text("\(Int(Double(Broadcaster.BytesSentOfSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
                                 .foregroundColor(.primary)
                                 .font(Font.system(.subheadline))
                         }
@@ -81,13 +81,13 @@ struct BroadcasterView: View {
                 }
         }
         .sheet(isPresented: self.$showPicker,
-               onDismiss: self.sendSong)
+               onDismiss: self.exportAndStartBroadcasting)
         {
             SongPickerView(songs: self.$songs)
         }
     }
     
-    func sendSong()
+    func exportAndStartBroadcasting()
     {
         if(self.songs == nil)
         {
@@ -100,9 +100,8 @@ struct BroadcasterView: View {
         if let url = songItem.value(forProperty: MPMediaItemPropertyAssetURL)
         {
             let asset = AVAsset(url: url as! URL)
-            NSLog("Compatible exports are : \(AVAssetExportSession.exportPresets(compatibleWith: asset))")
-            
             let session = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetLowQuality)
+            
             session!.outputFileType = AVFileType.mp4
             
             session!.shouldOptimizeForNetworkUse = true
@@ -123,7 +122,7 @@ struct BroadcasterView: View {
                             let data = try Data.init(contentsOf: session!.outputURL!)
                             
                             DispatchQueue.main.async {
-                                self.Broadcaster.trySend(data: data)
+                                self.Broadcaster.startBroadcasting(data: data)
                             }
                         }
                         catch

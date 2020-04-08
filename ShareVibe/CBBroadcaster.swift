@@ -12,8 +12,10 @@ import MediaPlayer
 
 class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, MPMediaPickerControllerDelegate
 {
-    @Published var BytesSentOfCurrentSegmentSoFar: Int = 0
-    @Published var TotalBytesOfCurrentSegment: Int = 0
+    var peripheralManager: CBPeripheralManager!
+    
+    @Published var BytesSentOfSoFar: Int = 0
+    @Published var ExpectedAmountOfBytes: Int = 0
     
     @Published var ListeningCentrals : [CBCentral] = []
     
@@ -25,10 +27,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     @Published var RoomName : String = ""
     
     var songData : Data = Data()
-    var needBroadcastSegmentLength = true
+    var needBroadcastExpectedBytesLength = true
     
-    var peripheralManager: CBPeripheralManager!
-        
+    
     func startStation(roomName : String)
     {
         if peripheralManager == nil
@@ -45,8 +46,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     {
         Globals.Playback.RestartPlayer()
         
-        self.needBroadcastSegmentLength = true
-        self.BytesSentOfCurrentSegmentSoFar = 0
+        self.needBroadcastExpectedBytesLength = true
+        self.BytesSentOfSoFar = 0
         self.startedPlayingAudio = false
     }
     
@@ -62,7 +63,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
     }
     
-    func trySend(data: Data)
+    func startBroadcasting(data: Data)
     {
         self.songData = data
         
@@ -95,9 +96,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func sendWholeSegment()
     {
-        while(self.BytesSentOfCurrentSegmentSoFar < self.songData.count)
+        while(self.BytesSentOfSoFar < self.songData.count)
         {
-            let BufferingAudio = self.BytesSentOfCurrentSegmentSoFar > 0 && self.BytesSentOfCurrentSegmentSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
+            let BufferingAudio = self.BytesSentOfSoFar > 0 && self.BytesSentOfSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
             
             if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
             {
@@ -109,8 +110,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
                 if(peripheralManager.updateValue(chunk, for: Globals.BluetoothGlobals.SegmentDataCharacteristic, onSubscribedCentrals: nil))
                 {
                     NSLog("Sent \(chunk.count) bytes")
-                    self.BytesSentOfCurrentSegmentSoFar += chunk.count
-                    if(!self.startedPlayingAudio && self.BytesSentOfCurrentSegmentSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
+                    self.BytesSentOfSoFar += chunk.count
+                    if(!self.startedPlayingAudio && self.BytesSentOfSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
                     {
                         self.startedPlayingAudio = true
                         Globals.Playback.Player = AVPlayer.init(url: Globals.Playback.ExportedAudioFilePath)
@@ -119,7 +120,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
                 }
                 else
                 {
-                    NSLog("Transmit queue full at \(self.BytesSentOfCurrentSegmentSoFar) bytes")
+                    NSLog("Transmit queue full at \(self.BytesSentOfSoFar) bytes")
                     //TODO: Add a queue, instead of failing on the updatevalue every time
                     break
                 }
@@ -129,15 +130,15 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func tryBroadcastSegmentLength()
     {
-        if(self.needBroadcastSegmentLength)
+        if(self.needBroadcastExpectedBytesLength)
         {
-            self.TotalBytesOfCurrentSegment = self.songData.count
+            self.ExpectedAmountOfBytes = self.songData.count
             
-            self.needBroadcastSegmentLength = !peripheralManager.updateValue(Globals.convertToData(number: self.songData.count), for: Globals.BluetoothGlobals.SegmentLengthCharacteristic, onSubscribedCentrals: nil)
+            self.needBroadcastExpectedBytesLength = !peripheralManager.updateValue(Globals.convertToData(number: self.songData.count), for: Globals.BluetoothGlobals.SegmentLengthCharacteristic, onSubscribedCentrals: nil)
             
-            if(!self.needBroadcastSegmentLength)
+            if(!self.needBroadcastExpectedBytesLength)
             {
-                NSLog("Broadcasted file segment length \(self.TotalBytesOfCurrentSegment)")
+                NSLog("Broadcasted file segment length \(self.ExpectedAmountOfBytes)")
             }
         }
     }
@@ -150,8 +151,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func setupForNextSegment()
     {
-        self.BytesSentOfCurrentSegmentSoFar = 0
-        self.needBroadcastSegmentLength = true
+        self.BytesSentOfSoFar = 0
+        self.needBroadcastExpectedBytesLength = true
     }
     
     func peripheralManagerIsReady(toUpdateSubscribers peripheral: CBPeripheralManager) {
@@ -197,9 +198,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             Status = Globals.Playback.Status.waitingForListeners
             
             Globals.BluetoothGlobals.Service.characteristics = [Globals.BluetoothGlobals.SegmentLengthCharacteristic, Globals.BluetoothGlobals.SegmentDataCharacteristic,
-                                                                Globals.BluetoothGlobals.SongDescriptionCharacteristic,
-                                                                Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
-                                                                Globals.BluetoothGlobals.RoomNameCharacteristic]
+                Globals.BluetoothGlobals.SongDescriptionCharacteristic,
+                Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
+                Globals.BluetoothGlobals.RoomNameCharacteristic]
             
             peripheralManager.add(Globals.BluetoothGlobals.Service)
             
@@ -220,18 +221,18 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func GetChunkFromCurrentSegment() -> Data?
     {
-        if(BytesSentOfCurrentSegmentSoFar >= self.songData.count)
+        if(BytesSentOfSoFar >= self.songData.count)
         {
             UIApplication.shared.isIdleTimerDisabled = false
             return nil
         }
-        else if(BytesSentOfCurrentSegmentSoFar + Globals.ChunkSize > self.songData.count)
+        else if(BytesSentOfSoFar + Globals.ChunkSize > self.songData.count)
         {
-            return self.songData.subdata(in: Data.Index(BytesSentOfCurrentSegmentSoFar)..<(self.songData.count))
+            return self.songData.subdata(in: Data.Index(BytesSentOfSoFar)..<(self.songData.count))
         }
         else
         {
-            return self.songData.subdata(in: Data.Index(BytesSentOfCurrentSegmentSoFar)..<(Data.Index(BytesSentOfCurrentSegmentSoFar)+Data.Index(Globals.ChunkSize)))
+            return self.songData.subdata(in: Data.Index(BytesSentOfSoFar)..<(Data.Index(BytesSentOfSoFar)+Data.Index(Globals.ChunkSize)))
         }
     }
     
