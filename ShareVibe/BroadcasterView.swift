@@ -50,7 +50,7 @@ struct BroadcasterView: View {
                 .disabled(roomName.count == 0)
                 .padding()
                 
-                if self.Broadcaster.startedPlayingAudio
+                if self.Broadcaster.startedPlayingAudio && Globals.Playback.Player.rate != 0
                 {
                     Button(action: {
                         Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
