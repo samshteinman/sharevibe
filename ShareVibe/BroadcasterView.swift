@@ -67,17 +67,16 @@ struct BroadcasterView: View {
                     HStack {
                         Spacer()
                         
-                        BufferingIndicatorView(Status: $Broadcaster.Status)
+                        BufferingIndicatorView(Status: $Broadcaster.Status, BytesSentSoFar: $Broadcaster.BytesSentOfSoFar)
                         
                         if Broadcaster.BytesSentOfSoFar > 0
                         {
                             Text("\(Int(Double(Broadcaster.BytesSentOfSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
-                                .foregroundColor(.primary)
+                                .foregroundColor(.red)
                                 .font(Font.system(.subheadline))
                         }
                         Spacer()
                     }
-                    .padding()
                 }
         }
         .sheet(isPresented: self.$showPicker,

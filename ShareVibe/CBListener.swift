@@ -16,8 +16,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
 {
     var centralManager : CBCentralManager!
     
-    @Published var BytesReceivedSoFar: UInt64 = 0
-    @Published var ExpectedAmountOfBytes: UInt64 = 0
+    @Published var BytesReceivedSoFar: Int = 0
+    @Published var ExpectedAmountOfBytes: Int = 0
     
     @Published var Status : String = ""
     
@@ -228,7 +228,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 UIApplication.shared.isIdleTimerDisabled = true
                 
                 self.ExpectedAmountOfBytes = (val.withUnsafeBytes
-                    { (ptr: UnsafePointer<UInt64>) in ptr.pointee } )
+                    { (ptr: UnsafePointer<Int>) in ptr.pointee } )
                 NSLog("Got expected length \(self.ExpectedAmountOfBytes)")
             }
         }
@@ -245,13 +245,13 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             {
                 appendFileData(val: val)
                 
-                self.BytesReceivedSoFar += UInt64(val.count)
+                self.BytesReceivedSoFar += val.count
                 
                 BufferingAudio = self.BytesReceivedSoFar > 0 && self.BytesReceivedSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
                 
-                if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
+                if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
                 {
-                    Status = Globals.Playback.Status.bufferingSong
+                    Status = Globals.Playback.Status.syncingSong
                 }
                 
                 if(!self.startedPlayingAudio && self.BytesReceivedSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
@@ -286,12 +286,12 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     
     func restartReceivingAudio()
     {
+        self.dataReceived = nil
         Globals.Playback.RestartPlayer()
         
         self.Status = ""
         self.BufferingAudio = false
         self.startedPlayingAudio = false
-        self.dataReceived = nil
         self.BytesReceivedSoFar = 0
         self.ExpectedAmountOfBytes = 0
         Globals.Playback.BytesPlayedSoFar = 0
@@ -351,7 +351,9 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
         Globals.Playback.Player.replaceCurrentItem(with: Globals.Playback.StreamingPlayerItem)
         
+        NSLog("Starting playing audio")
         Globals.Playback.Player.play()
+        
         UIApplication.shared.isIdleTimerDisabled = false
         if let error = Globals.Playback.Player.error
         {
@@ -362,7 +364,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         if let contentInfoRequest = loadingRequest.contentInformationRequest
         {
-            NSLog("Got content request")
+            NSLog("Got content request responding with \(UInt64(self.ExpectedAmountOfBytes))")
             contentInfoRequest.contentLength = Int64(bitPattern: UInt64(self.ExpectedAmountOfBytes))
             contentInfoRequest.contentType = AVFileType.mp4.rawValue
             contentInfoRequest.isByteRangeAccessSupported = true
@@ -496,7 +498,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if(keyPath == "status")
         {
-            print("playback currentitem : \(Globals.Playback.Player.currentItem!)")
+            print("playback currentitem : \(Globals.Playback.Player.currentItem!) status: \(Globals.Playback.Player.status)")
             if let error = Globals.Playback.Player.currentItem?.error
             {
                 NSLog("Error during playback: \(error)")

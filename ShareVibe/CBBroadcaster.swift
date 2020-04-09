@@ -100,9 +100,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             let BufferingAudio = self.BytesSentOfSoFar > 0 && self.BytesSentOfSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
             
-            if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
+            if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
             {
-                Status = Globals.Playback.Status.bufferingSong
+                Status = Globals.Playback.Status.syncingSong
             }
             
             if let chunk = GetChunkFromCurrentSegment()
@@ -168,6 +168,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
             Globals.ChunkSize = Int(central.maximumUpdateValueLength)
+            
+            NSLog("Setting desired bluetooth low latency for rapid audio exchange")
+            peripheral.setDesiredConnectionLatency(.low, for: central)
             
             if !self.ListeningCentrals.contains(central)
             {

@@ -47,10 +47,10 @@ public class Globals : NSObject
     {
         public class Status
         {
-            static let scanningForStations = "Searching  for stations..."
+            static let scanningForStations = "Searching for stations..."
             static let noSongCurrentlyPlaying = "No song currently playing..."
             static let waitingForCurrentSongToFinish = "Waiting for song to finish..."
-            static let bufferingSong = "Buffering song..."
+            static let syncingSong = "Syncing, don't leave yet..."
             static let couldNotStartBluetooth = "Could not start Bluetooth! Please restart the app."
             static let waitingForListeners = "Waiting for listeners..."
             static let failedBluetooth = "Bluetooth error! Please check your settings and restart..."
@@ -77,12 +77,6 @@ public class Globals : NSObject
             Globals.Playback.Player.cancelPendingPrerolls()
             Globals.Playback.Player.replaceCurrentItem(with: nil)
             Globals.Playback.Player.pause()
-        }
-        
-        static func ConvertUInt32ToData(length : UInt32) -> Data
-        {
-            var tempHolder = length
-            return Data.init(bytes: &tempHolder, count: MemoryLayout.size(ofValue: tempHolder))
         }
     }
     

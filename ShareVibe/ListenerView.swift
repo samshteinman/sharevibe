@@ -58,7 +58,7 @@ struct ListenerView : View {
                             }
                             .disabled(self.Listener.currentlyListeningToStation?.id == station.id)
                             
-                            if self.Listener.startedPlayingAudio
+                            if self.Listener.startedPlayingAudio && Globals.Playback.Player.rate != 0
                             {
                                 Button(action: {
                                     Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
@@ -78,17 +78,17 @@ struct ListenerView : View {
                         HStack {
                             Spacer()
                             
-                            BufferingIndicatorView(Status: $Listener.Status)
+                            BufferingIndicatorView(Status: $Listener.Status, BytesSentSoFar: $Listener.BytesReceivedSoFar)
                             
                             if Listener.BytesReceivedSoFar > 0
                             {
                                 Text("\(Int(Double(Listener.BytesReceivedSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(.red)
                                     .font(Font.system(.subheadline))
+                                
                             }
                             Spacer()
                         }
-                        .padding()
                     }
                     
                     if self.Listener.currentlyListeningToStation != nil
