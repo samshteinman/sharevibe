@@ -54,6 +54,7 @@ struct BroadcasterView: View {
                 {
                     Button(action: {
                         self.Broadcaster.isMuted = !self.Broadcaster.isMuted
+                        Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
                     })
                     {
                         Image(systemName: self.Broadcaster.isMuted ? "speaker.fill" : "speaker.3.fill")

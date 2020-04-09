@@ -156,6 +156,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                         {
                             NSLog("\(characteristic.uuid)")
                             peripheral.setNotifyValue(true, for: characteristic)
+                            Status = Globals.Playback.Status.noSongCurrentlyPlaying
                         }
                     }
                 }
@@ -480,7 +481,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             
             clearAllStationsBut(station: currentlyListeningToStation!)
             
-            Status = Globals.Playback.Status.noSongCurrentlyPlaying
             if(isCurrentlyConnected)
             {
                 peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
@@ -489,6 +489,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             {
                 centralManager.connect(peripheral, options: nil)
             }
+            
+            Status = Globals.Playback.Status.connecting
         }
     }
     

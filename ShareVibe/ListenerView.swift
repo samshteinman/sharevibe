@@ -62,6 +62,7 @@ struct ListenerView : View {
                             {
                                 Button(action: {
                                     self.Listener.isMuted = !self.Listener.isMuted
+                                    Globals.Playback.Player.isMuted = self.Listener.isMuted
                                 })
                                 {
                                     Image(systemName: self.Listener.isMuted ? "speaker.fill" : "speaker.3.fill")

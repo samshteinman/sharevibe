@@ -47,6 +47,7 @@ public class Globals : NSObject
     {
         public class Status
         {
+            static let connecting = "Connecting"
             static let scanningForStations = "Searching for stations"
             static let noSongCurrentlyPlaying = "No song currently playing"
             static let waitingForCurrentSongToFinish = "Waiting for song to finish"
