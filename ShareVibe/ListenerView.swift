@@ -89,6 +89,7 @@ struct ListenerView : View {
                             }
                             Spacer()
                         }
+                        .padding()
                     }
                     
                     if self.Listener.currentlyListeningToStation != nil

@@ -14,8 +14,7 @@ struct BufferingIndicatorView: View {
     @Binding var BytesSentSoFar : Int
     
     var body: some View {
-        HStack
-            {
+        HStack {
                 if BytesSentSoFar > 0 {
                     Image(systemName: "exclamationmark.triangle")
                         .font(Font.system(.largeTitle))
@@ -31,7 +30,6 @@ struct BufferingIndicatorView: View {
                     .transition(.opacity)
                     .foregroundColor(BytesSentSoFar > 0 ? .red : .secondary)
         }
-        .padding()
     }
 }
 

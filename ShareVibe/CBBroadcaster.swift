@@ -114,7 +114,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
                     if(!self.startedPlayingAudio && self.BytesSentOfSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
                     {
                         self.startedPlayingAudio = true
-                        Globals.Playback.Player = AVPlayer.init(url: Globals.Playback.ExportedAudioFilePath)
+                        
+                        Globals.Playback.Player.replaceCurrentItem(with: AVPlayerItem.init(url: Globals.Playback.ExportedAudioFilePath))
                         Globals.Playback.Player.play()
                     }
                 }
