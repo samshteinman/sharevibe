@@ -29,6 +29,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     var dataReceived : Data?
     
     @Published var startedPlayingAudio = false
+    @Published var isMuted = false
     
     @Published var currentlyListeningToStation : Station?
     @Published var fullyDiscoveredStations = Dictionary<UUID,Station>()

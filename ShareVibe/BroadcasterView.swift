@@ -53,10 +53,10 @@ struct BroadcasterView: View {
                 if self.Broadcaster.startedPlayingAudio && Globals.Playback.Player.rate != 0
                 {
                     Button(action: {
-                        Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
+                        self.Broadcaster.isMuted = !self.Broadcaster.isMuted
                     })
                     {
-                        Image(systemName: Globals.Playback.Player.isMuted ? "speaker.fill" : "speaker.3.fill")
+                        Image(systemName: self.Broadcaster.isMuted ? "speaker.fill" : "speaker.3.fill")
                             .foregroundColor(.blue)
                     }
                     .font(Font.system(.largeTitle))

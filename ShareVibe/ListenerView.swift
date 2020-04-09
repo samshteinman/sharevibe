@@ -61,10 +61,10 @@ struct ListenerView : View {
                             if self.Listener.startedPlayingAudio && Globals.Playback.Player.rate != 0
                             {
                                 Button(action: {
-                                    Globals.Playback.Player.isMuted = !Globals.Playback.Player.isMuted
+                                    self.Listener.isMuted = !self.Listener.isMuted
                                 })
                                 {
-                                    Image(systemName: Globals.Playback.Player.isMuted ? "speaker.fill" : "speaker.3.fill")
+                                    Image(systemName: self.Listener.isMuted ? "speaker.fill" : "speaker.3.fill")
                                         .foregroundColor(.blue)
                                 }
                                 .padding()

@@ -22,6 +22,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     @Published var Status : String = ""
     
     @Published var startedPlayingAudio = false
+    @Published var isMuted: Bool = false
     
     @Published var NumberOfListeners = 0
     @Published var RoomName : String = ""
