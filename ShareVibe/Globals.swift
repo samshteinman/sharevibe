@@ -56,6 +56,8 @@ public class Globals : NSObject
             static let waitingForListeners = "Waiting for listeners"
             static let failedBluetooth = "Bluetooth error! Please check your settings and restart"
             static let preparingSong = "Preparing song"
+            static let broadcastingFailed = "Broadcast failed"
+            static let failedToShareSong = "Could not share song. Is the song downloaded from the cloud?"
         }
         
         static var Player : AVPlayer = AVPlayer.init()

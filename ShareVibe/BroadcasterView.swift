@@ -21,6 +21,8 @@ struct BroadcasterView: View {
     
     @State private var isRoomMade = false
     
+    @State private var showExportError = false
+    
     var body: some View {
         VStack
             {
@@ -83,22 +85,26 @@ struct BroadcasterView: View {
         {
             SongPickerView(songs: self.$songs)
         }
+        .alert(isPresented: $showExportError)
+        {
+            Alert(title: Text(Globals.Playback.Status.broadcastingFailed), message: Text(Globals.Playback.Status.failedToShareSong))
+        }
     }
     
     func exportAndStartBroadcasting()
     {
-       
         if(self.songs == nil)
         {
             return
         }
-        self.isRoomMade = true
         
         let songItems: [MPMediaItem] = self.songs!.items
         let songItem = songItems[0]
         
         if let url = songItem.value(forProperty: MPMediaItemPropertyAssetURL)
         {
+            self.isRoomMade = true
+              
             self.Broadcaster.Status = Globals.Playback.Status.preparingSong
             
             let asset = AVAsset(url: url as! URL)
@@ -134,10 +140,15 @@ struct BroadcasterView: View {
                     }
                     else
                     {
+                        self.showExportError = true
                         NSLog("Failed for \(String(describing: session?.outputURL)) status: \(String(describing: session?.status.rawValue)) \(String(describing: session?.error))")
                     }
             })
             
+        }
+        else
+        {
+            self.showExportError = true
         }
     }
     
