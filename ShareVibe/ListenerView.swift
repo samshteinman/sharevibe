@@ -37,6 +37,7 @@ struct ListenerView : View {
                                 self.Listener.startListeningToStation(id: station.id)
                             })
                             {
+                                withAnimation{
                                 HStack
                                     {
                                         if self.Listener.currentlyListeningToStation?.id == station.id
@@ -55,6 +56,7 @@ struct ListenerView : View {
                                         Text("\(station.NumberOfListeners ?? 0)")
                                 }
                                 .padding()
+                                }
                             }
                             .disabled(self.Listener.currentlyListeningToStation?.id == station.id)
                             
@@ -76,21 +78,9 @@ struct ListenerView : View {
                     .padding()
                     
                     if !Listener.startedPlayingAudio {
-                        HStack {
-                            Spacer()
-                            
-                            BufferingIndicatorView(Status: $Listener.Status, BytesSentSoFar: $Listener.BytesReceivedSoFar)
-                            
-                            if Listener.BytesReceivedSoFar > 0
-                            {
-                                Text("\(Int(Double(Listener.BytesReceivedSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
-                                    .foregroundColor(.red)
-                                    .font(Font.system(.subheadline))
-                                
-                            }
-                            Spacer()
-                        }
+                        BufferingIndicatorView(Status: $Listener.Status, BufferingBytesSoFar: $Listener.BytesReceivedSoFar, MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartListener))
                         .padding()
+                        }
                     }
                     
                     if self.Listener.currentlyListeningToStation != nil
@@ -99,7 +89,7 @@ struct ListenerView : View {
                             self.Listener.restart()
                         })
                         {
-                            Image(systemName: "gobackward")
+                            Image(systemName: "gobackward.minus")
                                 .font(Font.system(.largeTitle))
                                 .foregroundColor(.blue)
                         }
@@ -109,7 +99,6 @@ struct ListenerView : View {
                 }
             }
         }
-    }
 }
 
 struct ListenerView_Previews: PreviewProvider {

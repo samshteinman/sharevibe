@@ -45,12 +45,23 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         }
     }
     
-    func restart()
+    func shutdown()
+    {
+        reset()
+        centralManager.stopScan()
+    }
+    
+    func reset()
     {
         restartReceivingAudio()
         cancelAllConnections()
         clearAllStationLists()
         currentlyListeningToStation = nil
+    }
+    
+    func restart()
+    {
+        reset()
         startScanningForStations()
     }
     
@@ -249,14 +260,14 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 
                 self.BytesReceivedSoFar += val.count
                 
-                BufferingAudio = self.BytesReceivedSoFar > 0 && self.BytesReceivedSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
+                BufferingAudio = self.BytesReceivedSoFar > 0 && self.BytesReceivedSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStartListener
                 
                 if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
                 {
                     Status = Globals.Playback.Status.syncingSong
                 }
                 
-                if(!self.startedPlayingAudio && self.BytesReceivedSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
+                if(!self.startedPlayingAudio && self.BytesReceivedSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStartListener)
                 {
                     startPlayingStreamingAudio()
                 }

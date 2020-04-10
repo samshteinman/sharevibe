@@ -99,7 +99,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     {
         while(self.BytesSentOfSoFar < self.songData.count)
         {
-            let BufferingAudio = self.BytesSentOfSoFar > 0 && self.BytesSentOfSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStart
+            let BufferingAudio = self.BytesSentOfSoFar > 0 && self.BytesSentOfSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster
             
             if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
             {
@@ -112,7 +112,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
                 {
                     NSLog("Sent \(chunk.count) bytes")
                     self.BytesSentOfSoFar += chunk.count
-                    if(!self.startedPlayingAudio && self.BytesSentOfSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStart)
+                    if(!self.startedPlayingAudio && self.BytesSentOfSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster)
                     {
                         self.startedPlayingAudio = true
                         

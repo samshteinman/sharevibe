@@ -51,7 +51,7 @@ public class Globals : NSObject
             static let scanningForStations = "Searching for stations"
             static let noSongCurrentlyPlaying = "No song currently playing"
             static let waitingForCurrentSongToFinish = "Waiting for song to finish"
-            static let syncingSong = "Syncing, don't leave yet!"
+            static let syncingSong = "Syncing, please don't leave"
             static let couldNotStartBluetooth = "Could not start Bluetooth! Please restart the app"
             static let waitingForListeners = "Waiting for listeners"
             static let failedBluetooth = "Bluetooth error! Please check your settings and restart"
@@ -59,7 +59,8 @@ public class Globals : NSObject
         
         static var Player : AVPlayer = AVPlayer.init()
         
-        static var AmountOfBytesBeforeAudioCanStart : UInt64 = 65535
+        static var AmountOfBytesBeforeAudioCanStartListener : Int = 65535
+        static var AmountOfBytesBeforeAudioCanStartBroadcaster : Int = 67035
         
         static let AudioFileExtension = ".mp4"
         

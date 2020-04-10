@@ -35,16 +35,20 @@ struct BroadcasterView: View {
                 .padding()
                 
                 Button(action: {
-                    self.Broadcaster.startStation(roomName: self.roomName)
-                    self.songs = nil
-                    self.showPicker = !self.showPicker
-                    self.isRoomMade = true
+                    withAnimation
+                        {
+                            self.Broadcaster.startStation(roomName: self.roomName)
+                            self.songs = nil
+                            self.showPicker = !self.showPicker
+                    }
                 })
                 {
                     VStack {
-                        Image(systemName: self.isRoomMade ? "music.note" : "antenna.radiowaves.left.and.right")
-                            .font(Font.system(.largeTitle))
-                            .padding()
+                        withAnimation{
+                            Image(systemName: isRoomMade ? "music.note" : "antenna.radiowaves.left.and.right")
+                                .font(Font.system(.largeTitle))
+                                .padding()
+                        }
                     }
                 }
                 .disabled(roomName.count == 0)
@@ -53,8 +57,8 @@ struct BroadcasterView: View {
                 if self.Broadcaster.startedPlayingAudio && Globals.Playback.Player.rate != 0
                 {
                     Button(action: {
-                        self.Broadcaster.isMuted = !self.Broadcaster.isMuted
-                        Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
+                            self.Broadcaster.isMuted.toggle()
+                            Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
                     })
                     {
                         Image(systemName: self.Broadcaster.isMuted ? "speaker.fill" : "speaker.3.fill")
@@ -68,14 +72,8 @@ struct BroadcasterView: View {
                     HStack {
                         Spacer()
                         
-                        BufferingIndicatorView(Status: $Broadcaster.Status, BytesSentSoFar: $Broadcaster.BytesSentOfSoFar)
+                        BufferingIndicatorView(Status: $Broadcaster.Status, BufferingBytesSoFar: $Broadcaster.BytesSentOfSoFar , MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster))
                         
-                        if Broadcaster.BytesSentOfSoFar > 0
-                        {
-                            Text("\(Int(Double(Broadcaster.BytesSentOfSoFar) / Double(Globals.Playback.AmountOfBytesBeforeAudioCanStart) * Double(100)))%")
-                                .foregroundColor(.red)
-                                .font(Font.system(.subheadline))
-                        }
                         Spacer()
                     }
                 }
@@ -89,10 +87,12 @@ struct BroadcasterView: View {
     
     func exportAndStartBroadcasting()
     {
+       
         if(self.songs == nil)
         {
             return
         }
+        self.isRoomMade = true
         
         let songItems: [MPMediaItem] = self.songs!.items
         let songItem = songItems[0]
