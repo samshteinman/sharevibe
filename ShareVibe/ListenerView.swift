@@ -44,7 +44,7 @@ struct ListenerView : View {
                                         {
                                             Image(systemName: "radiowaves.left")
                                                 .font(Font.system(.largeTitle))
-                                                .foregroundColor(.blue)
+                                                .foregroundColor(.primary)
                                         }
                                         else
                                         {

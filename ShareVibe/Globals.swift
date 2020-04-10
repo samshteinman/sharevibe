@@ -60,7 +60,7 @@ public class Globals : NSObject
         static var Player : AVPlayer = AVPlayer.init()
         
         static var AmountOfBytesBeforeAudioCanStartListener : Int = 65535
-        static var AmountOfBytesBeforeAudioCanStartBroadcaster : Int = 67035
+        static var AmountOfBytesBeforeAudioCanStartBroadcaster : Int = 69035
         
         static let AudioFileExtension = ".mp4"
         
