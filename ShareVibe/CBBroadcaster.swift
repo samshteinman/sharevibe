@@ -170,10 +170,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
             Globals.ChunkSize = Int(central.maximumUpdateValueLength)
-            
-            NSLog("Setting desired bluetooth low latency for rapid audio exchange")
-            peripheral.setDesiredConnectionLatency(.low, for: central)
-            
+                       
             if !self.ListeningCentrals.contains(central)
             {
                 self.ListeningCentrals.append(central)
