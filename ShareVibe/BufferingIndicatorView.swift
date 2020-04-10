@@ -29,7 +29,6 @@ struct BufferingIndicatorView: View {
                 Text("\(Int(Double(BufferingBytesSoFar) / Double(MaximumBufferingBytes) * Double(100)))%")
                     .foregroundColor(.red)
                     .font(Font.system(.subheadline))
-                
             }
         }
     }

@@ -37,11 +37,10 @@ struct BroadcasterView: View {
                 .padding()
                 
                 Button(action: {
-                    withAnimation
-                        {
-                            self.Broadcaster.startStation(roomName: self.roomName)
-                            self.songs = nil
-                            self.showPicker = !self.showPicker
+                    withAnimation {
+                        self.Broadcaster.startStation(roomName: self.roomName)
+                        self.songs = nil
+                        self.showPicker = !self.showPicker
                     }
                 })
                 {
@@ -59,8 +58,8 @@ struct BroadcasterView: View {
                 if self.Broadcaster.startedPlayingAudio && Globals.Playback.Player.rate != 0
                 {
                     Button(action: {
-                            self.Broadcaster.isMuted.toggle()
-                            Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
+                        self.Broadcaster.isMuted.toggle()
+                        Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
                     })
                     {
                         Image(systemName: self.Broadcaster.isMuted ? "speaker.fill" : "speaker.3.fill")
@@ -72,11 +71,7 @@ struct BroadcasterView: View {
                 else if isRoomMade
                 {
                     HStack {
-                        Spacer()
-                        
                         BufferingIndicatorView(Status: $Broadcaster.Status, BufferingBytesSoFar: $Broadcaster.BytesSentOfSoFar , MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster))
-                        
-                        Spacer()
                     }
                 }
         }
@@ -104,7 +99,7 @@ struct BroadcasterView: View {
         if let url = songItem.value(forProperty: MPMediaItemPropertyAssetURL)
         {
             self.isRoomMade = true
-              
+            
             self.Broadcaster.Status = Globals.Playback.Status.preparingSong
             
             let asset = AVAsset(url: url as! URL)

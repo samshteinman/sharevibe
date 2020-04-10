@@ -238,8 +238,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             {
                 restartReceivingAudio()
                 
-                UIApplication.shared.isIdleTimerDisabled = true
-                
                 self.ExpectedAmountOfBytes = (val.withUnsafeBytes
                     { (ptr: UnsafePointer<Int>) in ptr.pointee } )
                 NSLog("Got expected length \(self.ExpectedAmountOfBytes)")
@@ -261,6 +259,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 self.BytesReceivedSoFar += val.count
                 
                 BufferingAudio = self.BytesReceivedSoFar > 0 && self.BytesReceivedSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStartListener
+                
+                UIApplication.shared.isIdleTimerDisabled = BufferingAudio
                 
                 if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
                 {
@@ -367,7 +367,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         NSLog("Starting playing audio")
         Globals.Playback.Player.play()
         
-        UIApplication.shared.isIdleTimerDisabled = false
         if let error = Globals.Playback.Player.error
         {
             NSLog("Error after play: \(String(describing: error))")

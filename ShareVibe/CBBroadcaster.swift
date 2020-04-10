@@ -88,8 +88,6 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     {
         reset()
         
-        UIApplication.shared.isIdleTimerDisabled = true
-        
         tryBroadcastSegmentLength()
         
         sendWholeSegment()
@@ -100,6 +98,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         while(self.BytesSentOfSoFar < self.songData.count)
         {
             let BufferingAudio = self.BytesSentOfSoFar > 0 && self.BytesSentOfSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster
+            
+            UIApplication.shared.isIdleTimerDisabled = BufferingAudio
             
             if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
             {
@@ -228,7 +228,6 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     {
         if(BytesSentOfSoFar >= self.songData.count)
         {
-            UIApplication.shared.isIdleTimerDisabled = false
             return nil
         }
         else if(BytesSentOfSoFar + Globals.ChunkSize > self.songData.count)
