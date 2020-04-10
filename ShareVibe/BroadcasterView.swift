@@ -99,6 +99,8 @@ struct BroadcasterView: View {
         
         if let url = songItem.value(forProperty: MPMediaItemPropertyAssetURL)
         {
+            self.Broadcaster.Status = Globals.Playback.Status.preparingSong
+            
             let asset = AVAsset(url: url as! URL)
             let session = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetLowQuality)
             

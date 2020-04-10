@@ -55,6 +55,7 @@ public class Globals : NSObject
             static let couldNotStartBluetooth = "Could not start Bluetooth! Please restart the app"
             static let waitingForListeners = "Waiting for listeners"
             static let failedBluetooth = "Bluetooth error! Please check your settings and restart"
+            static let preparingSong = "Preparing song"
         }
         
         static var Player : AVPlayer = AVPlayer.init()
