@@ -29,7 +29,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     
     @objc func handleInterruption(notification: Notification)
     {
+        guard let userInfo = notification.userInfo,
+            let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSession.InterruptionType(rawValue : typeValue) else
+        {
+            return
+        }
+        
+        switch type
+        {
+        case .began:
+            Globals.Playback.Player.pause()
+        case .ended:
+            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else {return}
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume)
+            {
+                Globals.Playback.Player.play()
+            }
+            
+        default: ()
+        }
+        
         print("notification: \(notification)")
+        
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
