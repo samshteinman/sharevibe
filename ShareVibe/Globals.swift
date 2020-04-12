@@ -74,15 +74,12 @@ public class Globals : NSObject
             static let scanningForStations = "Searching for stations"
             static let noSongCurrentlyPlaying = "No song currently playing"
             static let waitingForCurrentSongToFinish = "Waiting for song to finish"
-            static let syncingSong = "Syncing"
+            static let bufferingSong = "Buffering"
             static let waitingForListeners = "Waiting for listeners"
             static let failedBluetooth = "Bluetooth error! Please check your settings and restart"
             static let preparingSong = "Preparing song"
             static let broadcastingFailed = "Broadcast failed! Please check your settings and restart"
             static let failedToShareSong = "Could not share song. Is the song downloaded from the cloud?"
-            static let stayOnAppWhileSync = "Please don't close during sync"
-            static let everyoneOpenPhones = "Please keep ShareVibe open during sync"
-            static let pleaseKeepOpen = "Please keep open"
         }
         
         static var Player : AVPlayer = AVPlayer.init()

@@ -18,28 +18,17 @@ struct BufferingIndicatorView: View {
         VStack
             {
                 HStack {
-                    ActivityIndicatorView(color: BufferingBytesSoFar > 0 ? .constant(.red) : .constant(.secondaryLabel))
+                    ActivityIndicatorView()
                         .animation(.easeOut)
                     
                     Text(Status)
                         .font(Font.system(.subheadline))
-                        .foregroundColor(BufferingBytesSoFar > 0 ? .red : .secondary)
-                }
-                
-                if BufferingBytesSoFar > 0
-                {
-                    HStack
-                        {
-                            Image(systemName: "exclamationmark.triangle")
-                            .foregroundColor(.red)
-                            
-                            Text(Globals.Playback.Status.stayOnAppWhileSync)
-                            .foregroundColor(.red)
-                            .font(Font.system(.subheadline))
-                            
-                            Text("\(Int(Double(BufferingBytesSoFar) / Double(MaximumBufferingBytes) * Double(100)))%")
-                                                     .foregroundColor(.red)
-                                                     .font(Font.system(.subheadline))
+                        .foregroundColor(.secondary)
+                    
+                    if BufferingBytesSoFar > 0
+                    {
+                        Text("\(Int(Double(BufferingBytesSoFar) / Double(MaximumBufferingBytes) * Double(100)))%")
+                        .font(Font.system(.subheadline))
                     }
                 }
         }

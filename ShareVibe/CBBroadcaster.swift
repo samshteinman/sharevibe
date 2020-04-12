@@ -123,9 +123,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             
             UIApplication.shared.isIdleTimerDisabled = BufferingAudio
             
-            if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
+            if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
             {
-                Status = Globals.Playback.Status.syncingSong
+                Status = Globals.Playback.Status.bufferingSong
             }
             
             if let chunk = GetChunkFromCurrentSegment()

@@ -268,9 +268,9 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 
                 UIApplication.shared.isIdleTimerDisabled = BufferingAudio
                 
-                if(BufferingAudio && Status != Globals.Playback.Status.syncingSong)
+                if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
                 {
-                    Status = Globals.Playback.Status.syncingSong
+                    Status = Globals.Playback.Status.bufferingSong
                 }
                 
                 if(!self.startedPlayingAudio && self.BytesReceivedSoFar > Globals.Playback.AmountOfBytesBeforeAudioCanStartListener)
@@ -308,7 +308,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         self.dataReceived = nil
         Globals.Playback.RestartPlayer()
         
-        self.Status = ""
+        self.Status = Globals.Playback.Status.noSongCurrentlyPlaying
         self.BufferingAudio = false
         self.startedPlayingAudio = false
         self.BytesReceivedSoFar = 0
@@ -397,9 +397,11 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         {
             NSLog("Got data request for \(dataRequest.requestedOffset) length \(dataRequest.requestedLength)")
             let dataReceivedSnapshot = dataReceived
-            if dataReceivedSnapshot == nil
+            if dataReceivedSnapshot == nil || dataReceivedSnapshot!.count == 0
             {
-                return false
+                NSLog("Sending up 0 bytes becuse data is nil or 0 \(dataReceivedSnapshot)")
+                loadingRequest.finishLoading()
+                return true
             }
             
             let amountCanSupply = dataReceivedSnapshot!.count - Globals.Playback.BytesPlayedSoFar
