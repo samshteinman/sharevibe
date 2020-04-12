@@ -520,7 +520,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if(keyPath == "status")
         {
-            print("playback currentitem : \(Globals.Playback.Player.currentItem!) status: \(Globals.Playback.Player.status)")
+            print("Playback currentitem : \(Globals.Playback.Player.currentItem!) status: \(Globals.Playback.Player.status) \(Globals.Playback.Player.status.rawValue))")
             if let error = Globals.Playback.Player.currentItem?.error
             {
                 NSLog("Error during playback: \(error)")

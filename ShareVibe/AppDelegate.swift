@@ -19,19 +19,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             try AVAudioSession.sharedInstance().setCategory(.playback)
                try AVAudioSession.sharedInstance().setActive(true)
             
+            Globals.Playback.setupRemoteAudioControls()
+            
             NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
             }
            catch {}
         return true
     }
-    
+  
     @objc func handleInterruption(notification: Notification)
     {
         print("notification: \(notification)")
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        
+        NSLog("Entered background")
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {

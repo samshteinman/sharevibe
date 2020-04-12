@@ -97,8 +97,8 @@ struct ListenerView : View {
                         Spacer()
                     }
                 }
-            }
         }
+    }
 }
 
 struct ListenerView_Previews: PreviewProvider {

@@ -45,6 +45,28 @@ public class Globals : NSObject
     
     public class Playback
     {
+        static func setupRemoteAudioControls()
+        {
+            let commandCenter = MPRemoteCommandCenter.shared()
+            commandCenter.playCommand.addTarget { event in
+                if Globals.Playback.Player.rate == 0
+                {
+                   Globals.Playback.Player.play()
+                    return .success
+                }
+                return .commandFailed
+            }
+            
+            commandCenter.pauseCommand.addTarget { event in
+                if Globals.Playback.Player.rate > 0
+                {
+                   Globals.Playback.Player.pause()
+                    return .success
+                }
+                return .commandFailed
+            }
+        }
+        
         public class Status
         {
             static let settingUp = "Setting up"
@@ -58,7 +80,7 @@ public class Globals : NSObject
             static let preparingSong = "Preparing song"
             static let broadcastingFailed = "Broadcast failed! Please check your settings and restart"
             static let failedToShareSong = "Could not share song. Is the song downloaded from the cloud?"
-            static let stayOnAppWhileSync = "Please don't close during sync!"
+            static let stayOnAppWhileSync = "Please don't close during sync"
             static let everyoneOpenPhones = "Please keep ShareVibe open during sync"
             static let pleaseKeepOpen = "Please keep open"
         }
