@@ -22,6 +22,8 @@ struct BroadcasterView: View {
     @State private var isRoomMade = false
     
     @State private var showExportError = false
+    @State private var showSyncWarning = false
+    
     
     var body: some View {
         VStack
@@ -84,6 +86,11 @@ struct BroadcasterView: View {
         {
             Alert(title: Text(Globals.Playback.Status.broadcastingFailed), message: Text(Globals.Playback.Status.failedToShareSong))
         }
+        .alert(isPresented: $showSyncWarning)
+        {
+            Alert(title: Text(Globals.Playback.Status.pleaseKeepOpen), message: Text(Globals.Playback.Status.everyoneOpenPhones))
+        }
+        
     }
     
     func exportAndStartBroadcasting()
@@ -125,6 +132,8 @@ struct BroadcasterView: View {
                             let data = try Data.init(contentsOf: session!.outputURL!)
                             
                             DispatchQueue.main.async {
+                                self.showSyncWarning = true
+                                
                                 self.Broadcaster.startBroadcasting(data: data)
                             }
                         }

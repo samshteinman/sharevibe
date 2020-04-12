@@ -25,6 +25,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "CBListener.playStream(path:):CBListener.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Globals.Playback.Player.rate">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PeripheralCentralManager.GetChunkFromFile():PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
@@ -65,6 +73,14 @@
          contextName = "specialized closure #1 in ContentView.sendSong():ContentView.swift">
       </ContextState>
       <ContextState
+         contextName = "CBListener.centralManager(_:didDiscover:advertisementData:rssi:):CBListener.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "peripheral.identifier">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PeripheralListener.resourceLoader(_:shouldWaitForLoadingOfRequestedResource:):PeripheralListener.swift">
          <PersistentStrings>
             <PersistentString
@@ -73,10 +89,13 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "CBListener.centralManager(_:didDiscover:advertisementData:rssi:):CBListener.swift">
+         contextName = "CBListener.createOrUpdateStation(id:name:numberOfListeners:peripheral:):CBListener.swift">
          <PersistentStrings>
             <PersistentString
-               value = "peripheral.identifier">
+               value = "scanningStations">
+            </PersistentString>
+            <PersistentString
+               value = "readyStations">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -98,17 +117,6 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "CBListener.createOrUpdateStation(id:name:numberOfListeners:peripheral:):CBListener.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "scanningStations">
-            </PersistentString>
-            <PersistentString
-               value = "readyStations">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "CentralBroadcaster.sendChunkToStream(stream:):CentralBroadcaster.swift">
          <PersistentStrings>
             <PersistentString
@@ -123,12 +131,15 @@
          contextName = "PeripheralCentralManager.startSend(content:):PeripheralCentralManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "peripheralManager">
-            </PersistentString>
-            <PersistentString
                value = "PeripheralCentralManager.FileLengthCharacteristic">
             </PersistentString>
+            <PersistentString
+               value = "peripheralManager">
+            </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "BroadcasterView.exportAndStartBroadcasting():BroadcasterView.swift">
       </ContextState>
       <ContextState
          contextName = "BluetoothCentralManager.peripheral(_:didUpdateValueFor:error:):BluetoothCentralManager.swift">
@@ -140,16 +151,16 @@
                value = "self.mdatIndex">
             </PersistentString>
             <PersistentString
-               value = "self.currentSegmentHandleToFile">
+               value = "Globals.Playback.Player.status">
             </PersistentString>
             <PersistentString
                value = "self.FileLength">
             </PersistentString>
             <PersistentString
-               value = "self.SegmentLength">
+               value = "self.currentSegmentHandleToFile">
             </PersistentString>
             <PersistentString
-               value = "Globals.Playback.Player.status">
+               value = "self.SegmentLength">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

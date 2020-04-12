@@ -39,6 +39,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     {
         if centralManager == nil
         {
+            Status = Globals.Playback.Status.settingUp
+            
             centralManager = CBCentralManager(delegate: self, queue: nil)
             
             NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
@@ -65,13 +67,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         startScanningForStations()
     }
     
-    func startScanningForStations()
-    {
-        Scanning = true
-        Status = Globals.Playback.Status.scanningForStations
-        centralManager.scanForPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
-    }
-    
     public func centralManagerDidUpdateState(
         _ central: CBCentralManager)
     {
@@ -83,8 +78,17 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         else
         {
             Scanning = false
-            Status = Globals.Playback.Status.couldNotStartBluetooth
+            Status = Globals.Playback.Status.failedBluetooth
         }
+    }
+    
+    func startScanningForStations()
+    {
+        Scanning = true
+        
+        Status = Globals.Playback.Status.scanningForStations
+        
+        centralManager.scanForPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
     }
     
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -94,7 +98,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
         if !self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID]).contains(peripheral)
         {
-            NSLog("Found peripheral, connecting...!");
+            NSLog("Found peripheral, connecting for inquiry...!");
             
             peripheral.delegate = self
             self.centralManager.connect(peripheral, options: nil);
@@ -102,7 +106,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     }
     
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        NSLog("Connected!");
+        NSLog("Connected to \(peripheral) Discovering services....");
         peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
     }
     
@@ -120,7 +124,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             
             if(services[0].uuid == Globals.BluetoothGlobals.ServiceUUID)
             {
-                NSLog("Found service we were looking for")
+                NSLog("Found service we were looking for \(peripheral), discovering characteristics")
+                
                 if currentlyListeningToStation?.id == peripheral.identifier
                 {
                     peripheral.discoverCharacteristics(nil, for: services[0])
@@ -148,9 +153,10 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         }
         else
         {
-            NSLog("Discovered some characteristics:")
             if let characteristics = service.characteristics
             {
+                NSLog("Discovered \(characteristics.count) characteristics:")
+                
                 for characteristic in characteristics
                 {
                     if characteristic.uuid == Globals.BluetoothGlobals.RoomNameUUID
@@ -158,7 +164,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                         characteristic.uuid == Globals.BluetoothGlobals.NumberOfListenersUUID
                     {
                         peripheral.readValue(for: characteristic)
-                        NSLog("Request\(characteristic.uuid)")
+                        NSLog("Request read on \(characteristic.uuid)")
                         peripheral.setNotifyValue(true, for: characteristic)
                     }
                     else
@@ -179,7 +185,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     {
         if fullyDiscoveredStations[id] != nil
         {
-            NSLog("Already fully discovered, updating state.")
+            NSLog("Already fully discovered \(id), updating state.")
             if let num = numberOfListeners
             {
                 fullyDiscoveredStations[id]!.NumberOfListeners = num
@@ -358,7 +364,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
         Globals.Playback.StreamingPlayerItem.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         
-        Globals.Playback.StreamingAsset.resourceLoader.setDelegate(self, queue: DispatchQueue.main)
+        Globals.Playback.StreamingAsset.resourceLoader.setDelegate(self, queue: DispatchQueue.global())
         
         Globals.Playback.Player.automaticallyWaitsToMinimizeStalling = false
         
@@ -374,10 +380,12 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     }
     
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+        
         if let contentInfoRequest = loadingRequest.contentInformationRequest
         {
-            NSLog("Got content request responding with \(UInt64(self.ExpectedAmountOfBytes))")
             contentInfoRequest.contentLength = Int64(bitPattern: UInt64(self.ExpectedAmountOfBytes))
+            NSLog("Got content request responding with \(contentInfoRequest.contentLength)")
+            
             contentInfoRequest.contentType = AVFileType.mp4.rawValue
             contentInfoRequest.isByteRangeAccessSupported = true
             
@@ -387,13 +395,14 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
         if let dataRequest = loadingRequest.dataRequest
         {
+            NSLog("Got data request for \(dataRequest.requestedOffset) length \(dataRequest.requestedLength)")
             let dataReceivedSnapshot = dataReceived
-            if(dataReceivedSnapshot == nil)
+            if dataReceivedSnapshot == nil
             {
                 return false
             }
             
-            let amount = dataReceivedSnapshot!.count - Globals.Playback.BytesPlayedSoFar
+            let amountCanSupply = dataReceivedSnapshot!.count - Globals.Playback.BytesPlayedSoFar
             let chunk = 16384
             var returning : Data?
             
@@ -403,7 +412,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 loadingRequest.finishLoading()
                 return false
             }
-            else if amount > chunk
+            else if amountCanSupply > chunk
             {
                 returning = dataReceivedSnapshot!.subdata(in: Globals.Playback.BytesPlayedSoFar..<(Globals.Playback.BytesPlayedSoFar + chunk))
             }

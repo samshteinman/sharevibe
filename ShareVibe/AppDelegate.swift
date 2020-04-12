@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             try AVAudioSession.sharedInstance().setCategory(.playback)
                try AVAudioSession.sharedInstance().setActive(true)
             
-            
             NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
             }
            catch {}

@@ -15,21 +15,33 @@ struct BufferingIndicatorView: View {
     @Binding var MaximumBufferingBytes : Int
     
     var body: some View {
-        HStack {
-            ActivityIndicatorView(color: BufferingBytesSoFar > 0 ? .constant(.red) : .constant(.secondaryLabel))
-                .animation(.easeOut)
-            
-                Text(Status)
-                    .font(Font.system(.subheadline))
-                    .transition(.opacity)
-                    .foregroundColor(BufferingBytesSoFar > 0 ? .red : .secondary)
-            
-            if BufferingBytesSoFar > 0
+        VStack
             {
-                Text("\(Int(Double(BufferingBytesSoFar) / Double(MaximumBufferingBytes) * Double(100)))%")
-                    .foregroundColor(.red)
-                    .font(Font.system(.subheadline))
-            }
+                HStack {
+                    ActivityIndicatorView(color: BufferingBytesSoFar > 0 ? .constant(.red) : .constant(.secondaryLabel))
+                        .animation(.easeOut)
+                    
+                    Text(Status)
+                        .font(Font.system(.subheadline))
+                        .foregroundColor(BufferingBytesSoFar > 0 ? .red : .secondary)
+                }
+                
+                if BufferingBytesSoFar > 0
+                {
+                    HStack
+                        {
+                            Image(systemName: "exclamationmark.triangle")
+                            .foregroundColor(.red)
+                            
+                            Text(Globals.Playback.Status.stayOnAppWhileSync)
+                            .foregroundColor(.red)
+                            .font(Font.system(.subheadline))
+                            
+                            Text("\(Int(Double(BufferingBytesSoFar) / Double(MaximumBufferingBytes) * Double(100)))%")
+                                                     .foregroundColor(.red)
+                                                     .font(Font.system(.subheadline))
+                    }
+                }
         }
     }
 }

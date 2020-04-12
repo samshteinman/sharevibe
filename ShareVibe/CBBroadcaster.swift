@@ -37,9 +37,31 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             RoomName = roomName
             
+            Status = Globals.Playback.Status.settingUp
+            
             peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
             
             NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        }
+    }
+    
+    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        if(peripheral.state == .poweredOn)
+        {
+            NSLog("Ready to advertise")
+            
+            Globals.BluetoothGlobals.Service.characteristics = [Globals.BluetoothGlobals.SegmentLengthCharacteristic, Globals.BluetoothGlobals.SegmentDataCharacteristic,
+                Globals.BluetoothGlobals.SongDescriptionCharacteristic,
+                Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
+                Globals.BluetoothGlobals.RoomNameCharacteristic]
+            
+            peripheralManager.add(Globals.BluetoothGlobals.Service)
+            
+            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.BluetoothGlobals.ServiceUUID]])
+        }
+        else
+        {
+            Status = Globals.Playback.Status.failedBluetooth
         }
     }
     
@@ -192,32 +214,14 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
     }
     
-    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
-        if(peripheral.state == .poweredOn)
-        {
-            NSLog("Ready to advertise")
-            
-            Status = Globals.Playback.Status.waitingForListeners
-            
-            Globals.BluetoothGlobals.Service.characteristics = [Globals.BluetoothGlobals.SegmentLengthCharacteristic, Globals.BluetoothGlobals.SegmentDataCharacteristic,
-                Globals.BluetoothGlobals.SongDescriptionCharacteristic,
-                Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
-                Globals.BluetoothGlobals.RoomNameCharacteristic]
-            
-            peripheralManager.add(Globals.BluetoothGlobals.Service)
-            
-            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.BluetoothGlobals.ServiceUUID]])
-        }
-        else
-        {
-            Status = Globals.Playback.Status.failedBluetooth
-        }
-    }
-    
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
         if let error = error{
             Status = Globals.Playback.Status.failedBluetooth
             NSLog("\(error)")
+        }
+        else
+        {
+            Status = Globals.Playback.Status.waitingForListeners
         }
     }
     
