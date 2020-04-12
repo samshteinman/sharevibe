@@ -78,7 +78,7 @@ struct ListenerView : View {
                     .padding()
                     
                     if !Listener.startedPlayingAudio {
-                        BufferingIndicatorView(Status: $Listener.Status, BufferingBytesSoFar: $Listener.BytesReceivedSoFar, MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartListener))
+                        StatusIndicatorView(Status: $Listener.Status, BufferingBytesSoFar: $Listener.BytesReceivedSoFar, MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartListener), HasError: $Listener.HasError)
                             .padding()
                     }
                 }

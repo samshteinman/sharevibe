@@ -71,7 +71,7 @@ struct BroadcasterView: View {
                 else if isRoomMade
                 {
                     HStack {
-                        BufferingIndicatorView(Status: $Broadcaster.Status, BufferingBytesSoFar: $Broadcaster.BytesSentOfSoFar , MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster))
+                        StatusIndicatorView(Status: $Broadcaster.Status, BufferingBytesSoFar: $Broadcaster.BytesSentOfSoFar , MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster), HasError: $Broadcaster.HasError)
                     }
                 }
         }

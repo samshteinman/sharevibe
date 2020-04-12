@@ -80,6 +80,7 @@ public class Globals : NSObject
             static let preparingSong = "Preparing song"
             static let broadcastingFailed = "Broadcast failed! Please check your settings and restart"
             static let failedToShareSong = "Could not share song. Is the song downloaded from the cloud?"
+            static let errorPlayingSong = "Failed to play song. Sorry please try again"
         }
         
         static var Player : AVPlayer = AVPlayer.init()

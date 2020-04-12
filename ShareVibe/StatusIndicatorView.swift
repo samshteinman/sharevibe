@@ -1,5 +1,5 @@
 //
-//  BufferingIndicatorView.swift
+//  StatusIndicatorView.swift
 //  ShareVibe
 //
 //  Created by Sam Shteinman on 2020-04-03.
@@ -8,24 +8,35 @@
 
 import SwiftUI
 
-struct BufferingIndicatorView: View {
+struct StatusIndicatorView: View {
     
     @Binding var Status : String
     @Binding var BufferingBytesSoFar : Int
     @Binding var MaximumBufferingBytes : Int
+    @Binding var HasError : Bool
     
     var body: some View {
         VStack
             {
                 HStack {
-                    ActivityIndicatorView()
-                        .animation(.easeOut)
+                    if !HasError
+                    {
+                        ActivityIndicatorView()
+                            .animation(.easeOut)
+                    }
+                    else
+                    {
+                        Image(systemName: "exclamationmark.triangle")
+                            .animation(.easeOut)
+                            .foregroundColor(.red)
+                            .font(Font.system(.largeTitle))
+                    }
                     
                     Text(Status)
                         .font(Font.system(.subheadline))
                         .foregroundColor(.secondary)
                     
-                    if BufferingBytesSoFar > 0
+                    if BufferingBytesSoFar > 0 && !HasError
                     {
                         Text("\(Int(Double(BufferingBytesSoFar) / Double(MaximumBufferingBytes) * Double(100)))%")
                             .foregroundColor(.secondary)
@@ -36,8 +47,8 @@ struct BufferingIndicatorView: View {
     }
 }
 
-struct BufferingIndicatorView_Previews: PreviewProvider {
+struct StatusIndicatorView_Previews: PreviewProvider {
     static var previews: some View {
-        BufferingIndicatorView(Status: .constant(""), BufferingBytesSoFar: .constant(0), MaximumBufferingBytes: .constant(100))
+        StatusIndicatorView(Status: .constant(""), BufferingBytesSoFar: .constant(0), MaximumBufferingBytes: .constant(100), HasError: .constant(true))
     }
 }

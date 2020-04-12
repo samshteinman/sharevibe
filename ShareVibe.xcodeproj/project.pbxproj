@@ -10,7 +10,6 @@
 		364E0FEA243682A30014AC58 /* ListenerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FE9243682A30014AC58 /* ListenerView.swift */; };
 		364E0FED2436B9C30014AC58 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */; };
 		365031ED2439283300E6B7D6 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EC2439283300E6B7D6 /* Station.swift */; };
-		3650C7A524379CE0003A19F1 /* BufferingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */; };
 		36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB1241C603E00FABC9D /* AppDelegate.swift */; };
 		36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB3241C603E00FABC9D /* SceneDelegate.swift */; };
 		36526FB6241C603E00FABC9D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB5241C603E00FABC9D /* ContentView.swift */; };
@@ -24,6 +23,7 @@
 		3686737C241DEEA100F23BC8 /* SongPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3686737B241DEEA100F23BC8 /* SongPickerView.swift */; };
 		36C849882421542100D5FD8C /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C849872421542100D5FD8C /* Globals.swift */; };
 		36D2C48124366CA5000477CB /* BroadcasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D2C48024366CA5000477CB /* BroadcasterView.swift */; };
+		36E8DBB024439A41007568A5 /* StatusIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E8DBAF24439A41007568A5 /* StatusIndicatorView.swift */; };
 		36ED5390241D8CE400440054 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36ED538F241D8CE400440054 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +48,6 @@
 		364E0FE9243682A30014AC58 /* ListenerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerView.swift; sourceTree = "<group>"; };
 		364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		365031EC2439283300E6B7D6 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
-		3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferingIndicatorView.swift; sourceTree = "<group>"; };
 		36526FAE241C603E00FABC9D /* ShareVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36526FB1241C603E00FABC9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36526FB3241C603E00FABC9D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -68,6 +67,7 @@
 		3686737B241DEEA100F23BC8 /* SongPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPickerView.swift; sourceTree = "<group>"; };
 		36C849872421542100D5FD8C /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		36D2C48024366CA5000477CB /* BroadcasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcasterView.swift; sourceTree = "<group>"; };
+		36E8DBAF24439A41007568A5 /* StatusIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIndicatorView.swift; sourceTree = "<group>"; };
 		36ED538F241D8CE400440054 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -105,7 +105,7 @@
 				36526FB5241C603E00FABC9D /* ContentView.swift */,
 				3686737B241DEEA100F23BC8 /* SongPickerView.swift */,
 				364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */,
-				3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */,
+				36E8DBAF24439A41007568A5 /* StatusIndicatorView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -337,8 +337,8 @@
 				36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */,
 				365031ED2439283300E6B7D6 /* Station.swift in Sources */,
 				36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */,
-				3650C7A524379CE0003A19F1 /* BufferingIndicatorView.swift in Sources */,
 				36C849882421542100D5FD8C /* Globals.swift in Sources */,
+				36E8DBB024439A41007568A5 /* StatusIndicatorView.swift in Sources */,
 				3657D780242EE84A00E72807 /* CBBroadcaster.swift in Sources */,
 				3657D77E242EDE7B00E72807 /* CBListener.swift in Sources */,
 				36526FB6241C603E00FABC9D /* ContentView.swift in Sources */,

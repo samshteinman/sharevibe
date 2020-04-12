@@ -63,6 +63,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         else
         {
             Status = Globals.Playback.Status.failedBluetooth
+            HasError = true
         }
     }
     
@@ -71,8 +72,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         Globals.Playback.RestartPlayer()
         
         self.needBroadcastExpectedBytesLength = true
-        self.BytesSentOfSoFar = 0
+        BytesSentOfSoFar = 0
         self.startedPlayingAudio = false
+        HasError = false
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {
@@ -219,6 +221,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         if let error = error{
             Status = Globals.Playback.Status.failedBluetooth
             NSLog("\(error)")
+            HasError = true
         }
         else
         {
@@ -234,11 +237,11 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
         else if(BytesSentOfSoFar + Globals.ChunkSize > self.songData.count)
         {
-            return self.songData.subdata(in: Data.Index(BytesSentOfSoFar)..<(self.songData.count))
+            return self.songData.subdata(in: BytesSentOfSoFar..<self.songData.count)
         }
         else
         {
-            return self.songData.subdata(in: Data.Index(BytesSentOfSoFar)..<(Data.Index(BytesSentOfSoFar)+Data.Index(Globals.ChunkSize)))
+            return self.songData.subdata(in: BytesSentOfSoFar..<BytesSentOfSoFar+Globals.ChunkSize)
         }
     }
     

@@ -60,6 +60,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         cancelAllConnections()
         clearAllStationLists()
         currentlyListeningToStation = nil
+        HasError = false
     }
     
     func restart()
@@ -79,6 +80,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         else
         {
             Scanning = false
+            HasError = true
             Status = Globals.Playback.Status.failedBluetooth
         }
     }
@@ -144,6 +146,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if let error = error
         {
             NSLog("Error when discovering services: \(error)")
+            //Silently fail here, don't want to error on a bad peripheral
         }
     }
     
@@ -267,8 +270,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 
                 BufferingAudio = self.BytesReceivedSoFar > 0 && self.BytesReceivedSoFar < Globals.Playback.AmountOfBytesBeforeAudioCanStartListener
                 
-                UIApplication.shared.isIdleTimerDisabled = BufferingAudio
-                
                 if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
                 {
                     Status = Globals.Playback.Status.bufferingSong
@@ -377,6 +378,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if let error = Globals.Playback.Player.error
         {
             NSLog("Error after play: \(String(describing: error))")
+            HasError = true
+            Status = Globals.Playback.Status.errorPlayingSong
         }
     }
     
