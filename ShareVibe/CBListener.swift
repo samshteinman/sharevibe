@@ -20,6 +20,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     @Published var ExpectedAmountOfBytes: Int = 0
     
     @Published var Status : String = ""
+    @Published var HasError : Bool = false
     
     @Published var SongTitleAndArtist : String = ""
     

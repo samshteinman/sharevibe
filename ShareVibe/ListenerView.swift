@@ -38,24 +38,24 @@ struct ListenerView : View {
                             })
                             {
                                 withAnimation{
-                                HStack
-                                    {
-                                        if self.Listener.currentlyListeningToStation?.id == station.id
+                                    HStack
                                         {
-                                            Image(systemName: "radiowaves.left")
-                                                .font(Font.system(.largeTitle))
-                                                .foregroundColor(.primary)
-                                        }
-                                        else
-                                        {
-                                            Image(systemName: "music.note")
-                                        }
-                                        Text("\(station.Name!)")
-                                        Spacer()
-                                        Image(systemName: "person.3.fill")
-                                        Text("\(station.NumberOfListeners ?? 0)")
-                                }
-                                .padding()
+                                            if self.Listener.currentlyListeningToStation?.id == station.id
+                                            {
+                                                Image(systemName: "radiowaves.left")
+                                                    .font(Font.system(.largeTitle))
+                                                    .foregroundColor(.primary)
+                                            }
+                                            else
+                                            {
+                                                Image(systemName: "music.note")
+                                            }
+                                            Text("\(station.Name!)")
+                                            Spacer()
+                                            Image(systemName: "person.3.fill")
+                                            Text("\(station.NumberOfListeners ?? 0)")
+                                    }
+                                    .padding()
                                 }
                             }
                             .disabled(self.Listener.currentlyListeningToStation?.id == station.id)
@@ -79,24 +79,21 @@ struct ListenerView : View {
                     
                     if !Listener.startedPlayingAudio {
                         BufferingIndicatorView(Status: $Listener.Status, BufferingBytesSoFar: $Listener.BytesReceivedSoFar, MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartListener))
-                        .padding()
-                        }
-                    }
-                    
-                    if self.Listener.currentlyListeningToStation != nil
-                    {
-                        Button(action: {
-                            self.Listener.restart()
-                        })
-                        {
-                            Image(systemName: "gobackward.minus")
-                                .font(Font.system(.largeTitle))
-                                .foregroundColor(.blue)
-                        }
-                        .padding()
-                        Spacer()
+                            .padding()
                     }
                 }
+                
+                Button(action: {
+                    self.Listener.restart()
+                })
+                {
+                    Image(systemName: "gobackward.minus")
+                        .font(Font.system(.largeTitle))
+                        .foregroundColor(.blue)
+                }
+                .padding()
+                Spacer()
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     @Published var ListeningCentrals : [CBCentral] = []
     
     @Published var Status : String = ""
+    @Published var HasError : Bool = false
     
     @Published var startedPlayingAudio = false
     @Published var isMuted: Bool = false

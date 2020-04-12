@@ -10,7 +10,6 @@
 		364E0FEA243682A30014AC58 /* ListenerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FE9243682A30014AC58 /* ListenerView.swift */; };
 		364E0FED2436B9C30014AC58 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */; };
 		365031ED2439283300E6B7D6 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031EC2439283300E6B7D6 /* Station.swift */; };
-		365031F324392F8800E6B7D6 /* ListeningToStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365031F224392F8700E6B7D6 /* ListeningToStationView.swift */; };
 		3650C7A524379CE0003A19F1 /* BufferingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */; };
 		36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB1241C603E00FABC9D /* AppDelegate.swift */; };
 		36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36526FB3241C603E00FABC9D /* SceneDelegate.swift */; };
@@ -49,7 +48,6 @@
 		364E0FE9243682A30014AC58 /* ListenerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerView.swift; sourceTree = "<group>"; };
 		364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		365031EC2439283300E6B7D6 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
-		365031F224392F8700E6B7D6 /* ListeningToStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningToStationView.swift; sourceTree = "<group>"; };
 		3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferingIndicatorView.swift; sourceTree = "<group>"; };
 		36526FAE241C603E00FABC9D /* ShareVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36526FB1241C603E00FABC9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				3686737B241DEEA100F23BC8 /* SongPickerView.swift */,
 				364E0FEC2436B9C30014AC58 /* ActivityIndicatorView.swift */,
 				3650C7A424379CE0003A19F1 /* BufferingIndicatorView.swift */,
-				365031F224392F8700E6B7D6 /* ListeningToStationView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -337,7 +334,6 @@
 				364E0FED2436B9C30014AC58 /* ActivityIndicatorView.swift in Sources */,
 				36D2C48124366CA5000477CB /* BroadcasterView.swift in Sources */,
 				3686737C241DEEA100F23BC8 /* SongPickerView.swift in Sources */,
-				365031F324392F8800E6B7D6 /* ListeningToStationView.swift in Sources */,
 				36526FB2241C603E00FABC9D /* AppDelegate.swift in Sources */,
 				365031ED2439283300E6B7D6 /* Station.swift in Sources */,
 				36526FB4241C603E00FABC9D /* SceneDelegate.swift in Sources */,

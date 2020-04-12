@@ -21,8 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             
             Globals.Playback.setupRemoteAudioControls()
             
-            application.beginReceivingRemoteControlEvents()
-            
             NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
         }
         catch {}
