@@ -22,8 +22,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     @Published var Status : String = ""
     @Published var HasError : Bool = false
     
-    @Published var SongTitleAndArtist : String = ""
-    
     @Published var Scanning = false
     @Published var BufferingAudio = false
     
@@ -91,7 +89,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
         Status = Globals.Playback.Status.scanningForStations
         
-        centralManager.scanForPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
+        centralManager.scanForPeripherals(withServices: [Globals.Bluetooth.ServiceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : true])
     }
     
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -99,7 +97,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         //When scanning: peripherals are always advertising, even ones I've connected to
         createOrUpdateStation(id: peripheral.identifier , peripheral: peripheral)
         
-        if !self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID]).contains(peripheral)
+        if !self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.Bluetooth.ServiceUUID]).contains(peripheral)
         {
             NSLog("Found peripheral, connecting for inquiry...!");
             
@@ -110,7 +108,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         NSLog("Connected to \(peripheral) Discovering services....");
-        peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
+        peripheral.discoverServices([Globals.Bluetooth.ServiceUUID]);
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?)
@@ -125,7 +123,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 return
             }
             
-            if(services[0].uuid == Globals.BluetoothGlobals.ServiceUUID)
+            if(services[0].uuid == Globals.Bluetooth.ServiceUUID)
             {
                 NSLog("Found service we were looking for \(peripheral), discovering characteristics")
                 
@@ -136,8 +134,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 else
                 {
                     peripheral.discoverCharacteristics([
-                        Globals.BluetoothGlobals.RoomNameUUID,
-                        Globals.BluetoothGlobals.NumberOfListenersUUID], for: services[0])
+                        Globals.Bluetooth.RoomNameUUID,
+                        Globals.Bluetooth.NumberOfListenersUUID], for: services[0])
                     
                 }
             }
@@ -163,9 +161,9 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 
                 for characteristic in characteristics
                 {
-                    if characteristic.uuid == Globals.BluetoothGlobals.RoomNameUUID
+                    if characteristic.uuid == Globals.Bluetooth.RoomNameUUID
                         ||
-                        characteristic.uuid == Globals.BluetoothGlobals.NumberOfListenersUUID
+                        characteristic.uuid == Globals.Bluetooth.NumberOfListenersUUID
                     {
                         peripheral.readValue(for: characteristic)
                         NSLog("Request read on \(characteristic.uuid)")
@@ -225,7 +223,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        if characteristic.uuid == Globals.BluetoothGlobals.RoomNameUUID
+        if characteristic.uuid == Globals.Bluetooth.RoomNameUUID
         {
             //TODO: Timing? Multiple calls to this?
             if let val = characteristic.value
@@ -233,7 +231,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 createOrUpdateStation(id: peripheral.identifier, name: String(bytes: val, encoding: .utf8))
             }
         }
-        else if characteristic.uuid == Globals.BluetoothGlobals.NumberOfListenersUUID
+        else if characteristic.uuid == Globals.Bluetooth.NumberOfListenersUUID
         {
             //TODO: Timing? Multiple calls to this?
             if let val = characteristic.value
@@ -242,7 +240,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                     { (ptr: UnsafePointer<Int>) in ptr.pointee } ))
             }
         }
-        else if(characteristic.uuid == Globals.BluetoothGlobals.SongLengthUUID)
+        else if(characteristic.uuid == Globals.Bluetooth.SongLengthUUID)
         {
             if let val = characteristic.value
             {
@@ -253,7 +251,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 NSLog("Got expected length \(self.ExpectedAmountOfBytes)")
             }
         }
-        else if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
+        else if(characteristic.uuid == Globals.Bluetooth.SongDataUUID)
         {
             if self.ExpectedAmountOfBytes <= 0
             {
@@ -281,13 +279,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
                 }
             }
         }
-        else if(characteristic.uuid == Globals.BluetoothGlobals.SongDescriptionUUID)
-        {
-            if let val = characteristic.value
-            {
-                self.SongTitleAndArtist = String(decoding: val, as: UTF8.self)
-            }
-        }
         else
         {
             NSLog("Update value for uknown characteristic!")
@@ -301,7 +292,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         NSLog("Did modify services")
         NSLog("Searching for services again!");
-        peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
+        peripheral.discoverServices([Globals.Bluetooth.ServiceUUID]);
         
     }
     
@@ -463,7 +454,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     
     func cancelAllConnections()
     {
-        for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID])
+        for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.Bluetooth.ServiceUUID])
         {
             centralManager.cancelPeripheralConnection(peripheral)
         }
@@ -472,7 +463,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     func cancelAllConnectionsBut( exceptPeripheral : CBPeripheral) -> Bool
        {
         var isCurrentlyConnected = false
-           for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.BluetoothGlobals.ServiceUUID])
+           for peripheral in self.centralManager.retrieveConnectedPeripherals(withServices: [Globals.Bluetooth.ServiceUUID])
            {
             if(exceptPeripheral == peripheral)
             {
@@ -508,7 +499,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             
             if(isCurrentlyConnected)
             {
-                peripheral.discoverServices([Globals.BluetoothGlobals.ServiceUUID]);
+                peripheral.discoverServices([Globals.Bluetooth.ServiceUUID]);
             }
             else
             {

@@ -51,16 +51,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         default: ()
         }
         
-        print("notification: \(notification)")
-        
+        NSLog("notification: \(notification)")
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        NSLog("Entered background")
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        
     }
     
     // MARK: UISceneSession Lifecycle

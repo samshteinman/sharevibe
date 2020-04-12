@@ -21,25 +21,23 @@ public class Globals : NSObject
         return Data.init(bytes: &length, count: MemoryLayout.size(ofValue: length))
     }
     
-    public class BluetoothGlobals
+    public class Bluetooth
     {
         static let ServiceUUID = CBUUID(string: "88753A44-4D6F-1226-9C60-0050E4C00067")
         
         static let SongDataUUID = CBUUID(string: "78753A44-4D6F-1226-9C60-0050E4C00067")
-        static let SongDescriptionUUID = CBUUID(string: "12353A44-4D6F-1226-9C60-0050E4C00067")
         static let NumberOfListenersUUID = CBUUID(string: "55553A44-4D6F-1226-9C60-0050E4C00067")
         static let RoomNameUUID = CBUUID(string: "99953A44-4D6F-1226-9C60-0050E4C00067")
         static let SongLengthUUID = CBUUID(string: "18753A44-4D6F-1226-9C60-0050E4C00067")
         
-        static var Service = CBMutableService(type: Globals.BluetoothGlobals.ServiceUUID, primary: true)
+        static var Service = CBMutableService(type: Globals.Bluetooth.ServiceUUID, primary: true)
         static var CharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .write]
         static var Permissions: CBAttributePermissions = [.readable, .writeable]
         
-        static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongLengthUUID, properties: Globals.BluetoothGlobals.CharacteristicProperties, value: nil, permissions: Permissions)
-        static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongDataUUID, properties: Globals.BluetoothGlobals.CharacteristicProperties, value: nil, permissions: Permissions)
-        static var SongDescriptionCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.SongDescriptionUUID, properties: Globals.BluetoothGlobals.CharacteristicProperties, value: nil, permissions: Permissions)
-        static var RoomNameCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.RoomNameUUID, properties: Globals.BluetoothGlobals.CharacteristicProperties, value: nil, permissions: Permissions)
-        static var NumberOfListenersCharacteristic = CBMutableCharacteristic(type: Globals.BluetoothGlobals.NumberOfListenersUUID, properties: Globals.BluetoothGlobals.CharacteristicProperties, value: nil, permissions: Permissions)
+        static var SegmentLengthCharacteristic = CBMutableCharacteristic(type: Globals.Bluetooth.SongLengthUUID, properties: Globals.Bluetooth.CharacteristicProperties, value: nil, permissions: Permissions)
+        static var SegmentDataCharacteristic = CBMutableCharacteristic(type: Globals.Bluetooth.SongDataUUID, properties: Globals.Bluetooth.CharacteristicProperties, value: nil, permissions: Permissions)
+        static var RoomNameCharacteristic = CBMutableCharacteristic(type: Globals.Bluetooth.RoomNameUUID, properties: Globals.Bluetooth.CharacteristicProperties, value: nil, permissions: Permissions)
+        static var NumberOfListenersCharacteristic = CBMutableCharacteristic(type: Globals.Bluetooth.NumberOfListenersUUID, properties: Globals.Bluetooth.CharacteristicProperties, value: nil, permissions: Permissions)
         
     }
     

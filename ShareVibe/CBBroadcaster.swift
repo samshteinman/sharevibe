@@ -51,14 +51,13 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             NSLog("Ready to advertise")
             
-            Globals.BluetoothGlobals.Service.characteristics = [Globals.BluetoothGlobals.SegmentLengthCharacteristic, Globals.BluetoothGlobals.SegmentDataCharacteristic,
-                Globals.BluetoothGlobals.SongDescriptionCharacteristic,
-                Globals.BluetoothGlobals.NumberOfListenersCharacteristic,
-                Globals.BluetoothGlobals.RoomNameCharacteristic]
+            Globals.Bluetooth.Service.characteristics = [Globals.Bluetooth.SegmentLengthCharacteristic, Globals.Bluetooth.SegmentDataCharacteristic,
+                Globals.Bluetooth.NumberOfListenersCharacteristic,
+                Globals.Bluetooth.RoomNameCharacteristic]
             
-            peripheralManager.add(Globals.BluetoothGlobals.Service)
+            peripheralManager.add(Globals.Bluetooth.Service)
             
-            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.BluetoothGlobals.ServiceUUID]])
+            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.Bluetooth.ServiceUUID]])
         }
         else
         {
@@ -78,13 +77,13 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {
-        if characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID
+        if characteristic.uuid == Globals.Bluetooth.SongDataUUID
         {
             if let index = self.ListeningCentrals.firstIndex(of: central)
             {
                 self.ListeningCentrals.remove(at: index)
                 NSLog("Broadcasting listener count \(self.ListeningCentrals.count)")
-                peripheral.updateValue(Globals.convertToData(number: self.ListeningCentrals.count), for: Globals.BluetoothGlobals.NumberOfListenersCharacteristic, onSubscribedCentrals: nil)
+                peripheral.updateValue(Globals.convertToData(number: self.ListeningCentrals.count), for: Globals.Bluetooth.NumberOfListenersCharacteristic, onSubscribedCentrals: nil)
             }
         }
     }
@@ -133,7 +132,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             
             if let chunk = GetChunkFromCurrentSegment()
             {
-                if(peripheralManager.updateValue(chunk, for: Globals.BluetoothGlobals.SegmentDataCharacteristic, onSubscribedCentrals: nil))
+                if(peripheralManager.updateValue(chunk, for: Globals.Bluetooth.SegmentDataCharacteristic, onSubscribedCentrals: nil))
                 {
                     NSLog("Sent \(chunk.count) bytes")
                     self.BytesSentOfSoFar += chunk.count
@@ -161,7 +160,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             self.ExpectedAmountOfBytes = self.songData.count
             
-            self.needBroadcastExpectedBytesLength = !peripheralManager.updateValue(Globals.convertToData(number: self.songData.count), for: Globals.BluetoothGlobals.SegmentLengthCharacteristic, onSubscribedCentrals: nil)
+            self.needBroadcastExpectedBytesLength = !peripheralManager.updateValue(Globals.convertToData(number: self.songData.count), for: Globals.Bluetooth.SegmentLengthCharacteristic, onSubscribedCentrals: nil)
             
             if(!self.needBroadcastExpectedBytesLength)
             {
@@ -191,7 +190,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
         
-        if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
+        if(characteristic.uuid == Globals.Bluetooth.SongDataUUID)
         {
             NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
             Globals.ChunkSize = Int(central.maximumUpdateValueLength)
@@ -200,7 +199,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             {
                 self.ListeningCentrals.append(central)
                 NSLog("Broadcasting listener count \(self.ListeningCentrals.count)")
-                peripheral.updateValue(Globals.convertToData(number: self.ListeningCentrals.count), for: Globals.BluetoothGlobals.NumberOfListenersCharacteristic, onSubscribedCentrals: nil)
+                peripheral.updateValue(Globals.convertToData(number: self.ListeningCentrals.count), for: Globals.Bluetooth.NumberOfListenersCharacteristic, onSubscribedCentrals: nil)
                 
                 if(self.ListeningCentrals.count == 1 && self.songData.count > 0)
                 {
@@ -210,7 +209,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
         
         NSLog("\(central) subscribed to characteristic \(characteristic.uuid) and can handle: \(central.maximumUpdateValueLength)")
-        if(characteristic.uuid == Globals.BluetoothGlobals.SongDataUUID)
+        if(characteristic.uuid == Globals.Bluetooth.SongDataUUID)
         {
             NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
             Globals.ChunkSize = Int(central.maximumUpdateValueLength)
@@ -246,12 +245,12 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-        if request.characteristic.uuid == Globals.BluetoothGlobals.RoomNameUUID
+        if request.characteristic.uuid == Globals.Bluetooth.RoomNameUUID
         {
             request.value = RoomName.data(using: .utf8)
             peripheral.respond(to: request, withResult: .success)
         }
-        else if request.characteristic.uuid == Globals.BluetoothGlobals.NumberOfListenersUUID
+        else if request.characteristic.uuid == Globals.Bluetooth.NumberOfListenersUUID
         {
             request.value = Globals.convertToData(number: self.ListeningCentrals.count)
             peripheral.respond(to: request, withResult: .success)
