@@ -56,12 +56,25 @@ struct BroadcasterView: View {
                 if self.Broadcaster.startedPlayingAudio
                 {
                     Button(action: {
+                        
+                        if Globals.Playback.Player.rate == 0 {
+                            Globals.Playback.Player.play()
+                            self.Broadcaster.continueSending()
+                        }
+                        else {
                             self.Broadcaster.isMuted.toggle()
                             Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
+                        }
                     })
                     {
-                        Image(systemName: self.Broadcaster.isMuted ? "speaker.fill" : "speaker.3.fill")
-                        .foregroundColor(.blue)
+                        if Globals.Playback.Player.rate == 0 {
+                            Image(systemName: "play.fill")
+                            .foregroundColor(.blue)
+                        }
+                        else{
+                            Image(systemName: self.Broadcaster.isMuted ? "speaker.fill" : "speaker.3.fill")
+                            .foregroundColor(.blue)
+                        }
                     }
                     .font(Font.system(.largeTitle))
                     .padding()
