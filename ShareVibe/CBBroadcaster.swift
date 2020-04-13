@@ -14,6 +14,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
 {
     var peripheralManager: CBPeripheralManager!
     
+    @Published var StationStarted : Bool = false
+    
     @Published var BytesSentOfSoFar: Int = 0
     @Published var ExpectedAmountOfBytes: Int = 0
     
@@ -23,14 +25,13 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     @Published var HasError : Bool = false
     
     @Published var startedPlayingAudio = false
-    @Published var isMuted: Bool = false
+     @Published var isMuted: Bool = false
     
     @Published var NumberOfListeners = 0
     @Published var RoomName : String = ""
     
     var songData : Data = Data()
     var needBroadcastExpectedBytesLength = true
-    
     
     func startStation(roomName : String)
     {
@@ -46,18 +47,23 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
     }
     
+    func startAdvertising()
+    {
+        Globals.Bluetooth.Service.characteristics = [Globals.Bluetooth.SegmentLengthCharacteristic, Globals.Bluetooth.SegmentDataCharacteristic,
+                                                     Globals.Bluetooth.NumberOfListenersCharacteristic,
+                                                     Globals.Bluetooth.RoomNameCharacteristic]
+        
+        peripheralManager.add(Globals.Bluetooth.Service)
+        
+        peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.Bluetooth.ServiceUUID]])
+    }
+    
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if(peripheral.state == .poweredOn)
         {
             NSLog("Ready to advertise")
             
-            Globals.Bluetooth.Service.characteristics = [Globals.Bluetooth.SegmentLengthCharacteristic, Globals.Bluetooth.SegmentDataCharacteristic,
-                Globals.Bluetooth.NumberOfListenersCharacteristic,
-                Globals.Bluetooth.RoomNameCharacteristic]
-            
-            peripheralManager.add(Globals.Bluetooth.Service)
-            
-            peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Globals.Bluetooth.ServiceUUID]])
+            startAdvertising()
         }
         else
         {
@@ -66,7 +72,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
     }
     
-    func reset()
+    func resetBroadcast()
     {
         Globals.Playback.RestartPlayer()
         
@@ -104,13 +110,13 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     @objc func playerDidFinishPlaying(note: Notification)
     {
-        reset()
+        resetBroadcast()
         Status = Globals.Playback.Status.noSongCurrentlyPlaying
     }
     
     func trySend()
     {
-        reset()
+        resetBroadcast()
         
         tryBroadcastSegmentLength()
         
@@ -125,9 +131,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             
             UIApplication.shared.isIdleTimerDisabled = BufferingAudio
             
-            if(BufferingAudio && Status != Globals.Playback.Status.bufferingSong)
+            if(BufferingAudio && Status != Globals.Playback.Status.bufferingDontLeaveSong)
             {
-                Status = Globals.Playback.Status.bufferingSong
+                Status = Globals.Playback.Status.bufferingDontLeaveSong
             }
             
             if let chunk = GetChunkFromCurrentSegment()
@@ -194,7 +200,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         {
             NSLog("Updating file data chunk maximum size to \(central.maximumUpdateValueLength)")
             Globals.ChunkSize = Int(central.maximumUpdateValueLength)
-                       
+            
             if !self.ListeningCentrals.contains(central)
             {
                 self.ListeningCentrals.append(central)
@@ -224,7 +230,9 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
         }
         else
         {
-            Status = Globals.Playback.Status.waitingForListeners
+            Status = Globals.Playback.Status.noSongCurrentlyPlaying
+            
+            StationStarted = true
         }
     }
     

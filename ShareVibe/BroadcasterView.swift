@@ -19,8 +19,6 @@ struct BroadcasterView: View {
     @State private var showPicker : Bool = false
     @State private var roomName : String = ""
     
-    @State private var isRoomMade = false
-    
     @State private var showExportError = false
     
     var body: some View {
@@ -33,7 +31,7 @@ struct BroadcasterView: View {
                     Image(systemName: "person.3.fill")
                     Text("\(self.Broadcaster.ListeningCentrals.count)")
                 }
-                .disabled(self.isRoomMade)
+                .disabled(self.Broadcaster.StationStarted)
                 .padding()
                 
                 Button(action: {
@@ -46,7 +44,7 @@ struct BroadcasterView: View {
                 {
                     VStack {
                         withAnimation{
-                            Image(systemName: isRoomMade ? "music.note" : "antenna.radiowaves.left.and.right")
+                            Image(systemName: self.Broadcaster.StationStarted ? "music.note.list" : "antenna.radiowaves.left.and.right")
                                 .font(Font.system(.largeTitle))
                                 .padding()
                         }
@@ -55,20 +53,20 @@ struct BroadcasterView: View {
                 .disabled(roomName.count == 0)
                 .padding()
                 
-                if self.Broadcaster.startedPlayingAudio && Globals.Playback.Player.rate != 0
+                if self.Broadcaster.startedPlayingAudio
                 {
                     Button(action: {
-                        self.Broadcaster.isMuted.toggle()
-                        Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
+                            self.Broadcaster.isMuted.toggle()
+                            Globals.Playback.Player.isMuted = self.Broadcaster.isMuted
                     })
                     {
                         Image(systemName: self.Broadcaster.isMuted ? "speaker.fill" : "speaker.3.fill")
-                            .foregroundColor(.blue)
+                        .foregroundColor(.blue)
                     }
                     .font(Font.system(.largeTitle))
                     .padding()
                 }
-                else if isRoomMade
+                else if self.Broadcaster.StationStarted
                 {
                     HStack {
                         StatusIndicatorView(Status: $Broadcaster.Status, BufferingBytesSoFar: $Broadcaster.BytesSentOfSoFar , MaximumBufferingBytes: .constant(Globals.Playback.AmountOfBytesBeforeAudioCanStartBroadcaster), HasError: $Broadcaster.HasError)
@@ -97,9 +95,7 @@ struct BroadcasterView: View {
         let songItem = songItems[0]
         
         if let url = songItem.value(forProperty: MPMediaItemPropertyAssetURL)
-        {
-            self.isRoomMade = true
-            
+        {            
             self.Broadcaster.Status = Globals.Playback.Status.preparingSong
             
             let asset = AVAsset(url: url as! URL)
