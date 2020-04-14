@@ -390,7 +390,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         
         if let dataRequest = loadingRequest.dataRequest
         {
-            NSLog("Got data request for \(dataRequest.requestedOffset) length \(dataRequest.requestedLength)")
+            NSLog("Got data request start: \(dataRequest.requestedOffset) length: \(dataRequest.requestedLength)")
+            
             let dataReceivedSnapshot = dataReceived
             if dataReceivedSnapshot == nil || dataReceivedSnapshot!.count == 0
             {

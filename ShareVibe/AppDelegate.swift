@@ -23,7 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             
             NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
         }
-        catch {}
+        catch
+        {
+            NSLog("\(error)")
+        }
         return true
     }
     
@@ -36,8 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             return
         }
         
-        switch type
-        {
+        switch type {
         case .began:
             Globals.Playback.Player.pause()
         case .ended:
@@ -51,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         default: ()
         }
         
-        NSLog("notification: \(notification)")
+        NSLog("Notification: \(notification)")
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {

@@ -73,7 +73,7 @@ public class Globals : NSObject
             static let noSongCurrentlyPlaying = "No song currently playing"
             static let waitingForCurrentSongToFinish = "Waiting for song to finish"
             static let bufferingSong = "Buffering"
-            static let bufferingDontLeaveSong = bufferingSong + ", please don't leave yet"
+            static let bufferingDontLeaveSong = bufferingSong + ", please don't leave"
             static let waitingForListeners = "Waiting for listeners"
             static let failedBluetooth = "Bluetooth error! Please check your settings and restart"
             static let preparingSong = "Preparing song"
