@@ -98,13 +98,14 @@ public class Globals : NSObject
         
         static var BytesPlayedSoFar = 0
         
-        static func RestartPlayer()
+        static func RestartPlayer(mute : Bool)
         {
             Globals.Playback.Player.currentItem?.cancelPendingSeeks()
             Globals.Playback.Player.cancelPendingPrerolls()
             Globals.Playback.Player.replaceCurrentItem(with: nil)
             Globals.Playback.Player.pause()
             Globals.Playback.Player = AVPlayer.init()
+            Globals.Playback.Player.isMuted = mute
         }
     }
     

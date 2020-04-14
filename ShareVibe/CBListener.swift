@@ -299,7 +299,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     func restartReceivingAudio()
     {
         self.dataReceived = nil
-        Globals.Playback.RestartPlayer()
+        Globals.Playback.RestartPlayer(mute: isMuted)
         
         self.Status = Globals.Playback.Status.noSongCurrentlyPlaying
         self.BufferingAudio = false
@@ -349,7 +349,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
     
     public func playStream(path: String)
     {
-        Globals.Playback.RestartPlayer()
+        Globals.Playback.RestartPlayer(mute: isMuted)
         
         Globals.Playback.StreamingAsset = AVURLAsset.init(url: URL(fileURLWithPath: path))
         

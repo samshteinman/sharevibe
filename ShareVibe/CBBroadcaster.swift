@@ -74,7 +74,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     
     func resetBroadcast()
     {
-        Globals.Playback.RestartPlayer()
+        Globals.Playback.RestartPlayer(mute: isMuted)
         
         self.needBroadcastExpectedBytesLength = true
         BytesSentOfSoFar = 0
