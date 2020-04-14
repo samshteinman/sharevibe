@@ -104,6 +104,7 @@ public class Globals : NSObject
             Globals.Playback.Player.cancelPendingPrerolls()
             Globals.Playback.Player.replaceCurrentItem(with: nil)
             Globals.Playback.Player.pause()
+            Globals.Playback.Player = AVPlayer.init()
         }
     }
     

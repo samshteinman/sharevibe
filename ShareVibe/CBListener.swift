@@ -391,14 +391,16 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         if let dataRequest = loadingRequest.dataRequest
         {
             NSLog("Got data request start: \(dataRequest.requestedOffset) length: \(dataRequest.requestedLength)")
+
+            
+            if dataReceived == nil || dataReceived!.count == 0
+            {
+                NSLog("Cancelling playback because data is 0 bytes or nil, data: \(dataReceived)")
+                loadingRequest.finishLoading()
+                return false
+            }
             
             let dataReceivedSnapshot = dataReceived
-            if dataReceivedSnapshot == nil || dataReceivedSnapshot!.count == 0
-            {
-                NSLog("Sending up 0 bytes becuse data is nil or 0 \(dataReceivedSnapshot)")
-                loadingRequest.finishLoading()
-                return true
-            }
             
             let amountCanSupply = dataReceivedSnapshot!.count - Globals.Playback.BytesPlayedSoFar
             let chunk = 16384
@@ -412,7 +414,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             }
             else if amountCanSupply > chunk
             {
-                returning = dataReceivedSnapshot!.subdata(in: Globals.Playback.BytesPlayedSoFar..<(Globals.Playback.BytesPlayedSoFar + chunk))
+                returning = dataReceivedSnapshot!.subdata(in: Globals.Playback.BytesPlayedSoFar..<(Globals.Playback.BytesPlayedSoFar + amountCanSupply))
             }
             else if Globals.Playback.BytesPlayedSoFar + chunk > self.ExpectedAmountOfBytes
             {
