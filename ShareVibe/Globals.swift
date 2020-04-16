@@ -23,12 +23,12 @@ public class Globals : NSObject
     
     public class Bluetooth
     {
-        static let ServiceUUID = CBUUID(string: "88753A44-4D6F-1226-9C60-0050E4C00067")
+        static let ServiceUUID = CBUUID(string: "80CB4CF2-ED9B-4712-B85B-BE923376283F")
         
-        static let SongDataUUID = CBUUID(string: "78753A44-4D6F-1226-9C60-0050E4C00067")
-        static let NumberOfListenersUUID = CBUUID(string: "55553A44-4D6F-1226-9C60-0050E4C00067")
-        static let RoomNameUUID = CBUUID(string: "99953A44-4D6F-1226-9C60-0050E4C00067")
-        static let SongLengthUUID = CBUUID(string: "18753A44-4D6F-1226-9C60-0050E4C00067")
+        static let SongDataUUID = CBUUID(string: "E0E7E0A1-72E3-48EE-92DD-D0B5C91D76C6")
+        static let NumberOfListenersUUID = CBUUID(string: "BE4326EE-58C7-4027-847F-85AF6F78DC5F")
+        static let RoomNameUUID = CBUUID(string: "A7540A18-4089-44A3-9798-0DBA59D7DA85")
+        static let SongLengthUUID = CBUUID(string: "646B1DE9-2C10-4B0E-92FF-47B34319815F")
         
         static var Service = CBMutableService(type: Globals.Bluetooth.ServiceUUID, primary: true)
         static var CharacteristicProperties: CBCharacteristicProperties = [.notify, .read, .write]
