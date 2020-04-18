@@ -36,7 +36,7 @@ struct BroadcasterView: View {
                 .padding()
                 
                 Button(action: {
-                    if Globals.State == Globals.CBState.Listening
+                    if Globals.State == Globals.CBState.Listener
                     {
                         self.showStillConnectedError = true
                     }
@@ -105,7 +105,7 @@ struct BroadcasterView: View {
         }
         .alert(isPresented: $showStillConnectedError)
         {
-            Alert(title: Text(Globals.Playback.Status.pleaseDisconnect), message: Text(Globals.Playback.Status.pleaseDisconnectFromStation))
+            Alert(title: Text(Globals.Playback.Status.pleaseRestart), message: Text(Globals.Playback.Status.pleaseDisconnectFromStation))
         }
     }
     

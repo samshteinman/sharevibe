@@ -43,6 +43,8 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             centralManager = CBCentralManager(delegate: self, queue: nil)
             
             NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+            
+            Globals.State = Globals.CBState.Listener
         }
     }
     
@@ -58,7 +60,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         cancelAllConnections()
         clearAllStationLists()
         currentlyListeningToStation = nil
-        Globals.State = nil
         HasError = false
     }
     
@@ -441,7 +442,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         self.fullyDiscoveredStations = Dictionary<UUID,Station>()
         self.currentlyDiscoveringStations = Dictionary<UUID,Station>()
         self.currentlyListeningToStation = nil
-        Globals.State = nil
     }
     
     
@@ -499,7 +499,6 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             let isCurrentlyConnected = cancelAllConnectionsBut(exceptPeripheral: peripheral)
             
             currentlyListeningToStation = fullyDiscoveredStations[id]
-            Globals.State = Globals.CBState.Listening
             
             clearAllStationsBut(station: currentlyListeningToStation!)
             

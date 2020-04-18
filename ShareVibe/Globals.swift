@@ -17,7 +17,7 @@ public class Globals : NSObject
     enum CBState
     {
         case Broadcaster
-        case Listening
+        case Listener
     }
     
     static var State : CBState?
@@ -87,10 +87,9 @@ public class Globals : NSObject
             static let broadcastingFailed = "Broadcast failed! Please check your settings and restart"
             static let failedToShareSong = "Could not share song. Is the song downloaded from the cloud?"
             static let errorPlayingSong = "Failed to play song. Sorry please try again"
-            static let pleaseDisconnect = "Please disconnect"
-            static let pleaseDisconnectFromStation = "Cannot start broadcast while listening to a station. Please disconnect from station and try again"
+            static let pleaseDisconnectFromStation = "Cannot start broadcasting while listening. Please restart the app and start a station"
             static let pleaseRestart = "Please restart"
-            static let broadcastMadePleaseRestart = "Cannot start listening after a station has been made. Please restart the app to start listening"
+            static let broadcastMadePleaseRestart = "Cannot start listening while broadcasting. Please restart the app and start listening"
         }
         
         static var Player : AVPlayer = AVPlayer.init()
