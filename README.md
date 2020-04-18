@@ -18,4 +18,4 @@ TODO:
 
 1. Chatroom?
 
-2. Listeners can't join in the middle of a song(currently using AVPLayer, will need to learn about Audio Queue Services)
+2. Listeners can't join in the middle of a song(currently using AVPlayer, will need to learn about Audio Queue Services)
