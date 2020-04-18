@@ -15,6 +15,7 @@ Another chooses "Broadcast" and picks the song(low quality MP4, the only one tha
 After ~65k bytes are sent, music starts on both phones
 
 TODO:
-Chatroom?
 
-Listeners can't join in the middle of a song(currently using AVPLayer, will need to learn about Audio Queue Services)
+1. Chatroom?
+
+2. Listeners can't join in the middle of a song(currently using AVPLayer, will need to learn about Audio Queue Services)
