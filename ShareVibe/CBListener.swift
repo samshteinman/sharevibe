@@ -58,6 +58,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         cancelAllConnections()
         clearAllStationLists()
         currentlyListeningToStation = nil
+        Globals.State = nil
         HasError = false
     }
     
@@ -440,6 +441,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
         self.fullyDiscoveredStations = Dictionary<UUID,Station>()
         self.currentlyDiscoveringStations = Dictionary<UUID,Station>()
         self.currentlyListeningToStation = nil
+        Globals.State = nil
     }
     
     
@@ -497,6 +499,7 @@ class CBListener : NSObject, ObservableObject, CBCentralManagerDelegate, CBPerip
             let isCurrentlyConnected = cancelAllConnectionsBut(exceptPeripheral: peripheral)
             
             currentlyListeningToStation = fullyDiscoveredStations[id]
+            Globals.State = Globals.CBState.Listening
             
             clearAllStationsBut(station: currentlyListeningToStation!)
             

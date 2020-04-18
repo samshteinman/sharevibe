@@ -12,6 +12,7 @@ struct ListenerView : View {
     
     @ObservedObject var Listener : CBListener = CBListener()
     @State var roomName : String = ""
+    @State private var showBroadcastingStartingError = false
     
     var body: some View {
         VStack {
@@ -19,7 +20,14 @@ struct ListenerView : View {
             if !Listener.Scanning
             {
                 Button(action: {
-                    self.Listener.startup()
+                    if Globals.State == Globals.CBState.Broadcaster
+                    {
+                        self.showBroadcastingStartingError = true
+                    }
+                    else
+                    {
+                        self.Listener.startup()
+                    }
                 })
                 {
                     Image(systemName: "ear")
@@ -94,6 +102,10 @@ struct ListenerView : View {
                 .padding()
                 Spacer()
             }
+        }
+        .alert(isPresented: $showBroadcastingStartingError)
+        {
+            Alert(title: Text(Globals.Playback.Status.pleaseRestart), message: Text(Globals.Playback.Status.broadcastMadePleaseRestart))
         }
     }
 }

@@ -25,7 +25,7 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
     @Published var HasError : Bool = false
     
     @Published var startedPlayingAudio = false
-     @Published var isMuted: Bool = false
+    @Published var isMuted: Bool = false
     
     @Published var NumberOfListeners = 0
     @Published var RoomName : String = ""
@@ -44,6 +44,8 @@ class CBBroadcaster : NSObject, ObservableObject, CBPeripheralManagerDelegate, M
             peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
             
             NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+                        
+            Globals.State = Globals.CBState.Broadcaster
         }
     }
     

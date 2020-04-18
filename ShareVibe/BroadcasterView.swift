@@ -20,6 +20,7 @@ struct BroadcasterView: View {
     @State private var roomName : String = ""
     
     @State private var showExportError = false
+    @State private var showStillConnectedError = false
     
     var body: some View {
         VStack
@@ -35,10 +36,17 @@ struct BroadcasterView: View {
                 .padding()
                 
                 Button(action: {
-                    withAnimation {
-                        self.Broadcaster.startStation(roomName: self.roomName)
-                        self.songs = nil
-                        self.showPicker = !self.showPicker
+                    if Globals.State == Globals.CBState.Listening
+                    {
+                        self.showStillConnectedError = true
+                    }
+                    else
+                    {
+                        withAnimation {
+                            self.Broadcaster.startStation(roomName: self.roomName)
+                            self.songs = nil
+                            self.showPicker = !self.showPicker
+                        }
                     }
                 })
                 {
@@ -94,6 +102,10 @@ struct BroadcasterView: View {
         .alert(isPresented: $showExportError)
         {
             Alert(title: Text(Globals.Playback.Status.broadcastingFailed), message: Text(Globals.Playback.Status.failedToShareSong))
+        }
+        .alert(isPresented: $showStillConnectedError)
+        {
+            Alert(title: Text(Globals.Playback.Status.pleaseDisconnect), message: Text(Globals.Playback.Status.pleaseDisconnectFromStation))
         }
     }
     
