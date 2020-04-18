@@ -15,5 +15,5 @@ Another chooses "Broadcast" and picks the song(low quality MP4, the only one tha
 After ~65k bytes are sent, music starts on both phones
 
 TODO:
-Keep sending data while apps in background(currently only works if the app is playing audio)
 Chatroom?
+Listeners can't join in the middle of a song(currently using AVPLayer, will need to learn about Audio Queue Services)
