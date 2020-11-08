@@ -1,5 +1,9 @@
 # ShareVibe
 
+Available here: https://apps.apple.com/sr/app/sharevibe/id1507858210
+
+--
+
 Bluetooth Radio Station
 
 Stream song from iTunes library over BLE
